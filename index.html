@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curso IA y Productividad</title><link rel="stylesheet" href="estilo.css"></head>
+<body><main>
+<header><h1>AI Productivity Engineering</h1><p>Curso de IA para la productividad · eIA (Escuela de Inteligencia Artificial) · Docente: Carlos Cárdenas</p></header>
+<h2 style="color:var(--navy);margin-top:24px">Sesión 1 · 29 de septiembre</h2>
+<div class="grid">
+  <a class="tile" href="encuesta.html"><b>Encuesta inicial</b>¿Cómo usas la IA hoy? Anónima, 3 minutos.</a>
+  <a class="tile" href="material/Tarea-S1-Estado-Financiero.xlsx"><b>Descargar la tarea</b>Excel con el estado financiero de una empresa ficticia.</a>
+  <a class="tile" href="entregar.html"><b>Entregar la tarea</b>Sube un texto, un archivo o un enlace con tu correo.</a>
+  <a class="tile" href="cierre.html"><b>Encuesta de cierre</b>¿Cómo te fue en la clase? Anónima, 2 minutos.</a>
+</div>
+<div class="msg" id="plazo">Cargando fecha límite…</div>
+<h2 style="color:var(--navy)">Reglas del curso</h2>
+<ul>
+  <li>60% entregables de cada sesión y 40% trabajo final en grupos de 3 a 4.</li>
+  <li>Cada práctica tiene ruta no-code y ruta developer.</li>
+  <li>No subas datos personales ni de clientes a herramientas de IA en la nube.</li>
+</ul>
+<p class="nota"><a href="docente.html">Panel docente</a></p>
+</main>
+<script src="preguntas.js"></script>
+<script>
+fetch(API + "/plazo?tarea=s1").then(r => r.json()).then(j => {
+  const d = new Date(j.plazo);
+  document.getElementById("plazo").textContent = "Fecha límite de la tarea 1: " + d.toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }) + " (hora de Lima).";
+}).catch(() => { document.getElementById("plazo").textContent = "Fecha límite de la tarea 1: jueves 1 de octubre, 6:59 p. m. (hora de Lima)."; });
+</script>
+</body></html>

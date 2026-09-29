@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Panel docente</title><link rel="stylesheet" href="estilo.css">
+<style>main{max-width:1100px}</style></head>
+<body><main>
+<header><h1>Panel docente</h1><p>Solo para el docente. Se actualiza cada 20 segundos.</p></header>
+<form id="login" class="row" style="margin:16px 0"><input type="password" id="k" placeholder="Clave de administrador" autocomplete="current-password"><button>Entrar</button></form>
+<p class="err" id="err"></p>
+<div class="row" id="tabs" style="margin:8px 0 0;flex-wrap:wrap">
+  <button type="button" data-t="inicial">Encuesta inicial</button>
+  <button type="button" data-t="cierre">Encuesta de cierre</button>
+  <button type="button" data-t="entregas">Entregas tarea 1</button>
+</div>
+<div id="out"></div>
+</main>
+<script src="preguntas.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let key = ""; try { key = sessionStorage.getItem("ek") || ""; } catch (e) {}
+let res = null, ent = null, actual = "inicial", timer = null;
+const esc = s => { const d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; };
+const hora = ts => new Date(ts * 1000).toLocaleString("es-PE", { timeZone: "America/Lima", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { actual = b.dataset.t; pintar(); });
+async function get(path) {
+  const r = await fetch(API + path, { headers: { "X-Admin-Key": key } });
+  if (r.status === 401) throw new Error("clave");
+  return r.json();
+}
+async function cargar() {
+  try {
+    [res, ent] = await Promise.all([get("/results"), get("/entregas?tarea=s1")]);
+    $("err").textContent = ""; try { sessionStorage.setItem("ek", key); } catch (e) {}
+    pintar();
+  } catch (x) { $("err").textContent = x.message === "clave" ? "Clave incorrecta." : "No se pudo conectar con el servidor."; if (x.message === "clave") clearInterval(timer); }
+}
+function pintar() {
+  document.querySelectorAll("#tabs button").forEach(b => b.style.opacity = b.dataset.t === actual ? "1" : ".5");
+  if (!res) return;
+  if (actual === "entregas") return pintarEntregas();
+  const E = ENCUESTAS[actual], P = E.preguntas;
+  const n = Object.values(res.totales[E.contador] || {}).reduce((a, b) => a + b, 0);
+  let h = `<h2 style="color:var(--navy);margin:20px 0 0">${esc(E.titulo)}</h2><div class="kpi"><div><b>${n}</b>votos</div></div><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
+  for (const p of P) {
+    h += `<fieldset><legend>${esc(p.texto)}</legend>`;
+    if (p.tipo === "texto") { const t = res.textos[p.id] || []; h += t.length ? `<ul class="textos">${t.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "<p>Sin respuestas aún.</p>"; }
+    else {
+      const tot = res.totales[p.id] || {}, filas = p.opciones.map(o => [o, tot[o] || 0]).sort((a, b) => b[1] - a[1]), max = Math.max(1, ...filas.map(f => f[1]));
+      h += `<table><thead><tr><th>Opción</th><th></th><th class="n">Votos</th><th class="n">%</th></tr></thead><tbody>`;
+      for (const [o, v] of filas) h += `<tr><td>${esc(o)}</td><td style="width:35%"><div class="bar" style="width:${v / max * 100}%"></div></td><td class="n">${v}</td><td class="n">${n ? Math.round(v / n * 100) : 0}%</td></tr>`;
+      h += `</tbody></table>`;
+    }
+    h += `</fieldset>`;
+  }
+  $("out").innerHTML = h;
+  $("csv").onclick = () => {
+    const L = [["pregunta", "opcion", "votos"]];
+    for (const p of P) { if (p.tipo === "texto") (res.textos[p.id] || []).forEach(t => L.push([p.texto, t, ""])); else p.opciones.forEach(o => L.push([p.texto, o, (res.totales[p.id] || {})[o] || 0])); }
+    bajar("encuesta-" + actual + ".csv", L);
+  };
+}
+function pintarEntregas() {
+  const all = ent.entregas, porCorreo = {};
+  all.forEach(e => { (porCorreo[e.email] = porCorreo[e.email] || []).push(e); });
+  const ult = Object.values(porCorreo).map(v => Object.assign({}, v[v.length - 1], { versiones: v.length })).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  const lim = new Date(ent.plazo).toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
+  let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · Tarea 1</h2><div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div></div><p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo.</p><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
+  h += `<table><thead><tr><th>Nombre</th><th>Correo</th><th>Grupo</th><th>Recibido</th><th>Texto</th><th>Enlace</th><th>Archivo</th><th class="n">Vers.</th></tr></thead><tbody>`;
+  for (const e of ult) {
+    const link = e.enlace && /^https?:\/\//.test(e.enlace) ? `<a href="${esc(e.enlace)}" target="_blank" rel="noopener noreferrer">abrir</a>` : "";
+    h += `<tr><td>${esc(e.nombre)}</td><td>${esc(e.email)}</td><td>${esc(e.grupo)}</td><td>${hora(e.ts)}</td><td class="wrap">${esc(e.texto)}</td><td>${link}</td><td>${e.archivo ? `<a href="#" data-id="${e.id}" data-n="${esc(e.archivo)}">${esc(e.archivo)}</a>` : ""}</td><td class="n">${e.versiones}</td></tr>`;
+  }
+  h += `</tbody></table>`;
+  if (!ult.length) h += "<p>Aún no hay entregas.</p>";
+  $("out").innerHTML = h;
+  $("out").querySelectorAll("a[data-id]").forEach(a => a.onclick = async ev => {
+    ev.preventDefault();
+    const r = await fetch(API + "/archivo?id=" + a.dataset.id, { headers: { "X-Admin-Key": key } });
+    if (!r.ok) { alert("No se pudo descargar."); return; }
+    const u = URL.createObjectURL(await r.blob()); const d = document.createElement("a"); d.href = u; d.download = a.dataset.n; d.click(); URL.revokeObjectURL(u);
+  });
+  $("csv").onclick = () => bajar("entregas-tarea1.csv", [["nombre", "correo", "grupo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, e.grupo, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
+}
+function bajar(nombre, L) {
+  const s = L.map(r => r.map(c => '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"').join(",")).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + s], { type: "text/csv" })); a.download = nombre; a.click();
+}
+$("login").addEventListener("submit", e => { e.preventDefault(); key = $("k").value.trim(); cargar(); clearInterval(timer); timer = setInterval(cargar, 20000); });
+if (key) { cargar(); timer = setInterval(cargar, 20000); }
+</script></body></html>
