@@ -37,3 +37,5 @@ label.campo { display:block; font-weight:600; margin:12px 0 4px; }
 .ok { background:#E7F8F1; color:#0B5E42; }
 @media (prefers-color-scheme: dark) { .ok { background:#0F3A2C; color:#B6F0D8; } }
 td.wrap { white-space: pre-wrap; max-width: 320px; }
+a { color: var(--blue); }
+select { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
