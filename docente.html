@@ -64,10 +64,10 @@ function pintarEntregas() {
   const ult = Object.values(porCorreo).map(v => Object.assign({}, v[v.length - 1], { versiones: v.length })).sort((a, b) => a.nombre.localeCompare(b.nombre));
   const lim = new Date(ent.plazo).toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
   let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · Tarea 1</h2><div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div></div><p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo.</p><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
-  h += `<table><thead><tr><th>Nombre</th><th>Correo</th><th>Grupo</th><th>Recibido</th><th>Texto</th><th>Enlace</th><th>Archivo</th><th class="n">Vers.</th></tr></thead><tbody>`;
+  h += `<table><thead><tr><th>Nombre</th><th>Correo</th><th>Recibido</th><th>Texto</th><th>Enlace</th><th>Archivo</th><th class="n">Vers.</th></tr></thead><tbody>`;
   for (const e of ult) {
     const link = e.enlace && /^https?:\/\//.test(e.enlace) ? `<a href="${esc(e.enlace)}" target="_blank" rel="noopener noreferrer">abrir</a>` : "";
-    h += `<tr><td>${esc(e.nombre)}</td><td>${esc(e.email)}</td><td>${esc(e.grupo)}</td><td>${hora(e.ts)}</td><td class="wrap">${esc(e.texto)}</td><td>${link}</td><td>${e.archivo ? `<a href="#" data-id="${e.id}" data-n="${esc(e.archivo)}">${esc(e.archivo)}</a>` : ""}</td><td class="n">${e.versiones}</td></tr>`;
+    h += `<tr><td>${esc(e.nombre)}</td><td>${esc(e.email)}</td><td>${hora(e.ts)}</td><td class="wrap">${esc(e.texto)}</td><td>${link}</td><td>${e.archivo ? `<a href="#" data-id="${e.id}" data-n="${esc(e.archivo)}">${esc(e.archivo)}</a>` : ""}</td><td class="n">${e.versiones}</td></tr>`;
   }
   h += `</tbody></table>`;
   if (!ult.length) h += "<p>Aún no hay entregas.</p>";
@@ -78,7 +78,7 @@ function pintarEntregas() {
     if (!r.ok) { alert("No se pudo descargar."); return; }
     const u = URL.createObjectURL(await r.blob()); const d = document.createElement("a"); d.href = u; d.download = a.dataset.n; d.click(); URL.revokeObjectURL(u);
   });
-  $("csv").onclick = () => bajar("entregas-tarea1.csv", [["nombre", "correo", "grupo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, e.grupo, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
+  $("csv").onclick = () => bajar("entregas-tarea1.csv", [["nombre", "correo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
 }
 function bajar(nombre, L) {
   const s = L.map(r => r.map(c => '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"').join(",")).join("\n");

@@ -2,19 +2,18 @@
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Entregar tarea</title><link rel="stylesheet" href="estilo.css"></head>
 <body><main>
-<header><h1>Entregar la tarea</h1><p>AI Productivity Engineering · eIA. Identifícate con tu correo y envía un texto, un archivo o un enlace.</p></header>
+<header><h1>Entregar la tarea</h1><p>AI Productivity Engineering · eIA. Tarea individual: identifícate con tu correo y envía un texto, un archivo o un enlace.</p></header>
 <div class="msg" id="plazo">Cargando fecha límite…</div>
 <div id="estado"></div>
 <form id="f">
   <fieldset><legend>Tus datos</legend>
     <label class="campo" for="email">Correo</label><input type="email" id="email" required maxlength="254" autocomplete="email" placeholder="tu@correo.com">
     <label class="campo" for="nombre">Nombre completo</label><input type="text" id="nombre" required maxlength="120" autocomplete="name">
-    <label class="campo" for="grupo">Grupo (opcional)</label><input type="text" id="grupo" maxlength="120" placeholder="Ej.: Grupo 3 o nombres de tus compañeros">
     <label class="campo" for="tarea">Tarea</label>
     <select id="tarea" style="width:100%;padding:10px;border-radius:10px;font:inherit"><option value="s1">Sesión 1 · Estado financiero con IA</option></select>
   </fieldset>
   <fieldset><legend>Tu entrega (al menos una opción)</legend>
-    <label class="campo" for="texto">Texto</label><textarea id="texto" maxlength="20000" placeholder="Tus hallazgos, recomendaciones y qué modelos usaron…"></textarea>
+    <label class="campo" for="texto">Texto</label><textarea id="texto" maxlength="20000" placeholder="Tus hallazgos, recomendaciones y qué modelos usaste…"></textarea>
     <label class="campo" for="enlace">Enlace</label><input type="url" id="enlace" maxlength="500" placeholder="https://docs.google.com/…">
     <label class="campo" for="archivo">Archivo (máximo 10 MB)</label><input type="file" id="archivo" accept=".pdf,.xlsx,.xls,.csv,.docx,.doc,.pptx,.txt,.md,.png,.jpg,.jpeg,.zip">
     <p class="nota">Formatos: PDF, Excel, Word, PowerPoint, CSV, texto, imagen o ZIP. Si el enlace es de Google Drive, compártelo como "cualquier persona con el enlace".</p>
@@ -53,7 +52,7 @@ $("f").addEventListener("submit", async e => {
   if (!$("texto").value.trim() && !$("enlace").value.trim() && !file) { $("err").textContent = "Escribe un texto, pega un enlace o adjunta un archivo."; return; }
   const b = $("b"); b.disabled = true; b.textContent = "Enviando…";
   try {
-    const body = { tarea: $("tarea").value, email: $("email").value.trim(), nombre: $("nombre").value.trim(), grupo: $("grupo").value.trim(), texto: $("texto").value.trim(), enlace: $("enlace").value.trim() };
+    const body = { tarea: $("tarea").value, email: $("email").value.trim(), nombre: $("nombre").value.trim(), texto: $("texto").value.trim(), enlace: $("enlace").value.trim() };
     if (file) body.archivo = { nombre: file.name, tipo: file.type, b64: await leer(file) };
     const r = await fetch(API + "/entrega", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
