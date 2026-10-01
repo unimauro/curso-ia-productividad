@@ -157,7 +157,22 @@ class H(BaseHTTPRequestHandler):
         if self.path.startswith("/health"):
             return self._json(200, {"ok": True})
         if self.path.startswith("/mcp"):
-            return self._json(405, {"error": "usa POST para MCP"})
+            if "text/event-stream" in self.headers.get("Accept", "") or "text/html" not in self.headers.get("Accept", ""):
+                return self._json(405, {"error": "Este es un servidor MCP: los clientes deben usar POST"})
+            herramientas = "".join(f"<li><code>{t['name']}</code>: {t['description']}</li>" for t in TOOLS)
+            html = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Servidor MCP · Ventas Andina</title><style>body{{font:16px/1.6 system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 16px;color:#101B3D}}
+code{{background:#EEF4FF;padding:2px 6px;border-radius:6px}}.u{{background:#EEF4FF;padding:12px;border-radius:10px;font-family:monospace;word-break:break-all}}</style></head><body>
+<h1>Servidor MCP · Ventas Andina</h1>
+<p>Esta dirección funciona: es un <b>servidor MCP</b> del curso AI Productivity Engineering (eIA). No es una página para abrir en el navegador, sino para conectarla a una IA como Claude.</p>
+<p class="u">https://ai.tunky.net/encuesta-api/mcp</p>
+<h2>Cómo conectarlo en Claude</h2>
+<ol><li>claude.ai → Configuración → Conectores → Agregar conector personalizado.</li><li>Nombre: Ventas Andina. URL: la de arriba.</li><li>En un chat nuevo, activa el conector y pregunta por las ventas.</li></ol>
+<h2>Herramientas</h2><ul>{herramientas}</ul>
+<p>Datos ficticios de práctica. Funciona con Claude gratis (1 conector personalizado). ChatGPT necesita plan Plus o superior.</p></body></html>"""
+            body = html.encode()
+            self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
+            return
         if self.path.startswith("/plazo"):
             t = self._q("tarea") or "s1"
             return self._json(200, {"tarea": t, "plazo": PLAZOS.get(t), "ahora": int(time.time())})

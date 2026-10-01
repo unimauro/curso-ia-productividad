@@ -32,7 +32,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <h2>Antes de empezar</h2>
 <ul>
-  <li>Ruta ventas: abre <a href="https://v0.app" target="_blank" rel="noopener">v0 de Vercel</a> con tu cuenta. El plan gratis da US$ 5 de crédito al mes, y publica en Vercel con un clic.</li>
+  <li>Ruta ventas: abre <a href="https://v0.app" target="_blank" rel="noopener">v0 de Vercel (https://v0.app)</a> con tu cuenta. El plan gratis da US$ 5 de crédito al mes, y publica en Vercel con un clic.</li>
   <li>Ruta código: ten <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub</a>, <a href="https://vercel.com/signup" target="_blank" rel="noopener">Vercel</a> (entra con GitHub) y Claude Code o Cursor.</li>
   <li>Todos: una cuenta de Google para Sheets y Data Studio.</li>
 </ul>
@@ -87,7 +87,7 @@ Estilo: cálido y profesional, en español, montos en soles (S/), se ve bien en 
   <ol start="2"><li>Pulsa <b>Publish</b>. v0 publica en Vercel y te da una URL.</li><li>Prueba tu API en el navegador: <code>tu-url.vercel.app/api/resumen?mes=12</code>. Debe decir <code>"venta": 67360</code>.</li></ol>
   <h3><span class="ruta codigo">Ruta código</span> con GitHub y Vercel</h3>
   <ol>
-    <li>Descarga la plantilla <a href="material/api/resumen.js">api/resumen.js</a> y guárdala en <code>pulso-ventas/api/resumen.js</code>.</li>
+    <li>Descarga la plantilla <a href="material/api/resumen.js">api/resumen.js</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/api/resumen.js</code>) y guárdala en <code>pulso-ventas/api/resumen.js</code>.</li>
     <li>Sube la carpeta a GitHub y en Vercel: <b>Add New → Project → Import → Deploy</b>.</li>
   </ol>
   <pre class="cmd">cd pulso-ventas
@@ -103,13 +103,13 @@ gh repo create pulso-ventas --public --source=. --push
   <p>No un dashboard estático: un <b>agente</b> que conversa, consulta tu API como herramienta y responde con cifras reales. Así piensa: recibe la pregunta, decide qué datos necesita, llama a <code>/api/resumen</code> con filtros y responde mostrando qué consultó.</p>
   <h3>Modelos gratis para tu agente</h3>
   <ul>
-    <li><a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>: una sola clave para cientos de modelos. Los gratis terminan en <code>:free</code>. Sin tarjeta tienes 50 solicitudes al día; con una recarga única de US$ 10 sube a 1.000 al día. Elige en <a href="https://openrouter.ai/models" target="_blank" rel="noopener">openrouter.ai/models</a> uno gratis que soporte herramientas.</li>
-    <li><a href="https://build.nvidia.com" target="_blank" rel="noopener">NVIDIA Build</a>: modelos abiertos alojados por NVIDIA, gratis para prototipos y compatibles con la API de OpenAI.</li>
+    <li><a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter (https://openrouter.ai)</a>: una sola clave para cientos de modelos. Los gratis terminan en <code>:free</code>. Sin tarjeta tienes 50 solicitudes al día; con una recarga única de US$ 10 sube a 1.000 al día. Elige en <a href="https://openrouter.ai/models" target="_blank" rel="noopener">openrouter.ai/models</a> uno gratis que soporte herramientas.</li>
+    <li><a href="https://build.nvidia.com" target="_blank" rel="noopener">NVIDIA Build (https://build.nvidia.com)</a>: modelos abiertos alojados por NVIDIA, gratis para prototipos y compatibles con la API de OpenAI.</li>
   </ul>
   <h3>Paso a paso</h3>
   <ol>
     <li>Crea tu clave en <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a> o en build.nvidia.com.</li>
-    <li>Agrega a tu proyecto la plantilla probada: <a href="material/agente/api/chat.js">api/chat.js</a> y <a href="material/agente/chat.html">chat.html</a>, junto a tu <code>api/resumen.js</code>.</li>
+    <li>Agrega a tu proyecto la plantilla probada: <a href="material/agente/api/chat.js">api/chat.js</a> y <a href="material/agente/chat.html">chat.html</a>:<br><code>https://unimauro.github.io/curso-ia-productividad/material/agente/api/chat.js</code><br><code>https://unimauro.github.io/curso-ia-productividad/material/agente/chat.html</code><br>, junto a tu <code>api/resumen.js</code>.</li>
     <li>En Vercel: <b>Settings → Environment Variables</b>. Crea <code>LLM_API_KEY</code> con tu clave y <code>LLM_MODEL</code> con el modelo. Para NVIDIA agrega <code>LLM_BASE_URL</code> = <code>https://integrate.api.nvidia.com/v1</code>.</li>
     <li>Publica y abre <code>tu-url.vercel.app/chat.html</code>. Pregúntale: "¿Qué vendedor da más descuentos y cuánto margen pierde?".</li>
   </ol>
@@ -117,7 +117,7 @@ gh repo create pulso-ventas --public --source=. --push
   <div class="prompt" id="p3a">Agrega una página /chat con un agente llamado Analista Andina. Debe usar la API de OpenRouter con las variables de entorno LLM_API_KEY y LLM_MODEL, y tener una herramienta resumen_ventas que llame a mi /api/resumen con filtros de mes, región, canal y vendedor. Que muestre qué consultó y nunca invente cifras.</div>
   <button class="copiar" data-copy="p3a" type="button">Copiar prompt</button>
   <h3><span class="ruta codigo">Ruta código</span> con OpenCode</h3>
-  <p><a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode</a> es un agente de código abierto para la terminal, el escritorio o el editor. Trae modelos gratis y acepta tu clave de OpenRouter. En tu carpeta del proyecto ejecuta <code>opencode</code> y pídele: "Agrega a este proyecto el agente de chat de la plantilla y prepáralo para Vercel".</p>
+  <p><a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode (https://opencode.ai)</a> es un agente de código abierto para la terminal, el escritorio o el editor. Trae modelos gratis y acepta tu clave de OpenRouter. En tu carpeta del proyecto ejecuta <code>opencode</code> y pídele: "Agrega a este proyecto el agente de chat de la plantilla y prepáralo para Vercel".</p>
   <p class="nota"><b>Regla de oro:</b> la clave del modelo va en las variables de entorno de Vercel, nunca en el código ni en GitHub.</p>
 </div>
 
@@ -193,6 +193,22 @@ Sin autenticación, porque los datos son ficticios. Al final dime la URL para ag
   <h3><span class="ruta codigo">Ruta código</span></h3>
   <p>El conector usa MCP, el estándar abierto para conectar modelos con herramientas. Revisa cómo está hecho en <a href="https://github.com/unimauro/curso-ia-productividad/blob/main/api/server.py" target="_blank" rel="noopener">api/server.py</a>: dos herramientas, <code>resumen_ventas</code> y <code>entregas_proveedores</code>. En la sesión 7 conectaremos tu propio sistema así.</p>
   <p class="nota">Los datos son ficticios. Con datos reales de tu empresa, un conector debe tener autenticación y permisos mínimos.</p>
+</div>
+
+<h2>Extra · Skills: enséñale a la IA tu forma de trabajar</h2>
+<div class="reto">
+  <p>Una <b>skill</b> es un manual que la IA carga sola cuando la tarea lo necesita: un método, un formato, unas reglas. MCP le da <b>acceso</b> a tus datos; la skill le enseña <b>cómo</b> trabajar con ellos.</p>
+  <h3>En Claude, también con el plan gratis</h3>
+  <ol>
+    <li>En <a href="https://claude.ai" target="_blank" rel="noopener">https://claude.ai</a>: <b>Configuración → Capacidades</b> y activa <b>ejecución de código y creación de archivos</b>.</li>
+    <li>Descarga la skill del curso: <a href="material/skills/analista-financiero.zip">https://unimauro.github.io/curso-ia-productividad/material/skills/analista-financiero.zip</a>. Trae el método que salió de la tarea 1: fórmulas visibles, descomposición de la causa, anomalías y verificación.</li>
+    <li><b>Personalizar → Skills → + → Crear skill → Subir una skill</b> y elige el ZIP.</li>
+    <li>Sube el Excel de ventas y pide un análisis: Claude aplica el método solo.</li>
+  </ol>
+  <h3>En ChatGPT</h3>
+  <p>Las Skills nativas de ChatGPT son de los planes de empresa. Con el plan gratis, crea un <b>Proyecto</b> y pega el contenido del archivo <a href="material/skills/analista-financiero/SKILL.md">SKILL.md</a> en sus instrucciones.</p>
+  <h3>Crea la tuya</h3>
+  <p>Una skill es una carpeta con un archivo <code>SKILL.md</code>: un encabezado con <code>name</code> y <code>description</code>, y debajo las instrucciones. Pídele a Claude: "Crea una skill para que analices mis ventas como lo hicimos hoy" y súbela comprimida en ZIP.</p>
 </div>
 
 <h2>Tarea · Presentación para el gerente</h2>
