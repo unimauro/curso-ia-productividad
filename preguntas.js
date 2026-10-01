@@ -35,3 +35,16 @@ window.ENCUESTAS = {
     ],
   },
 };
+
+// Encuesta de cierre de la sesión 2: mismas preguntas con ids propios para no mezclar respuestas.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Reto 1: dashboard con IA", "Reto 2: publicar en Vercel", "Reto 3: presentación con IA", "Reto 4: tablero que se actualiza solo", "Radar IA al final", "Las dos rutas"];
+  window.ENCUESTAS.cierre2 = {
+    titulo: "¿Cómo te fue en la sesión 2?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias,
+    clave: "encuesta-ia-cierre-s2", prefijo: "c2-", contador: "s2_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s2_" + p.id.slice(2) : "s2_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
+  };
+})();

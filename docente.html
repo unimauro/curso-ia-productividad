@@ -8,8 +8,10 @@
 <p class="err" id="err"></p>
 <div class="row" id="tabs" style="margin:8px 0 0;flex-wrap:wrap">
   <button type="button" data-t="inicial">Encuesta inicial</button>
-  <button type="button" data-t="cierre">Encuesta de cierre</button>
-  <button type="button" data-t="entregas">Entregas tarea 1</button>
+  <button type="button" data-t="cierre">Cierre sesión 1</button>
+  <button type="button" data-t="cierre2">Cierre sesión 2</button>
+  <button type="button" data-t="entregas">Entregas</button>
+  <select id="tareaSel" style="padding:10px;border-radius:10px;font:inherit"><option value="s2">Tarea sesión 2</option><option value="s1">Tarea sesión 1</option></select>
 </div>
 <div id="out"></div>
 </main>
@@ -21,6 +23,7 @@ let res = null, ent = null, actual = "inicial", timer = null;
 const esc = s => { const d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; };
 const hora = ts => new Date(ts * 1000).toLocaleString("es-PE", { timeZone: "America/Lima", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { actual = b.dataset.t; pintar(); });
+document.getElementById("tareaSel").onchange = () => { actual = "entregas"; if (key) cargar(); };
 async function get(path) {
   const r = await fetch(API + path, { headers: { "X-Admin-Key": key } });
   if (r.status === 401) throw new Error("clave");
@@ -28,7 +31,7 @@ async function get(path) {
 }
 async function cargar() {
   try {
-    [res, ent] = await Promise.all([get("/results"), get("/entregas?tarea=s1")]);
+    [res, ent] = await Promise.all([get("/results"), get("/entregas?tarea=" + document.getElementById("tareaSel").value)]);
     $("err").textContent = ""; try { sessionStorage.setItem("ek", key); } catch (e) {}
     pintar();
   } catch (x) { $("err").textContent = x.message === "clave" ? "Clave incorrecta." : "No se pudo conectar con el servidor."; if (x.message === "clave") clearInterval(timer); }
@@ -63,7 +66,7 @@ function pintarEntregas() {
   all.forEach(e => { (porCorreo[e.email] = porCorreo[e.email] || []).push(e); });
   const ult = Object.values(porCorreo).map(v => Object.assign({}, v[v.length - 1], { versiones: v.length })).sort((a, b) => a.nombre.localeCompare(b.nombre));
   const lim = new Date(ent.plazo).toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
-  let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · Tarea 1</h2><div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div></div><p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo.</p><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
+  let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · ${esc(ent.tarea === "s2" ? "Sesión 2" : "Sesión 1")}</h2><div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div></div><p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo.</p><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
   h += `<table><thead><tr><th>Nombre</th><th>Correo</th><th>Recibido</th><th>Texto</th><th>Enlace</th><th>Archivo</th><th class="n">Vers.</th></tr></thead><tbody>`;
   for (const e of ult) {
     const link = e.enlace && /^https?:\/\//.test(e.enlace) ? `<a href="${esc(e.enlace)}" target="_blank" rel="noopener noreferrer">abrir</a>` : "";
@@ -78,7 +81,7 @@ function pintarEntregas() {
     if (!r.ok) { alert("No se pudo descargar."); return; }
     const u = URL.createObjectURL(await r.blob()); const d = document.createElement("a"); d.href = u; d.download = a.dataset.n; d.click(); URL.revokeObjectURL(u);
   });
-  $("csv").onclick = () => bajar("entregas-tarea1.csv", [["nombre", "correo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
+  $("csv").onclick = () => bajar("entregas-" + ent.tarea + ".csv", [["nombre", "correo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
 }
 function bajar(nombre, L) {
   const s = L.map(r => r.map(c => '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"').join(",")).join("\n");
