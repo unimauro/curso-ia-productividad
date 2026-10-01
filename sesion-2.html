@@ -21,7 +21,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <body><main>
 <header><h1>Sesión 2 · Dashboards y presentaciones con IA</h1><p>Jueves 1 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos: 10 de demo y 20 para construir.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora, publicado con tu URL; tu primera API, que usaremos en las próximas sesiones; una presentación para el gerente y un tablero que se actualiza solo cuando cambias una hoja de Google.</div>
+<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora, publicado con tu URL; tu primera API, que usaremos en las próximas sesiones; una presentación para el gerente, un tablero que se actualiza solo cuando cambias una hoja de Google y, de yapa, Claude y ChatGPT conectados a los datos como analistas.</div>
 
 <h2>Los datos: Distribuidora Andina S.A.C.</h2>
 <p>Empresa <b>ficticia</b> que vende café, granos andinos, bebidas, snacks y limpieza en Lima, Norte, Sur y Centro. Un año completo de ventas 2025: 4.451 líneas de pedidos, 140 clientes, 6 vendedores, 6 proveedores y sus entregas.</p>
@@ -133,6 +133,31 @@ Haz que el dashboard lea todo desde /api/resumen, que se refresque solo cada 60 
   <p class="nota">Publicar en la web hace pública la hoja para cualquiera con el enlace. Úsalo solo con datos de práctica.</p>
   <h3>Opción sin prompts: Data Studio</h3>
   <p>Si prefieres arrastrar y soltar: en <a href="https://datastudio.google.com" target="_blank" rel="noopener">Data Studio</a>, que hasta abril de 2026 se llamó Looker Studio, elige <b>Crear → Informe → Hojas de cálculo de Google</b>, selecciona tu hoja y agrega gráficos por mes, región y canal. Cuando cambies la hoja, pulsa <b>Actualizar datos</b>.</p>
+</div>
+
+<h2>Reto extra · Tu analista con IA: Claude y ChatGPT conectados a los datos</h2>
+<div class="reto">
+  <p>Un <b>agente</b> no solo conversa: consulta datos reales y responde con ellos. Conecta Claude o ChatGPT a las ventas de la distribuidora y hazle preguntas de gerente.</p>
+  <h3>Claude con un conector MCP</h3>
+  <ol>
+    <li>En <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>: <b>Configuración → Conectores → Agregar conector personalizado</b>. El plan gratis permite uno.</li>
+    <li>Nombre: <code>Ventas Andina</code>. URL: <code>https://ai.tunky.net/encuesta-api/mcp</code>. Pulsa <b>Agregar</b>.</li>
+    <li>En un chat nuevo, activa el conector desde el menú de herramientas y pregunta:</li>
+  </ol>
+  <div class="prompt" id="p5">Usa el conector Ventas Andina y respóndeme como analista comercial:
+1. ¿Qué vendedor da más descuentos y cuánto margen está perdiendo?
+2. ¿Qué proveedor llega tarde y qué pasó con las ventas de bebidas en el Norte entre julio y setiembre?
+3. ¿Cuánto dinero está vencido por cobrar y en qué canal?
+4. Con todo eso, hazme un dashboard interactivo y 3 recomendaciones para el gerente.</div>
+  <button class="copiar" data-copy="p5" type="button">Copiar prompt</button>
+  <h3>ChatGPT con tu API</h3>
+  <ol>
+    <li>Pega la URL de tu API del reto 2 y pídele que la lea: <i>"Abre https://tu-url.vercel.app/api/resumen y luego /api/resumen?mes=12. Explícame qué pasó en diciembre comparado con el año."</i></li>
+    <li>Si tu API todavía no está publicada, usa el JSON del curso como fuente.</li>
+  </ol>
+  <h3><span class="ruta codigo">Ruta código</span></h3>
+  <p>El conector usa MCP, el estándar abierto para conectar modelos con herramientas. Revisa cómo está hecho en <a href="https://github.com/unimauro/curso-ia-productividad/blob/main/api/server.py" target="_blank" rel="noopener">api/server.py</a>: dos herramientas, <code>resumen_ventas</code> y <code>entregas_proveedores</code>. En la sesión 7 conectaremos tu propio sistema así.</p>
+  <p class="nota">Los datos son ficticios. Con datos reales de tu empresa, un conector debe tener autenticación y permisos mínimos.</p>
 </div>
 
 <h2>Entrega de la sesión 2</h2>

@@ -7,8 +7,9 @@ POST /entrega           {tarea, email, nombre, grupo, texto, enlace, archivo:{no
 GET  /entregas?tarea=s1 (X-Admin-Key) -> todas las entregas (todas las versiones)
 GET  /archivo?id=N      (X-Admin-Key) -> archivo adjunto
 GET  /health
+POST /mcp               servidor MCP (Streamable HTTP, sin estado) con herramientas de ventas de la empresa ficticia
 """
-import base64, hashlib, hmac, json, os, re, sqlite3, time, uuid
+import base64, csv, hashlib, hmac, io, json, os, re, sqlite3, time, uuid, urllib.request
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -34,6 +35,92 @@ def db():
 def plazo(tarea):
     p = PLAZOS.get(tarea)
     return datetime.strptime(p, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp() if p else None
+
+
+# ---------------- MCP: ventas de Distribuidora Andina (datos ficticios) ----------------
+DATA_URL = "https://unimauro.github.io/curso-ia-productividad/material/"
+_cache = {}
+
+def _cargar(nombre):
+    c = _cache.get(nombre)
+    if c and time.time() - c[0] < 600:
+        return c[1]
+    raw = urllib.request.urlopen(DATA_URL + nombre, timeout=20).read().decode("utf-8")
+    data = json.loads(raw) if nombre.endswith(".json") else list(csv.DictReader(io.StringIO(raw)))
+    _cache[nombre] = (time.time(), data)
+    return data
+
+FILTROS = ["mes", "region", "canal", "vendedor", "proveedor", "categoria"]
+
+def resumen_ventas(args):
+    filas = [v for v in _cargar("ventas-2025.json") if all(not args.get(f) or str(v[f]).lower() == str(args[f]).lower() for f in FILTROS)]
+    def agrupar(k):
+        g = {}
+        for v in filas:
+            g[v[k]] = g.get(v[k], 0) + v["venta"]
+        return sorted(({"nombre": n, "venta": round(x)} for n, x in g.items()), key=lambda r: -r["venta"])
+    venta = sum(v["venta"] for v in filas); margen = sum(v["margen"] for v in filas)
+    desc = {}
+    for v in filas:
+        d = desc.setdefault(v["vendedor"], [0, 0]); d[0] += v["descuento"]; d[1] += 1
+    return {
+        "empresa": "Distribuidora Andina S.A.C. (ficticia, datos 2025 inventados para práctica)",
+        "filtros": {f: args[f] for f in FILTROS if args.get(f)},
+        "pedidos": len({v["pedido"] for v in filas}), "venta": round(venta), "margen": round(margen),
+        "margen_pct": round(margen / venta * 100, 1) if venta else 0,
+        "vencido_por_cobrar": round(sum(v["venta"] for v in filas if v["estado_pago"] == "Vencido")),
+        "por_mes": sorted(agrupar("mes"), key=lambda r: int(r["nombre"])), "por_region": agrupar("region"),
+        "por_canal": agrupar("canal"), "por_vendedor": agrupar("vendedor"), "top_productos": agrupar("producto")[:5],
+        "descuento_promedio_por_vendedor_pct": {k: round(x[0] / x[1] * 100, 1) for k, x in desc.items()},
+    }
+
+def entregas_proveedores(args):
+    g = {}
+    for c in _cargar("compras-proveedores-2025.csv"):
+        if args.get("proveedor") and c["proveedor"].lower() != args["proveedor"].lower():
+            continue
+        d = g.setdefault(c["proveedor"], [0, 0, 0, 0])
+        d[0] += 1; d[1] += c["a_tiempo"] == "Sí"; d[2] += int(c["dias_retraso"]); d[3] += float(c["monto"])
+    return {"proveedores": [{"proveedor": p, "ordenes": x[0], "a_tiempo_pct": round(x[1] / x[0] * 100), "retraso_promedio_dias": round(x[2] / x[0], 1), "compras_soles": round(x[3])} for p, x in sorted(g.items())]}
+
+STR = {"type": "string"}
+TOOLS = [
+    {"name": "resumen_ventas",
+     "description": "Resumen de ventas 2025 de Distribuidora Andina S.A.C., una empresa ficticia de práctica: venta, margen, pedidos, vencido por cobrar y desgloses por mes, región, canal, vendedor y producto. Todos los filtros son opcionales.",
+     "inputSchema": {"type": "object", "properties": {"mes": {"type": "integer", "minimum": 1, "maximum": 12, "description": "Mes de 2025, de 1 a 12"},
+        "region": dict(STR, description="Lima, Norte, Sur o Centro"), "canal": dict(STR, description="Tienda, Mayorista, Online o WhatsApp"),
+        "vendedor": dict(STR, description="Nombre completo del vendedor"), "proveedor": dict(STR, description="Nombre del proveedor"),
+        "categoria": dict(STR, description="Café y cacao, Granos andinos, Harinas y pastas, Bebidas, Snacks o Limpieza")}}},
+    {"name": "entregas_proveedores",
+     "description": "Cumplimiento de entregas de los proveedores en 2025: órdenes, porcentaje a tiempo, retraso promedio en días y monto comprado.",
+     "inputSchema": {"type": "object", "properties": {"proveedor": dict(STR, description="Opcional: nombre del proveedor")}}},
+]
+HANDLERS = {"resumen_ventas": resumen_ventas, "entregas_proveedores": entregas_proveedores}
+
+def mcp_responder(msg):
+    mid, method, params = msg.get("id"), msg.get("method"), msg.get("params") or {}
+    if mid is None:
+        return None  # notificación
+    if method == "initialize":
+        res = {"protocolVersion": params.get("protocolVersion", "2025-06-18"), "capabilities": {"tools": {"listChanged": False}},
+               "serverInfo": {"name": "ventas-andina", "version": "1.0.0"},
+               "instructions": "Datos ficticios de práctica del curso AI Productivity Engineering (eIA). Usa resumen_ventas para preguntas de ventas y entregas_proveedores para proveedores."}
+    elif method == "ping":
+        res = {}
+    elif method == "tools/list":
+        res = {"tools": TOOLS}
+    elif method == "tools/call":
+        fn = HANDLERS.get(params.get("name"))
+        if not fn:
+            return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": "herramienta desconocida"}}
+        try:
+            out = fn(params.get("arguments") or {})
+            res = {"content": [{"type": "text", "text": json.dumps(out, ensure_ascii=False)}], "structuredContent": out, "isError": False}
+        except Exception as e:
+            res = {"content": [{"type": "text", "text": "Error al consultar los datos: " + str(e)}], "isError": True}
+    else:
+        return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32601, "message": "método no soportado"}}
+    return {"jsonrpc": "2.0", "id": mid, "result": res}
 
 class H(BaseHTTPRequestHandler):
     def _cors(self):
@@ -69,6 +156,8 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/health"):
             return self._json(200, {"ok": True})
+        if self.path.startswith("/mcp"):
+            return self._json(405, {"error": "usa POST para MCP"})
         if self.path.startswith("/plazo"):
             t = self._q("tarea") or "s1"
             return self._json(200, {"tarea": t, "plazo": PLAZOS.get(t), "ahora": int(time.time())})
@@ -111,6 +200,8 @@ class H(BaseHTTPRequestHandler):
         self._json(404, {"error": "no encontrado"})
 
     def do_POST(self):
+        if self.path.startswith("/mcp"):
+            return self._mcp()
         if self.headers.get("Origin", "") not in ALLOWED:
             return self._json(403, {"error": "origen no permitido"})
         if self.path.startswith("/entrega"):
@@ -143,6 +234,20 @@ class H(BaseHTTPRequestHandler):
         except sqlite3.IntegrityError:
             return self._json(409, {"error": "ya votaste"})
         self._json(201, {"ok": True})
+
+    def _mcp(self):
+        try:
+            n = min(int(self.headers.get("Content-Length", 0)), 200000)
+            body = json.loads(self.rfile.read(n))
+        except Exception:
+            return self._json(400, {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "JSON inválido"}})
+        if isinstance(body, list):
+            out = [r for r in (mcp_responder(m) for m in body) if r]
+        else:
+            out = mcp_responder(body)
+        if not out:
+            self.send_response(202); self.end_headers(); return
+        self._json(200, out)
 
     def _entrega(self):
         try:
