@@ -158,10 +158,25 @@ Haz que el dashboard lea todo desde /api/resumen, que se refresque solo cada 60 
       <tr><td>Cursor y OpenCode</td><td>Sí</td></tr>
     </tbody>
   </table></div>
+  <h3>Crea tu propio servidor MCP en v0 o Vercel</h3>
+  <p>Tu proyecto puede tener las tres puertas a la vez: <code>/api/resumen</code> para tu app y tu bot, <code>/api/chat</code> para tu agente y <code>/mcp</code> para Claude, Cursor u OpenCode. Vercel publica servidores MCP con su paquete <code>mcp-handler</code>.</p>
+  <ol>
+    <li><span class="ruta ventas">Ruta ventas</span> En el mismo chat de v0, pega este prompt y luego pulsa <b>Publish</b>:</li>
+  </ol>
+  <div class="prompt" id="p6">Agrega un servidor MCP a este proyecto usando el paquete mcp-handler de Vercel, en la ruta /mcp. Registra dos herramientas:
+1. resumen_ventas: filtros opcionales mes, region, canal y vendedor; devuelve lo mismo que /api/resumen.
+2. top_productos: parámetro opcional limite; devuelve los productos más vendidos con su venta.
+Sin autenticación, porque los datos son ficticios. Al final dime la URL para agregarla como conector en Claude.</div>
+  <button class="copiar" data-copy="p6" type="button">Copiar prompt</button>
+  <ol start="2">
+    <li><span class="ruta codigo">Ruta código</span> Parte de la plantilla oficial <a href="https://github.com/vercel-labs/mcp-for-next.js" target="_blank" rel="noopener">vercel-labs/mcp-for-next.js</a>, agrega tus herramientas con tu agente de código y publícala en Vercel.</li>
+    <li>Tu URL de conector será <code>https://tu-proyecto.vercel.app/mcp</code>.</li>
+  </ol>
+  <p class="nota">¿Se trabó? Usa el servidor MCP del curso para seguir: <code>https://ai.tunky.net/encuesta-api/mcp</code>. Tiene las mismas cifras.</p>
   <h3>Claude con un conector MCP</h3>
   <ol>
     <li>En <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>: <b>Configuración → Conectores → Agregar conector personalizado</b>. El plan gratis permite uno.</li>
-    <li>Nombre: <code>Ventas Andina</code>. URL: <code>https://ai.tunky.net/encuesta-api/mcp</code>. Pulsa <b>Agregar</b>.</li>
+    <li>Nombre: <code>Ventas Andina</code>. URL: la de tu servidor, <code>https://tu-proyecto.vercel.app/mcp</code>, o la del curso, <code>https://ai.tunky.net/encuesta-api/mcp</code>. Pulsa <b>Agregar</b>.</li>
     <li>En un chat nuevo, activa el conector desde el menú de herramientas y pregunta:</li>
   </ol>
   <div class="prompt" id="p5">Usa el conector Ventas Andina y respóndeme como analista comercial:
