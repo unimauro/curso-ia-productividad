@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analista Andina</title>
+<style>
+:root{--bg:#F5F7FC;--card:#fff;--ink:#101B3D;--muted:#56627F;--line:#DCE3F1;--accent:#1E5EFF;--me:#E6EDFF;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0B1226;--card:#131C36;--ink:#E8EDFA;--muted:#9DA9C6;--line:#26345A;--accent:#7FA2FF;--me:#1B2A55;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px;display:flex;flex-direction:column;height:100vh}
+h1{margin:0;font-size:1.4rem}p.sub{margin:4px 0 12px;color:var(--muted)}
+#log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 0}
+.m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;background:var(--card);border:1px solid var(--line)}
+.yo{align-self:flex-end;background:var(--me);border-color:transparent}.info{font-size:.8rem;color:var(--muted);margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chips button{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+form{display:flex;gap:8px;padding-top:8px}input{flex:1;font:inherit;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+form button{font:inherit;font-weight:700;background:var(--accent);color:#fff;border:0;border-radius:12px;padding:0 18px;cursor:pointer}
+</style></head>
+<body><main>
+<h1>Analista Andina</h1>
+<p class="sub">Agente de IA que consulta las ventas 2025 de Distribuidora Andina S.A.C. (empresa ficticia).</p>
+<div class="chips" id="chips">
+  <button type="button">¿Cuánto vendimos en diciembre y cómo se compara con el año?</button>
+  <button type="button">¿Qué vendedor da más descuentos y cuánto margen pierde?</button>
+  <button type="button">¿Qué pasó con las bebidas en el Norte entre julio y setiembre?</button>
+  <button type="button">¿Qué canal crece más y qué harías con eso?</button>
+</div>
+<div id="log"></div>
+<form id="f"><input id="q" placeholder="Pregúntale al analista…" autocomplete="off" required><button>Enviar</button></form>
+</main>
+<script>
+const log = document.getElementById("log"), q = document.getElementById("q"), hist = [];
+function burbuja(texto, yo, info) { const d = document.createElement("div"); d.className = "m" + (yo ? " yo" : ""); d.textContent = texto; if (info) { const i = document.createElement("div"); i.className = "info"; i.textContent = info; d.appendChild(i); } log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+async function preguntar(t) {
+  burbuja(t, true); hist.push({ role: "user", content: t });
+  const espera = burbuja("Consultando las ventas…");
+  try {
+    const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mensajes: hist }) });
+    const j = await r.json(); espera.remove();
+    if (!r.ok) { burbuja("No pude responder: " + (j.error || r.status)); return; }
+    burbuja(j.respuesta || "(sin respuesta)", false, j.consultas?.length ? "Consultó la API: " + j.consultas.join(" · ") : "");
+    hist.push({ role: "assistant", content: j.respuesta || "" });
+  } catch (e) { espera.remove(); burbuja("No pude conectar con el agente."); }
+}
+document.getElementById("f").addEventListener("submit", e => { e.preventDefault(); const t = q.value.trim(); if (t) { q.value = ""; preguntar(t); } });
+document.querySelectorAll("#chips button").forEach(b => b.addEventListener("click", () => preguntar(b.textContent)));
+</script>
+</body></html>

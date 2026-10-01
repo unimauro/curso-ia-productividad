@@ -21,7 +21,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <body><main>
 <header><h1>Sesión 2 · Dashboards y presentaciones con IA</h1><p>Jueves 1 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos: 10 de demo y 20 para construir.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora, publicado con tu URL; tu primera API, que usaremos en las próximas sesiones; una presentación para el gerente, un tablero que se actualiza solo cuando cambias una hoja de Google y, de yapa, Claude y ChatGPT conectados a los datos como analistas.</div>
+<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora; tu primera API; un <b>agente analista</b> que conversa y consulta tus ventas con modelos gratis; un tablero que se actualiza solo desde una hoja de Google; y Claude conectado a los datos con MCP.</div>
 
 <h2>Los datos: Distribuidora Andina S.A.C.</h2>
 <p>Empresa <b>ficticia</b> que vende café, granos andinos, bebidas, snacks y limpieza en Lima, Norte, Sur y Centro. Un año completo de ventas 2025: 4.451 líneas de pedidos, 140 clientes, 6 vendedores, 6 proveedores y sus entregas.</p>
@@ -98,17 +98,27 @@ gh repo create pulso-ventas --public --source=. --push
   <p class="nota">El plan gratuito de Vercel es para uso personal y no comercial. Tu URL y tu API son públicas: úsalas solo con datos de práctica.</p>
 </div>
 
-<h2>Reto 3 · Presentación para el gerente</h2>
+<h2>Reto 3 · Tu agente analista</h2>
 <div class="reto">
-  <p>Usa <a href="https://gamma.app" target="_blank" rel="noopener">Gamma</a> (400 créditos gratis, con marca de agua), o pide a Claude o ChatGPT un PowerPoint. Pega este prompt con tus hallazgos verificados:</p>
-  <div class="prompt" id="p3">Crea una presentación de 5 láminas para el gerente de Distribuidora Andina S.A.C., una empresa ficticia:
-1. Título con la conclusión del año en una frase.
-2. Cómo nos fue: ventas, margen y los meses fuertes.
-3. Lo que preocupa: el proveedor que llega tarde y su efecto en el Norte, los descuentos de un vendedor y el dinero vencido por cobrar.
-4. La oportunidad: el crecimiento de Online y WhatsApp.
-5. Tres acciones para el próximo trimestre, con responsables.
-Usa solo estas cifras verificadas. Una idea por lámina y poco texto.</div>
-  <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
+  <p>No un dashboard estático: un <b>agente</b> que conversa, consulta tu API como herramienta y responde con cifras reales. Así piensa: recibe la pregunta, decide qué datos necesita, llama a <code>/api/resumen</code> con filtros y responde mostrando qué consultó.</p>
+  <h3>Modelos gratis para tu agente</h3>
+  <ul>
+    <li><a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>: una sola clave para cientos de modelos. Los gratis terminan en <code>:free</code>. Sin tarjeta tienes 50 solicitudes al día; con una recarga única de US$ 10 sube a 1.000 al día. Elige en <a href="https://openrouter.ai/models" target="_blank" rel="noopener">openrouter.ai/models</a> uno gratis que soporte herramientas.</li>
+    <li><a href="https://build.nvidia.com" target="_blank" rel="noopener">NVIDIA Build</a>: modelos abiertos alojados por NVIDIA, gratis para prototipos y compatibles con la API de OpenAI.</li>
+  </ul>
+  <h3>Paso a paso</h3>
+  <ol>
+    <li>Crea tu clave en <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a> o en build.nvidia.com.</li>
+    <li>Agrega a tu proyecto la plantilla probada: <a href="material/agente/api/chat.js">api/chat.js</a> y <a href="material/agente/chat.html">chat.html</a>, junto a tu <code>api/resumen.js</code>.</li>
+    <li>En Vercel: <b>Settings → Environment Variables</b>. Crea <code>LLM_API_KEY</code> con tu clave y <code>LLM_MODEL</code> con el modelo. Para NVIDIA agrega <code>LLM_BASE_URL</code> = <code>https://integrate.api.nvidia.com/v1</code>.</li>
+    <li>Publica y abre <code>tu-url.vercel.app/chat.html</code>. Pregúntale: "¿Qué vendedor da más descuentos y cuánto margen pierde?".</li>
+  </ol>
+  <h3><span class="ruta ventas">Ruta ventas</span> con v0</h3>
+  <div class="prompt" id="p3a">Agrega una página /chat con un agente llamado Analista Andina. Debe usar la API de OpenRouter con las variables de entorno LLM_API_KEY y LLM_MODEL, y tener una herramienta resumen_ventas que llame a mi /api/resumen con filtros de mes, región, canal y vendedor. Que muestre qué consultó y nunca invente cifras.</div>
+  <button class="copiar" data-copy="p3a" type="button">Copiar prompt</button>
+  <h3><span class="ruta codigo">Ruta código</span> con OpenCode</h3>
+  <p><a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode</a> es un agente de código abierto para la terminal, el escritorio o el editor. Trae modelos gratis y acepta tu clave de OpenRouter. En tu carpeta del proyecto ejecuta <code>opencode</code> y pídele: "Agrega a este proyecto el agente de chat de la plantilla y prepáralo para Vercel".</p>
+  <p class="nota"><b>Regla de oro:</b> la clave del modelo va en las variables de entorno de Vercel, nunca en el código ni en GitHub.</p>
 </div>
 
 <h2>Reto 4 · Tablero vivo: editas la hoja y el dashboard cambia solo</h2>
@@ -135,9 +145,19 @@ Haz que el dashboard lea todo desde /api/resumen, que se refresque solo cada 60 
   <p>Si prefieres arrastrar y soltar: en <a href="https://datastudio.google.com" target="_blank" rel="noopener">Data Studio</a>, que hasta abril de 2026 se llamó Looker Studio, elige <b>Crear → Informe → Hojas de cálculo de Google</b>, selecciona tu hoja y agrega gráficos por mes, región y canal. Cuando cambies la hoja, pulsa <b>Actualizar datos</b>.</p>
 </div>
 
-<h2>Reto extra · Tu analista con IA: Claude y ChatGPT conectados a los datos</h2>
+<h2>Reto extra · MCP: conecta Claude y ChatGPT a los datos</h2>
 <div class="reto">
-  <p>Un <b>agente</b> no solo conversa: consulta datos reales y responde con ellos. Conecta Claude o ChatGPT a las ventas de la distribuidora y hazle preguntas de gerente.</p>
+  <p><b>MCP</b> (Model Context Protocol) es el estándar abierto para conectar una IA con tus datos y herramientas: el "USB-C" de la IA. Un servidor MCP se construye una vez y lo usan Claude, ChatGPT, Cursor u OpenCode.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Cliente</th><th>¿Puede usar un MCP propio?</th></tr></thead>
+    <tbody>
+      <tr><td>Claude gratis</td><td>Sí: 1 conector personalizado</td></tr>
+      <tr><td>Claude Pro o superior</td><td>Sí: varios conectores</td></tr>
+      <tr><td>ChatGPT gratis</td><td>No: solo apps del catálogo. Usa tu API pegando la URL</td></tr>
+      <tr><td>ChatGPT Plus o superior</td><td>Sí, en modo desarrollador</td></tr>
+      <tr><td>Cursor y OpenCode</td><td>Sí</td></tr>
+    </tbody>
+  </table></div>
   <h3>Claude con un conector MCP</h3>
   <ol>
     <li>En <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>: <b>Configuración → Conectores → Agregar conector personalizado</b>. El plan gratis permite uno.</li>
@@ -160,10 +180,23 @@ Haz que el dashboard lea todo desde /api/resumen, que se refresque solo cada 60 
   <p class="nota">Los datos son ficticios. Con datos reales de tu empresa, un conector debe tener autenticación y permisos mínimos.</p>
 </div>
 
+<h2>Tarea · Presentación para el gerente</h2>
+<div class="reto">
+  <p>Usa <a href="https://gamma.app" target="_blank" rel="noopener">Gamma</a> (400 créditos gratis, con marca de agua), o pide a Claude o ChatGPT un PowerPoint. Pega este prompt con tus hallazgos verificados:</p>
+  <div class="prompt" id="p3">Crea una presentación de 5 láminas para el gerente de Distribuidora Andina S.A.C., una empresa ficticia:
+1. Título con la conclusión del año en una frase.
+2. Cómo nos fue: ventas, margen y los meses fuertes.
+3. Lo que preocupa: el proveedor que llega tarde y su efecto en el Norte, los descuentos de un vendedor y el dinero vencido por cobrar.
+4. La oportunidad: el crecimiento de Online y WhatsApp.
+5. Tres acciones para el próximo trimestre, con responsables.
+Usa solo estas cifras verificadas. Una idea por lámina y poco texto.</div>
+  <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
+</div>
+
 <h2>Entrega de la sesión 2</h2>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 2</b> y envía:</p>
-  <ul><li>La URL de tu dashboard.</li><li>La URL de tu API, por ejemplo <code>…/api/resumen?mes=12</code>.</li><li>Tu presentación en PDF o su enlace.</li><li>El enlace de tu hoja publicada y una captura del dashboard antes y después de cambiar un dato.</li></ul>
+  <ul><li>La URL de tu dashboard.</li><li>La URL de tu API, por ejemplo <code>…/api/resumen?mes=12</code>.</li><li>La URL de tu agente, <code>…/chat.html</code>, y una captura de una conversación.</li><li>Tu presentación de 5 láminas en PDF o su enlace.</li><li>El enlace de tu hoja publicada y una captura del dashboard antes y después de cambiar un dato.</li></ul>
   <p><b>Fecha límite:</b> martes 6 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
 
