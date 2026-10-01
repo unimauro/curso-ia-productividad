@@ -21,7 +21,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <body><main>
 <header><h1>Sesión 2 · Dashboards y presentaciones con IA</h1><p>Jueves 1 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos: 10 de demo y 20 para construir.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora, publicado con tu URL; tu primera API, que usaremos en las próximas sesiones; una presentación para el gerente y un tablero de Data Studio que se actualiza solo.</div>
+<div class="msg"><b>Hoy vas a construir:</b> un dashboard que cuenta la historia de una distribuidora, publicado con tu URL; tu primera API, que usaremos en las próximas sesiones; una presentación para el gerente y un tablero que se actualiza solo cuando cambias una hoja de Google.</div>
 
 <h2>Los datos: Distribuidora Andina S.A.C.</h2>
 <p>Empresa <b>ficticia</b> que vende café, granos andinos, bebidas, snacks y limpieza en Lima, Norte, Sur y Centro. Un año completo de ventas 2025: 4.451 líneas de pedidos, 140 clientes, 6 vendedores, 6 proveedores y sus entregas.</p>
@@ -111,28 +111,34 @@ Usa solo estas cifras verificadas. Una idea por lámina y poco texto.</div>
   <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
 </div>
 
-<h2>Reto 4 · Data Studio que se actualiza solo</h2>
+<h2>Reto 4 · Tablero vivo: editas la hoja y el dashboard cambia solo</h2>
 <div class="reto">
-  <p>Data Studio es la herramienta gratis de Google para tableros. Entre 2022 y abril de 2026 se llamó Looker Studio.</p>
-  <h3><span class="ruta ventas">Ruta ventas</span></h3>
+  <p>El gerente no programa: edita una hoja de Google. Conectamos esa hoja a tu API, y tu dashboard se actualiza solo. Todo con prompts.</p>
   <ol>
-    <li>Crea una hoja nueva en Google Sheets y escribe en la celda A1: <code>=IMPORTDATA("https://unimauro.github.io/curso-ia-productividad/material/ventas-2025.csv")</code>. Se cargan todas las ventas.</li>
-    <li>Entra a <a href="https://datastudio.google.com" target="_blank" rel="noopener">Data Studio</a> → <b>Crear → Informe</b> → conector <b>Hojas de cálculo de Google</b> → elige tu hoja.</li>
-    <li>Agrega: ventas por mes, un mapa o barras por región, un gráfico por canal, una tabla por proveedor y controles de filtro por vendedor y región.</li>
-    <li>Cambia un número en la hoja y pulsa <b>Actualizar datos</b> en Data Studio.</li>
-    <li>Pulsa <b>Compartir</b> y copia el enlace.</li>
+    <li><b>Crea la hoja:</b> en Google Sheets, <b>Archivo → Importar → Subir</b> el archivo <a href="material/ventas-2025.csv">ventas-2025.csv</a> → <b>Reemplazar hoja de cálculo</b>.</li>
+    <li><b>Publícala como CSV:</b> <b>Archivo → Compartir → Publicar en la web</b> → elige la hoja → formato <b>Valores separados por comas (.csv)</b> → <b>Publicar</b>. Copia el enlace.</li>
+    <li><b>Pide el cambio con un prompt</b> en v0 o en tu agente de código:</li>
   </ol>
-  <h3><span class="ruta codigo">Ruta código</span></h3>
-  <ol>
-    <li>Haz que tu dashboard lea los datos desde tu propia API del reto 2 en lugar del JSON.</li>
-    <li>Extra: suma la hoja de compras y muestra el porcentaje de entregas a tiempo por proveedor.</li>
+  <div class="prompt" id="p4">Cambia /api/resumen para que lea los datos desde este CSV publicado de Google Sheets, en lugar del JSON: PEGA_AQUI_TU_ENLACE
+
+La API debe leer el CSV del lado del servidor, convertir cada fila en un objeto con los mismos campos y no guardar los datos en caché más de 60 segundos.
+
+Haz que el dashboard lea todo desde /api/resumen, que se refresque solo cada 60 segundos y que muestre "Actualizado a las HH:MM".</div>
+  <button class="copiar" data-copy="p4" type="button">Copiar prompt</button>
+  <ol start="4">
+    <li><b>Publica</b> de nuevo con <b>Publish</b> en v0, o sube el cambio a GitHub.</li>
+    <li><b>Pruébalo:</b> en la hoja, cambia la venta de una fila de diciembre, por ejemplo agrégale un cero. Google tarda unos minutos en actualizar el CSV publicado; luego tu dashboard y tu API muestran el nuevo total.</li>
   </ol>
+  <p class="nota">Por qué la API y no el dashboard: Google bloquea que una página web lea su CSV directamente desde el navegador. Tu API lo lee desde el servidor, sin ese bloqueo. Además, cuando en la sesión 4 el bot de WhatsApp consulte tu API, responderá con lo que el gerente tenga en su hoja.</p>
+  <p class="nota">Publicar en la web hace pública la hoja para cualquiera con el enlace. Úsalo solo con datos de práctica.</p>
+  <h3>Opción sin prompts: Data Studio</h3>
+  <p>Si prefieres arrastrar y soltar: en <a href="https://datastudio.google.com" target="_blank" rel="noopener">Data Studio</a>, que hasta abril de 2026 se llamó Looker Studio, elige <b>Crear → Informe → Hojas de cálculo de Google</b>, selecciona tu hoja y agrega gráficos por mes, región y canal. Cuando cambies la hoja, pulsa <b>Actualizar datos</b>.</p>
 </div>
 
 <h2>Entrega de la sesión 2</h2>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 2</b> y envía:</p>
-  <ul><li>La URL de tu dashboard.</li><li>La URL de tu API, por ejemplo <code>…/api/resumen?mes=12</code>.</li><li>Tu presentación en PDF o su enlace.</li><li>El enlace de tu tablero de Data Studio.</li></ul>
+  <ul><li>La URL de tu dashboard.</li><li>La URL de tu API, por ejemplo <code>…/api/resumen?mes=12</code>.</li><li>Tu presentación en PDF o su enlace.</li><li>El enlace de tu hoja publicada y una captura del dashboard antes y después de cambiar un dato.</li></ul>
   <p><b>Fecha límite:</b> martes 6 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
 
