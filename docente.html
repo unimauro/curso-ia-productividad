@@ -1,7 +1,31 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Panel docente</title><link rel="stylesheet" href="estilo.css">
-<style>main{max-width:1100px}</style></head>
+<style>
+main{max-width:1100px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.tools input{flex:1;min-width:200px;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.cards{display:grid;gap:14px}
+.ecard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:10px}
+.ehead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.ehead h3{margin:0;font-size:1.1rem;color:var(--navy)}
+.meta{color:var(--muted);font-size:.88rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.85rem;padding:4px 10px;border-radius:999px;background:var(--tint);color:var(--ink);text-decoration:none;border:1px solid var(--line)}
+.chip.tarde{background:#FDECEC;color:#B42318;border-color:#F5C2C0}
+.texto{position:relative;line-height:1.55;overflow-wrap:anywhere}
+.texto.plegado{max-height:9.5em;overflow:hidden}
+.texto.plegado::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3em;background:linear-gradient(transparent,var(--card))}
+.texto h4{margin:10px 0 4px;color:var(--navy)}
+.texto table{font-size:.85rem;margin:6px 0}
+.texto p{margin:6px 0}
+.ver{width:auto;padding:6px 12px;font-size:.85rem;background:var(--tint);color:var(--ink);border:1px solid var(--line)}
+.rubrica{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.9rem;border-top:1px dashed var(--line);padding-top:10px}
+.rubrica label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.rubrica input{width:18px;height:18px}
+.nota-final{font-weight:700;color:var(--navy);margin-left:auto}
+.obs{width:100%;font:inherit;font-size:.9rem;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
+</style></head>
 <body><main>
 <header><h1>Panel docente</h1><p>Solo para el docente. Se actualiza cada 20 segundos.</p></header>
 <form id="login" class="row" style="margin:16px 0"><input type="password" id="k" placeholder="Clave de administrador" autocomplete="current-password"><button>Entrar</button></form>
@@ -33,6 +57,9 @@ async function cargar() {
   try {
     [res, ent] = await Promise.all([get("/results"), get("/entregas?tarea=" + document.getElementById("tareaSel").value)]);
     $("err").textContent = ""; try { sessionStorage.setItem("ek", key); } catch (e) {}
+    const nueva = JSON.stringify([res, ent]);
+    if (nueva === firma && actual === "entregas") return;
+    firma = nueva;
     pintar();
   } catch (x) { $("err").textContent = x.message === "clave" ? "Clave incorrecta." : "No se pudo conectar con el servidor."; if (x.message === "clave") clearInterval(timer); }
 }
@@ -61,27 +88,67 @@ function pintar() {
     bajar("encuesta-" + actual + ".csv", L);
   };
 }
+const RUBRICA = [["hallazgos", "3 hallazgos con cifras", 4], ["cifras", "Cifras correctas", 4], ["grafico", "Gráfico", 3], ["recos", "2 recomendaciones", 3], ["modelos", "Compara modelos y dice en qué fallan", 3], ["extra", "Anomalías o análisis extra", 3]];
+const abiertos = new Set(); let firma = "", filtro = "";
+const lsGet = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+function md(t) {
+  const L = esc(t || "").split("\n"); let out = "", tabla = [];
+  const inline = x => x.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/`([^`]+)`/g, "<code>$1</code>");
+  const cerrarTabla = () => { if (!tabla.length) return; const filas = tabla.filter(r => !/^\|\s*-/.test(r)).map(r => r.replace(/^\||\|$/g, "").split("|").map(c => inline(c.trim()))); out += "<div class='tbl'><table>" + filas.map((f, i) => "<tr>" + f.map(c => i ? `<td>${c}</td>` : `<th>${c}</th>`).join("") + "</tr>").join("") + "</table></div>"; tabla = []; };
+  for (const l of L) {
+    if (/^\s*\|/.test(l)) { tabla.push(l.trim()); continue; }
+    cerrarTabla();
+    if (/^#{1,4}\s/.test(l)) out += `<h4>${inline(l.replace(/^#+\s/, ""))}</h4>`;
+    else if (l.trim()) out += `<p>${inline(l)}</p>`;
+  }
+  cerrarTabla(); return out;
+}
 function pintarEntregas() {
   const all = ent.entregas, porCorreo = {};
   all.forEach(e => { (porCorreo[e.email] = porCorreo[e.email] || []).push(e); });
-  const ult = Object.values(porCorreo).map(v => Object.assign({}, v[v.length - 1], { versiones: v.length })).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  const plazo = new Date(ent.plazo).getTime() / 1000;
+  let ult = Object.values(porCorreo).map(v => Object.assign({}, v[v.length - 1], { versiones: v.length })).sort((a, b) => a.nombre.localeCompare(b.nombre));
   const lim = new Date(ent.plazo).toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
-  let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · ${esc(ent.tarea === "s2" ? "Sesión 2" : "Sesión 1")}</h2><div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div></div><p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo.</p><div class="row"><button id="csv" type="button">Descargar CSV</button></div>`;
-  h += `<table><thead><tr><th>Nombre</th><th>Correo</th><th>Recibido</th><th>Texto</th><th>Enlace</th><th>Archivo</th><th class="n">Vers.</th></tr></thead><tbody>`;
-  for (const e of ult) {
-    const link = e.enlace && /^https?:\/\//.test(e.enlace) ? `<a href="${esc(e.enlace)}" target="_blank" rel="noopener noreferrer">abrir</a>` : "";
-    h += `<tr><td>${esc(e.nombre)}</td><td>${esc(e.email)}</td><td>${hora(e.ts)}</td><td class="wrap">${esc(e.texto)}</td><td>${link}</td><td>${e.archivo ? `<a href="#" data-id="${e.id}" data-n="${esc(e.archivo)}">${esc(e.archivo)}</a>` : ""}</td><td class="n">${e.versiones}</td></tr>`;
+  const total = RUBRICA.reduce((a, r) => a + r[2], 0);
+  const notaDe = id => { const r = lsGet("rub-" + id) || {}; return RUBRICA.reduce((a, x) => a + (r[x[0]] ? x[2] : 0), 0); };
+  const revisadas = ult.filter(e => lsGet("rub-" + e.id)).length;
+  let h = `<h2 style="color:var(--navy);margin:20px 0 0">Entregas · ${esc(ent.tarea === "s2" ? "Sesión 2" : "Sesión 1")}</h2>
+  <div class="kpi"><div><b>${ult.length}</b>alumnos</div><div><b>${all.length}</b>envíos</div><div><b>${revisadas}</b>revisadas</div></div>
+  <p class="nota">Fecha límite: ${esc(lim)} (hora de Lima). Se muestra la última versión de cada correo. La rúbrica y tus observaciones se guardan solo en este navegador.</p>
+  <div class="tools"><input id="buscar" placeholder="Buscar por nombre, correo o texto…" value="${esc(filtro)}"><button id="csv" type="button" style="width:auto">Descargar CSV con notas</button></div><div class="cards">`;
+  const f = filtro.toLowerCase();
+  for (const e of ult.filter(e => !f || (e.nombre + e.email + (e.texto || "")).toLowerCase().includes(f))) {
+    const tarde = e.ts > plazo;
+    const rub = lsGet("rub-" + e.id) || {};
+    const chips = [];
+    if (e.enlace && /^https?:\/\//.test(e.enlace)) chips.push(`<a class="chip" href="${esc(e.enlace)}" target="_blank" rel="noopener noreferrer">🔗 Abrir enlace</a>`);
+    if (e.archivo) chips.push(`<a class="chip" href="#" data-id="${e.id}" data-n="${esc(e.archivo)}">📎 ${esc(e.archivo)}</a>`);
+    if (e.versiones > 1) chips.push(`<span class="chip">${e.versiones} versiones</span>`);
+    if (tarde) chips.push(`<span class="chip tarde">Fuera de plazo</span>`);
+    const largo = (e.texto || "").length > 500;
+    h += `<article class="ecard">
+      <div class="ehead"><h3>${esc(e.nombre)}</h3><span class="meta">${esc(e.email)} · ${hora(e.ts)}</span></div>
+      ${chips.length ? `<div class="chips">${chips.join("")}</div>` : ""}
+      ${e.texto ? `<div class="texto ${largo && !abiertos.has(e.id) ? "plegado" : ""}" id="tx-${e.id}">${md(e.texto)}</div>${largo ? `<button type="button" class="ver" data-ver="${e.id}">${abiertos.has(e.id) ? "Ver menos" : "Ver completo"}</button>` : ""}` : `<p class="meta">Sin texto.</p>`}
+      <div class="rubrica">${RUBRICA.map(r => `<label><input type="checkbox" data-rub="${e.id}" data-k="${r[0]}" ${rub[r[0]] ? "checked" : ""}> ${r[1]} <span class="meta">(${r[2]})</span></label>`).join("")}<span class="nota-final" id="nota-${e.id}">${notaDe(e.id)} / ${total}</span></div>
+      <textarea class="obs" data-obs="${e.id}" placeholder="Observaciones para el alumno…">${esc(lsGet("obs-" + e.id) || "")}</textarea>
+    </article>`;
   }
-  h += `</tbody></table>`;
+  h += `</div>`;
   if (!ult.length) h += "<p>Aún no hay entregas.</p>";
   $("out").innerHTML = h;
+  const b = $("buscar"); b.oninput = () => { filtro = b.value; const pos = b.selectionStart; pintarEntregas(); const nb = $("buscar"); nb.focus(); nb.setSelectionRange(pos, pos); };
+  $("out").querySelectorAll("[data-ver]").forEach(x => x.onclick = () => { const id = +x.dataset.ver; abiertos.has(id) ? abiertos.delete(id) : abiertos.add(id); pintarEntregas(); });
+  $("out").querySelectorAll("[data-rub]").forEach(x => x.onchange = () => { const k = "rub-" + x.dataset.rub, r = lsGet(k) || {}; r[x.dataset.k] = x.checked; lsSet(k, r); $("nota-" + x.dataset.rub).textContent = notaDe(+x.dataset.rub) + " / " + total; });
+  $("out").querySelectorAll("[data-obs]").forEach(x => x.oninput = () => lsSet("obs-" + x.dataset.obs, x.value));
   $("out").querySelectorAll("a[data-id]").forEach(a => a.onclick = async ev => {
     ev.preventDefault();
     const r = await fetch(API + "/archivo?id=" + a.dataset.id, { headers: { "X-Admin-Key": key } });
     if (!r.ok) { alert("No se pudo descargar."); return; }
     const u = URL.createObjectURL(await r.blob()); const d = document.createElement("a"); d.href = u; d.download = a.dataset.n; d.click(); URL.revokeObjectURL(u);
   });
-  $("csv").onclick = () => bajar("entregas-" + ent.tarea + ".csv", [["nombre", "correo", "recibido", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, hora(e.ts), e.texto, e.enlace, e.archivo || "", e.versiones])));
+  $("csv").onclick = () => bajar("entregas-" + ent.tarea + ".csv", [["nombre", "correo", "recibido", "nota", "observaciones", "texto", "enlace", "archivo", "versiones"]].concat(ult.map(e => [e.nombre, e.email, hora(e.ts), notaDe(e.id) + "/" + total, lsGet("obs-" + e.id) || "", e.texto, e.enlace, e.archivo || "", e.versiones])));
 }
 function bajar(nombre, L) {
   const s = L.map(r => r.map(c => '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"').join(",")).join("\n");
