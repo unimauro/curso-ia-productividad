@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sesión 3 · Guía de retos</title><link rel="stylesheet" href="estilo.css">
+<style>
+main{max-width:860px}
+h2{color:var(--navy);margin-top:32px}
+h3{margin:18px 0 6px}
+.reto{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0}
+.reto ol,.reto ul{padding-left:1.2em}
+.reto li{margin:6px 0}
+.ruta{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:999px;margin-right:6px}
+.ventas{background:#E2F4EE;color:#0B5E42}.codigo{background:#EEE8FC;color:#4B2A9E}
+@media (prefers-color-scheme: dark){.ventas{background:#10362D;color:#B6F0D8}.codigo{background:#2A2150;color:#D9CCFF}}
+.prompt{background:var(--tint);border-radius:10px;padding:12px 14px;white-space:pre-wrap;font-size:.95rem;margin:8px 0}
+.copiar{width:auto;padding:6px 12px;font-size:.85rem;margin-top:6px}
+code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+</style></head>
+<body><main>
+<header><h1>Sesión 3 · Tu app en una tarde con Lovable</h1><p>Martes 6 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos y un extra.</p></header>
+
+<div class="msg"><b>Hoy vas a construir:</b> una app publicada que capta clientes: landing, formulario que guarda leads, un chat con IA que atiende a los clientes y un panel interno que lee tu API de la sesión 2.</div>
+
+<h2>Antes de empezar</h2>
+<ul>
+  <li>Cuenta gratis en <a href="https://lovable.dev" target="_blank" rel="noopener">Lovable (https://lovable.dev)</a>. Sin tarjeta.</li>
+  <li><b>Créditos:</b> el plan gratis da 5 créditos al día, con un tope de 30 al mes. Se reinician a medianoche UTC, que en Lima son las 7:00 p. m.: justo al empezar la clase. Una landing completa cuesta unos 2 créditos; un cambio pequeño, 0,5.</li>
+  <li><b>Regla para que alcance:</b> un prompt completo por reto, con todo lo que quieres. Evita muchos mensajes pequeños.</li>
+  <li><b>IA gratis hoy:</b> la IA dentro de las apps de Lovable es gratis hasta el 6 de octubre, con modelos Gemini.</li>
+  <li>Ten a mano la URL de tu API de la sesión 2, por ejemplo <code>https://tu-proyecto.vercel.app/api/resumen</code>.</li>
+  <li>Datos de práctica: <code>https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json</code> (catálogo de 30 productos de Distribuidora Andina, empresa ficticia).</li>
+</ul>
+
+<h2>Reto 1 · Tu landing en un prompt</h2>
+<div class="reto">
+  <p>Antes de generar, escribe un <b>brief</b> de una página. Usa tu producto real o el ejemplo de Distribuidora Andina.</p>
+  <div class="prompt" id="p1">Crea la landing "Andina Mayorista" para Distribuidora Andina S.A.C., una distribuidora ficticia de abarrotes en Perú.
+
+Brief:
+- Cliente: bodegas, minimarkets, restaurantes y cafeterías.
+- Problema: comprar a varios proveedores, sin precios claros y con entregas tardías.
+- Propuesta: un solo proveedor con café, granos andinos, harinas, bebidas, snacks y limpieza; entrega en 24 a 48 horas en Lima.
+- Prueba: 140 clientes y entregas en Lima, Norte, Sur y Centro.
+- Llamada a la acción: "Pide tu cotización" y "Escríbenos por WhatsApp".
+
+Secciones: portada con titular y botón, categorías de productos, cómo funciona en 3 pasos, testimonios de ejemplo marcados como ilustrativos, preguntas frecuentes y pie con medios de pago (Yape, Plin, transferencia).
+
+Estilo: cálido, profesional, en español, montos en soles, que se vea perfecto en el celular.</div>
+  <button class="copiar" data-copy="p1" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 2 · Formulario que guarda leads</h2>
+<div class="reto">
+  <div class="prompt" id="p2">Agrega un formulario "Pide tu cotización" que guarde cada lead en una base de datos de Lovable Cloud, en una tabla leads con: nombre, negocio, tipo de negocio, distrito o ciudad, teléfono, correo, productos de interés, fecha y una casilla obligatoria de consentimiento: "Acepto que Distribuidora Andina use mis datos para contactarme sobre esta cotización".
+
+Después de enviar, muestra un mensaje de gracias. Crea una página /admin protegida con inicio de sesión donde solo el dueño vea la lista de leads, con búsqueda y exportación a CSV. Revisa la seguridad de la tabla para que nadie más pueda leerla.</div>
+  <button class="copiar" data-copy="p2" type="button">Copiar prompt</button>
+  <ul>
+    <li>Prueba el formulario con 3 leads de práctica. Usa datos inventados, no de personas reales.</li>
+    <li>Revisa el aviso de seguridad de Lovable y corrige lo que marque antes de publicar.</li>
+    <li>El consentimiento importa: en Perú la Ley 29733 protege los datos personales, y la Ley 32323 exige consentimiento para contactar con fines comerciales.</li>
+  </ul>
+</div>
+
+<h2>Reto 3 · Chat con IA que atiende a tus clientes</h2>
+<div class="reto">
+  <div class="prompt" id="p3">Agrega un chat flotante "Asistente Andina" que use la IA de Lovable. Debe responder sobre productos, precios, pedido mínimo, zonas, horarios y medios de pago usando solo el catálogo de https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json.
+
+Reglas: si no sabe algo, lo dice y ofrece que un asesor lo contacte. Si el cliente muestra interés de compra, pídele nombre, negocio y teléfono con su consentimiento y guárdalo en la tabla leads con origen "chat". Nunca inventes precios ni promociones.</div>
+  <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
+  <p>Pruébalo: "¿Cuánto cuesta el café en grano y cuál es el pedido mínimo?". Luego: "¿Tienen descuento del 50 %?". Debe decir que no tiene esa información, sin inventar.</p>
+</div>
+
+<h2>Reto 4 · Publica y mide</h2>
+<div class="reto">
+  <ol>
+    <li>Pulsa <b>Publish</b>. El plan gratis publica en un dominio <code>tu-app.lovable.app</code>. Los dominios propios son de pago.</li>
+    <li>Ábrela en tu celular y pide a dos compañeros que dejen un lead de prueba.</li>
+    <li>Mide: pide a Lovable "agrega analítica de visitas y cuenta cuántas personas abren el formulario y cuántas lo envían".</li>
+  </ol>
+  <h3><span class="ruta codigo">Ruta código</span></h3>
+  <p>Conecta el proyecto a GitHub desde Lovable, revisa el código con <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode (https://opencode.ai)</a>, Claude Code o Cursor, y publícalo también en Vercel.</p>
+</div>
+
+<h2>Extra · Panel del vendedor con tu API</h2>
+<div class="reto">
+  <div class="prompt" id="p4">En la página /admin agrega una pestaña "Ventas" que lea mi API https://TU-PROYECTO.vercel.app/api/resumen y muestre ventas, margen, vencido por cobrar y un gráfico por mes, con filtros de mes y región. Solo visible para usuarios con sesión iniciada.</div>
+  <button class="copiar" data-copy="p4" type="button">Copiar prompt</button>
+  <p class="nota">Así tu app usa la API que creaste en la sesión 2. En la sesión 4 el bot de WhatsApp usará la misma API y guardará leads en la misma tabla.</p>
+</div>
+
+<h2>Entrega de la sesión 3</h2>
+<div class="reto">
+  <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 3</b> y envía:</p>
+  <ul><li>La URL de tu app publicada.</li><li>Una captura de la página /admin con al menos 3 leads de prueba.</li><li>Una captura del chat respondiendo una pregunta de precios y otra que no sabe.</li><li>Opcional: el enlace de tu repositorio en GitHub.</li></ul>
+  <p><b>Fecha límite:</b> jueves 8 de octubre, 6:59 p. m., hora de Lima.</p>
+</div>
+
+<h2>Prepárate para la sesión 4</h2>
+<ul>
+  <li>Crea tu app en <a href="https://developers.facebook.com" target="_blank" rel="noopener">Meta for Developers (https://developers.facebook.com)</a> y activa el producto WhatsApp para obtener el número de prueba.</li>
+  <li>Ten una página de Facebook y una cuenta de Instagram profesional.</li>
+  <li>Crea una cuenta en <a href="https://vapi.ai" target="_blank" rel="noopener">Vapi (https://vapi.ai)</a> para el agente de voz.</li>
+</ul>
+<p class="nota"><a href="index.html">Volver al inicio del curso</a></p>
+</main>
+<script>
+document.querySelectorAll("button[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const t = document.getElementById(b.dataset.copy).innerText;
+  try { await navigator.clipboard.writeText(t); b.textContent = "Copiado"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Texto seleccionado: cópialo"; }
+  setTimeout(() => b.textContent = "Copiar prompt", 2500);
+}));
+</script>
+</body></html>

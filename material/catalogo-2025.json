@@ -1,0 +1,258 @@
+{
+ "empresa": "Distribuidora Andina S.A.C. (ficticia, datos de práctica)",
+ "atencion": "Lunes a sábado de 8:00 a. m. a 6:00 p. m.",
+ "pagos": [
+  "Yape",
+  "Plin",
+  "Transferencia",
+  "Tarjeta"
+ ],
+ "zonas": [
+  "Lima",
+  "Norte",
+  "Sur",
+  "Centro"
+ ],
+ "productos": [
+  {
+   "sku": "CAF-01",
+   "producto": "Café tostado molido 500 g",
+   "categoria": "Café y cacao",
+   "precio_soles": 24,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "CAF-02",
+   "producto": "Café en grano 1 kg",
+   "categoria": "Café y cacao",
+   "precio_soles": 46,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "CAF-03",
+   "producto": "Cacao en polvo 250 g",
+   "categoria": "Café y cacao",
+   "precio_soles": 12.5,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "CAF-04",
+   "producto": "Chocolate para taza 180 g",
+   "categoria": "Café y cacao",
+   "precio_soles": 9.9,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "CAF-05",
+   "producto": "Café instantáneo 200 g",
+   "categoria": "Café y cacao",
+   "precio_soles": 21,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "GRA-01",
+   "producto": "Quinua blanca 1 kg",
+   "categoria": "Granos andinos",
+   "precio_soles": 14.5,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "GRA-02",
+   "producto": "Kiwicha pop 300 g",
+   "categoria": "Granos andinos",
+   "precio_soles": 8.9,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "GRA-03",
+   "producto": "Maca en polvo 250 g",
+   "categoria": "Granos andinos",
+   "precio_soles": 17,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "GRA-04",
+   "producto": "Chía 500 g",
+   "categoria": "Granos andinos",
+   "precio_soles": 13,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "GRA-05",
+   "producto": "Avena con quinua 900 g",
+   "categoria": "Granos andinos",
+   "precio_soles": 11.5,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "HAR-01",
+   "producto": "Harina sin preparar 1 kg",
+   "categoria": "Harinas y pastas",
+   "precio_soles": 5.4,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "HAR-02",
+   "producto": "Fideo spaghetti 500 g",
+   "categoria": "Harinas y pastas",
+   "precio_soles": 3.9,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "HAR-03",
+   "producto": "Fideo tallarín 1 kg",
+   "categoria": "Harinas y pastas",
+   "precio_soles": 7.2,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "HAR-04",
+   "producto": "Harina preparada 1 kg",
+   "categoria": "Harinas y pastas",
+   "precio_soles": 6.3,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "HAR-05",
+   "producto": "Sémola 500 g",
+   "categoria": "Harinas y pastas",
+   "precio_soles": 4.1,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "BEB-01",
+   "producto": "Agua mineral 625 ml x 15",
+   "categoria": "Bebidas",
+   "precio_soles": 18,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "BEB-02",
+   "producto": "Gaseosa 3 L x 4",
+   "categoria": "Bebidas",
+   "precio_soles": 32,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "BEB-03",
+   "producto": "Néctar de durazno 1 L x 6",
+   "categoria": "Bebidas",
+   "precio_soles": 27,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "BEB-04",
+   "producto": "Bebida rehidratante 500 ml x 12",
+   "categoria": "Bebidas",
+   "precio_soles": 33,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "BEB-05",
+   "producto": "Té helado 500 ml x 12",
+   "categoria": "Bebidas",
+   "precio_soles": 29,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "SNA-01",
+   "producto": "Papas nativas 120 g x 10",
+   "categoria": "Snacks",
+   "precio_soles": 35,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "SNA-02",
+   "producto": "Chifles 150 g x 10",
+   "categoria": "Snacks",
+   "precio_soles": 28,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "SNA-03",
+   "producto": "Galletas de avena x 24",
+   "categoria": "Snacks",
+   "precio_soles": 22,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "SNA-04",
+   "producto": "Maní salado 200 g x 12",
+   "categoria": "Snacks",
+   "precio_soles": 30,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "SNA-05",
+   "producto": "Camote frito 120 g x 10",
+   "categoria": "Snacks",
+   "precio_soles": 31,
+   "pedido_minimo": 4,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "LIM-01",
+   "producto": "Detergente 2 kg",
+   "categoria": "Limpieza",
+   "precio_soles": 19.5,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "LIM-02",
+   "producto": "Lejía 4 L",
+   "categoria": "Limpieza",
+   "precio_soles": 9.8,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "LIM-03",
+   "producto": "Lavavajilla 900 g",
+   "categoria": "Limpieza",
+   "precio_soles": 8.2,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "LIM-04",
+   "producto": "Desinfectante 1.8 L",
+   "categoria": "Limpieza",
+   "precio_soles": 11.9,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  },
+  {
+   "sku": "LIM-05",
+   "producto": "Jabón de tocador x 3",
+   "categoria": "Limpieza",
+   "precio_soles": 6.5,
+   "pedido_minimo": 6,
+   "entrega": "24 a 48 horas en Lima; 3 a 5 días en provincias"
+  }
+ ]
+}

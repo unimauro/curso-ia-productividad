@@ -83,6 +83,17 @@ def entregas_proveedores(args):
         d[0] += 1; d[1] += c["a_tiempo"] == "Sí"; d[2] += int(c["dias_retraso"]); d[3] += float(c["monto"])
     return {"proveedores": [{"proveedor": p, "ordenes": x[0], "a_tiempo_pct": round(x[1] / x[0] * 100), "retraso_promedio_dias": round(x[2] / x[0], 1), "compras_soles": round(x[3])} for p, x in sorted(g.items())]}
 
+
+def catalogo_productos(args):
+    c = _cargar("catalogo-2025.json")
+    prods = c["productos"]
+    if args.get("categoria"):
+        prods = [p for p in prods if p["categoria"].lower() == str(args["categoria"]).lower()]
+    if args.get("buscar"):
+        q = str(args["buscar"]).lower()
+        prods = [p for p in prods if q in p["producto"].lower() or q in p["categoria"].lower()]
+    return {"empresa": c["empresa"], "atencion": c["atencion"], "pagos": c["pagos"], "zonas": c["zonas"], "productos": prods}
+
 STR = {"type": "string"}
 TOOLS = [
     {"name": "resumen_ventas",
@@ -95,7 +106,10 @@ TOOLS = [
      "description": "Cumplimiento de entregas de los proveedores en 2025: órdenes, porcentaje a tiempo, retraso promedio en días y monto comprado.",
      "inputSchema": {"type": "object", "properties": {"proveedor": dict(STR, description="Opcional: nombre del proveedor")}}},
 ]
-HANDLERS = {"resumen_ventas": resumen_ventas, "entregas_proveedores": entregas_proveedores}
+TOOLS.append({"name": "catalogo_productos",
+     "description": "Catálogo de Distribuidora Andina (ficticia): productos con precio en soles, pedido mínimo y tiempo de entrega, más horario, medios de pago y zonas. Filtros opcionales por categoría o texto.",
+     "inputSchema": {"type": "object", "properties": {"categoria": dict(STR, description="Café y cacao, Granos andinos, Harinas y pastas, Bebidas, Snacks o Limpieza"), "buscar": dict(STR, description="Texto a buscar en el nombre del producto")}}})
+HANDLERS = {"resumen_ventas": resumen_ventas, "entregas_proveedores": entregas_proveedores, "catalogo_productos": catalogo_productos}
 
 def mcp_responder(msg):
     mid, method, params = msg.get("id"), msg.get("method"), msg.get("params") or {}

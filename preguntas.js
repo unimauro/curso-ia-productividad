@@ -48,3 +48,15 @@ window.ENCUESTAS = {
     preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s2_" + p.id.slice(2) : "s2_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
   };
 })();
+
+// Encuesta de cierre de la sesión 3.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Reto 1: landing en un prompt", "Reto 2: formulario que guarda leads", "Reto 3: chat con IA para clientes", "Reto 4: publicar y medir", "Extra: panel con tu API", "Radar IA al final"];
+  window.ENCUESTAS.cierre3 = {
+    titulo: "¿Cómo te fue en la sesión 3?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s3", prefijo: "c3-", contador: "s3_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s3_" + p.id.slice(2) : "s3_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
+  };
+})();
