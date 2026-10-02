@@ -18,7 +18,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <body><main>
 <header><h1>Sesión 3 · Tu app en una tarde con Lovable</h1><p>Martes 6 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos y un extra.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> una app publicada que capta clientes: landing, formulario que guarda leads, un chat con IA que atiende a los clientes y un panel interno que lee tu API de la sesión 2.</div>
+<div class="msg"><b>Hoy vas a construir:</b> una app publicada que capta clientes: landing diseñada con una skill, formulario que guarda leads y te avisa por correo, un chat con IA que atiende a los clientes, un panel que lee tu API de la sesión 2 y tu base de datos conectada a la IA con MCP.</div>
 
 <h2>Antes de empezar</h2>
 <ul>
@@ -33,6 +33,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <h2>Reto 1 · Tu landing en un prompt</h2>
 <div class="reto">
   <p>Antes de generar, escribe un <b>brief</b> de una página. Usa tu producto real o el ejemplo de Distribuidora Andina.</p>
+  <p><b>Atajo con skill:</b> sube a Claude la skill <a href="material/skills/landing-que-vende.zip">landing-que-vende.zip</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/skills/landing-que-vende.zip</code>) en <b>Personalizar → Skills</b>. Luego dile: "Ayúdame con el brief de mi landing y dame el prompt para Lovable". En Lovable puedes pegar el contenido de su <a href="material/skills/landing-que-vende/SKILL.md">SKILL.md</a> en el conocimiento del proyecto para que respete esas reglas en cada cambio.</p>
   <div class="prompt" id="p1">Crea la landing "Andina Mayorista" para Distribuidora Andina S.A.C., una distribuidora ficticia de abarrotes en Perú.
 
 Brief:
@@ -54,6 +55,10 @@ Estilo: cálido, profesional, en español, montos en soles, que se vea perfecto 
 
 Después de enviar, muestra un mensaje de gracias. Crea una página /admin protegida con inicio de sesión donde solo el dueño vea la lista de leads, con búsqueda y exportación a CSV. Revisa la seguridad de la tabla para que nadie más pueda leerla.</div>
   <button class="copiar" data-copy="p2" type="button">Copiar prompt</button>
+  <h3>Aviso por correo al vendedor</h3>
+  <p>Crea una cuenta gratis en <a href="https://resend.com" target="_blank" rel="noopener">Resend (https://resend.com)</a>: 3.000 correos al mes y 100 al día. Sin dominio propio, solo puede enviar a tu propio correo, que es justo lo que necesitas para avisarte.</p>
+  <div class="prompt" id="p2b">Conecta Resend y, cada vez que llegue un lead nuevo, envíame un correo a MI_CORREO con el asunto "Nuevo lead: NOMBRE DEL NEGOCIO" y los datos del lead en una tabla. Guarda la clave de Resend como secreto, nunca en el código.</div>
+  <button class="copiar" data-copy="p2b" type="button">Copiar prompt</button>
   <ul>
     <li>Prueba el formulario con 3 leads de práctica. Usa datos inventados, no de personas reales.</li>
     <li>Revisa el aviso de seguridad de Lovable y corrige lo que marque antes de publicar.</li>
@@ -88,10 +93,29 @@ Reglas: si no sabe algo, lo dice y ofrece que un asesor lo contacte. Si el clien
   <p class="nota">Así tu app usa la API que creaste en la sesión 2. En la sesión 4 el bot de WhatsApp usará la misma API y guardará leads en la misma tabla.</p>
 </div>
 
+<h2>Extra · Supabase y MCP: tu base de datos conectada a la IA</h2>
+<div class="reto">
+  <p>La base de datos de Lovable Cloud funciona sobre <a href="https://supabase.com" target="_blank" rel="noopener">Supabase (https://supabase.com)</a>. Con MCP, Claude o Cursor pueden consultarla en lenguaje natural.</p>
+  <h3>Supabase propio <span class="ruta codigo">Ruta código</span></h3>
+  <ul>
+    <li>En Lovable puedes conectar tu propio proyecto de Supabase en lugar de Lovable Cloud.</li>
+    <li>Plan gratis: 2 proyectos, 500 MB de base de datos y 50.000 usuarios al mes. Si un proyecto pasa 7 días sin uso, se pausa.</li>
+  </ul>
+  <h3>Pregúntale a tu base de datos con el MCP de Supabase</h3>
+  <ol>
+    <li>Servidor MCP oficial: <code>https://mcp.supabase.com/mcp?read_only=true</code>. El parámetro <code>read_only=true</code> evita que la IA borre o cambie datos.</li>
+    <li>Agrégalo en Claude como conector personalizado, o en Cursor y Claude Code en su configuración de MCP.</li>
+    <li>Pregunta: "¿Cuántos leads llegaron hoy y de qué distritos?".</li>
+  </ol>
+  <h3>Lleva tus datos a Lovable con MCP</h3>
+  <p>Lovable acepta servidores MCP propios como conectores del chat mientras construyes. Agrega tu MCP de la sesión 2, o el del curso, <code>https://ai.tunky.net/encuesta-api/mcp</code>, y pídele: "Usa la herramienta catalogo_productos para armar la sección de productos con los precios reales". Ese conector solo te ayuda a construir: no forma parte de la app publicada.</p>
+  <p class="nota">El MCP del curso ahora tiene tres herramientas: <code>resumen_ventas</code>, <code>entregas_proveedores</code> y <code>catalogo_productos</code>.</p>
+</div>
+
 <h2>Entrega de la sesión 3</h2>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 3</b> y envía:</p>
-  <ul><li>La URL de tu app publicada.</li><li>Una captura de la página /admin con al menos 3 leads de prueba.</li><li>Una captura del chat respondiendo una pregunta de precios y otra que no sabe.</li><li>Opcional: el enlace de tu repositorio en GitHub.</li></ul>
+  <ul><li>La URL de tu app publicada.</li><li>Una captura de la página /admin con al menos 3 leads de prueba y del correo de aviso que te llegó.</li><li>Una captura del chat respondiendo una pregunta de precios y otra que no sabe.</li><li>Opcional: el enlace de tu repositorio en GitHub.</li></ul>
   <p><b>Fecha límite:</b> jueves 8 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
 
