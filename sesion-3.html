@@ -16,9 +16,9 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 3 · Tu app en una tarde con Lovable</h1><p>Martes 6 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 30 minutos y un extra.</p></header>
+<header><h1>Sesión 3 · Tu app en una tarde con Lovable</h1><p>Martes 6 de octubre · AI Productivity Engineering · eIA. Primero el SPEC, luego cuatro retos de 25 minutos y un bloque de MCP para tu productividad.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> una app publicada que capta clientes: landing diseñada con una skill, formulario que guarda leads y te avisa por correo, un chat con IA que atiende a los clientes, un panel que lee tu API de la sesión 2 y tu base de datos conectada a la IA con MCP.</div>
+<div class="msg"><b>Hoy vas a construir:</b> una app publicada que no se rompe al cambiarla, porque nace de un SPEC. El ejemplo de los prompts es una app que capta clientes: landing diseñada con una skill, formulario que guarda leads y te avisa por correo, un chat con IA que atiende a los clientes, un panel que lee tu API de la sesión 2 y tu base de datos conectada a la IA con MCP.</div>
 
 <h2>Antes de empezar</h2>
 <ul>
@@ -29,6 +29,54 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <li>Ten a mano la URL de tu API de la sesión 2, por ejemplo <code>https://tu-proyecto.vercel.app/api/resumen</code>.</li>
   <li>Datos de práctica: <code>https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json</code> (catálogo de 30 productos de Distribuidora Andina, empresa ficticia).</li>
 </ul>
+
+<h2>Productividad · Primero el SPEC</h2>
+<div class="reto">
+  <p><b>Mide antes de automatizar.</b> Horas ahorradas por semana = (minutos antes − minutos con IA) × veces por semana ÷ 60. Ejemplo ilustrativo: responder precios a clientes pasa de 5 a 1 minuto, 40 veces por semana, y te devuelve unas 2,7 horas. Haz la cuenta con tus propias tareas.</p>
+  <p><b>Por qué las apps hechas con IA se rompen:</b> prompts sueltos que la IA olvida, cambios pequeños que reescriben pantallas que ya funcionaban y créditos gastados en arreglar. La solución es un <b>SPEC</b>: un documento corto que dice qué hace la app, con qué datos y qué reglas. La IA lo lee antes de cada cambio.</p>
+  <h3>El método en 5 pasos</h3>
+  <ol>
+    <li><b>Escribe el SPEC con Claude</b> usando la skill <a href="material/skills/spec-de-app.zip">spec-de-app.zip</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/skills/spec-de-app.zip</code>). Súbela en Personalizar → Skills y pide: "Hazme el SPEC de mi app".</li>
+    <li><b>Pégalo en el conocimiento del proyecto de Lovable</b>, en la configuración del proyecto, sección Knowledge. Así la IA lo lee en cada mensaje.</li>
+    <li><b>Construye por fases:</b> un prompt por fase. Prueba sus criterios de aceptación antes de seguir.</li>
+    <li><b>Antes de cambiar algo,</b> actualiza el SPEC y pide el análisis de impacto en el modo Chat de Lovable, que planifica sin tocar el código.</li>
+    <li><b>Guarda versiones:</b> conecta GitHub y vuelve atrás desde el historial si algo se rompe.</li>
+  </ol>
+  <h3>Las 12 partes de un SPEC</h3>
+  <p>Objetivo · usuarios y roles · historias de usuario · pantallas · datos · reglas con números · integraciones · fuera de alcance · seguridad y datos personales · criterios de aceptación · fases · reglas para cambiar la app.</p>
+  <h3>Prompt 1 · Arranque por fase</h3>
+  <div class="prompt" id="ps1">Sigue el SPEC que está en el conocimiento del proyecto. Construye SOLO la fase 1: [nombre de la fase].
+
+No agregues funciones que no estén en el SPEC. Al terminar, dime qué criterios de aceptación de esta fase puedo probar y cómo.</div>
+  <button class="copiar" data-copy="ps1" type="button">Copiar prompt</button>
+  <h3>Prompt 2 · Cambio seguro, en modo Chat</h3>
+  <div class="prompt" id="ps2">Quiero este cambio: [describe el cambio].
+
+Antes de tocar el código:
+1. Actualiza el SPEC y súbelo de versión.
+2. Lista las pantallas, tablas y reglas que afecta.
+3. Dime si rompe algún criterio de aceptación.
+
+Espera mi OK para implementarlo.</div>
+  <button class="copiar" data-copy="ps2" type="button">Copiar prompt</button>
+</div>
+
+<h2>Elige tu proyecto de hoy</h2>
+<div class="reto">
+  <p>Los cuatro retos sirven para cualquiera de estos tres proyectos. Los prompts de ejemplo usan Andina Mayorista: adáptalos a tu SPEC.</p>
+  <ul>
+    <li><b>Andina Mayorista:</b> landing que capta clientes, leads con correo al vendedor y chat con el catálogo. Datos: <code>https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json</code></li>
+    <li><b>BecaMatch, el "Tinder" de las becas:</b> deslizas becas según tu perfil, guardas las que te interesan y recibes recordatorios antes de la fecha límite. SPEC: <a href="material/specs/becamatch-spec.md">becamatch-spec.md</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/specs/becamatch-spec.md</code>). Datos de práctica: <a href="material/becas-ejemplo.json">becas-ejemplo.json</a>, 12 becas <b>ficticias</b>. Si usas becas reales, cárgalas con su enlace oficial y verifícalas.</li>
+    <li><b>Pulso Comercial, seguimiento de ventas:</b> tablero de oportunidades, "Mi día" con alertas de clientes sin contacto, meta contra avance y pronóstico. Se conecta a tu API de la sesión 2 y a los leads de la landing. SPEC: <a href="material/specs/pulso-comercial-spec.md">pulso-comercial-spec.md</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/specs/pulso-comercial-spec.md</code>).</li>
+  </ul>
+  <table style="width:100%;border-collapse:collapse;font-size:.92rem">
+    <tr><th style="text-align:left">Reto</th><th style="text-align:left">Andina</th><th style="text-align:left">BecaMatch</th><th style="text-align:left">Pulso Comercial</th></tr>
+    <tr><td>1</td><td>Landing</td><td>Mazo de tarjetas</td><td>Tablero por etapas</td></tr>
+    <tr><td>2</td><td>Leads y correo</td><td>Perfil, guardadas y recordatorio</td><td>Usuarios, roles y alerta por correo</td></tr>
+    <tr><td>3</td><td>Chat con catálogo</td><td>Asistente de requisitos</td><td>"¿Qué hago hoy?"</td></tr>
+    <tr><td>4</td><td colspan="3">Publicar, hacer un cambio seguro con el prompt 2 y medir</td></tr>
+  </table>
+</div>
 
 <h2>Reto 1 · Tu landing en un prompt</h2>
 <div class="reto">
@@ -81,9 +129,29 @@ Reglas: si no sabe algo, lo dice y ofrece que un asesor lo contacte. Si el clien
     <li>Pulsa <b>Publish</b>. El plan gratis publica en un dominio <code>tu-app.lovable.app</code>. Los dominios propios son de pago.</li>
     <li>Ábrela en tu celular y pide a dos compañeros que dejen un lead de prueba.</li>
     <li>Mide: pide a Lovable "agrega analítica de visitas y cuenta cuántas personas abren el formulario y cuántas lo envían".</li>
+    <li>Haz un <b>cambio seguro</b> con el prompt 2 y comprueba que lo anterior sigue funcionando.</li>
   </ol>
   <h3><span class="ruta codigo">Ruta código</span></h3>
   <p>Conecta el proyecto a GitHub desde Lovable, revisa el código con <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode (https://opencode.ai)</a>, Claude Code o Cursor, y publícalo también en Vercel.</p>
+</div>
+
+<h2>MCP para tu productividad</h2>
+<div class="reto">
+  <p>MCP (Model Context Protocol) es el enchufe estándar que conecta la IA con tus herramientas. En Claude gratis, los conectores del directorio son gratis y puedes agregar <b>un</b> conector propio con URL. En ChatGPT, los MCP propios necesitan plan Plus o superior en modo desarrollador.</p>
+  <table style="width:100%;border-collapse:collapse;font-size:.92rem">
+    <tr><th style="text-align:left">Conector</th><th style="text-align:left">Para qué te sirve</th><th style="text-align:left">Costo y dirección</th></tr>
+    <tr><td>Gmail, Calendar y Drive</td><td>Leer correos de clientes, agendar, buscar archivos</td><td>Gratis, directorio de Claude</td></tr>
+    <tr><td>Notion, Slack y GitHub</td><td>Notas del equipo, avisos, código</td><td>Gratis, directorio de Claude</td></tr>
+    <tr><td>Lovable</td><td>Crear y cambiar tu app desde Claude</td><td>Gratis; gasta créditos solo al crear o enviar mensajes. <a href="https://lovable.dev/mcp" target="_blank" rel="noopener">https://lovable.dev/mcp</a></td></tr>
+    <tr><td>Supabase</td><td>Preguntar a tu base de datos</td><td><code>https://mcp.supabase.com/mcp?read_only=true</code></td></tr>
+    <tr><td>Vercel</td><td>Ver despliegues y errores de tu API</td><td><code>https://mcp.vercel.com</code></td></tr>
+    <tr><td>MCP del curso</td><td>Ventas, proveedores y catálogo</td><td><code>https://ai.tunky.net/encuesta-api/mcp</code></td></tr>
+  </table>
+  <h3>Un flujo productivo: de un correo a una oportunidad</h3>
+  <p>Activa Gmail y Calendar del directorio y agrega el MCP del curso como conector propio. Luego:</p>
+  <div class="prompt" id="pm1">Revisa mis correos de hoy que pidan cotización. Para cada uno, usa catalogo_productos para armar una cotización con precios reales y pedido mínimo, y déjala como BORRADOR de respuesta, sin enviarla. Crea un evento de seguimiento en mi calendario dentro de 2 días. Al final dame una tabla: cliente, monto estimado, etapa "Cotizado" y próxima acción.</div>
+  <button class="copiar" data-copy="pm1" type="button">Copiar prompt</button>
+  <p class="nota">Regla de oro: la IA deja borradores y tú revisas y envías.</p>
 </div>
 
 <h2>Extra · Panel del vendedor con tu API</h2>
@@ -115,7 +183,7 @@ Reglas: si no sabe algo, lo dice y ofrece que un asesor lo contacte. Si el clien
 <h2>Entrega de la sesión 3</h2>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 3</b> y envía:</p>
-  <ul><li>La URL de tu app publicada.</li><li>Una captura de la página /admin con al menos 3 leads de prueba y del correo de aviso que te llegó.</li><li>Una captura del chat respondiendo una pregunta de precios y otra que no sabe.</li><li>Opcional: el enlace de tu repositorio en GitHub.</li></ul>
+  <ul><li>La URL de tu app publicada.</li><li>Una captura de /admin con al menos 3 registros de prueba (leads, becas guardadas u oportunidades) y del correo de aviso que te llegó.</li><li>Una captura del chat respondiendo un dato real y otra pregunta que no sabe.</li><li>Tu SPEC.md en su última versión, con al menos un cambio registrado. Pega su contenido o un enlace.</li><li>Opcional: el enlace de tu repositorio en GitHub.</li></ul>
   <p><b>Fecha límite:</b> jueves 8 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
 

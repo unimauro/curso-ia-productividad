@@ -1,0 +1,219 @@
+{
+ "aviso": "Becas FICTICIAS para practicar. No representan programas reales.",
+ "becas": [
+  {
+   "id": 1,
+   "nombre": "Beca Excelencia Andina",
+   "entidad": "Fundación Horizonte (ejemplo)",
+   "pais": "Perú",
+   "nivel": "pregrado",
+   "areas": [
+    "Ingeniería",
+    "Ciencias"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 15,
+   "cobertura": "Matrícula y pensión completas",
+   "fecha_limite": "2026-11-15",
+   "enlace_oficial": "https://ejemplo.org/becas/1",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 2,
+   "nombre": "Maestría en Datos para el Desarrollo",
+   "entidad": "Universidad del Pacífico Sur (ejemplo)",
+   "pais": "Chile",
+   "nivel": "maestría",
+   "areas": [
+    "Ingeniería",
+    "Economía"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 14,
+   "cobertura": "Matrícula y manutención",
+   "fecha_limite": "2026-12-01",
+   "enlace_oficial": "https://ejemplo.org/becas/2",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 3,
+   "nombre": "Programa Líderes Digitales",
+   "entidad": "Instituto Nova (ejemplo)",
+   "pais": "España",
+   "nivel": "curso",
+   "areas": [
+    "Tecnología",
+    "Negocios"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 13,
+   "cobertura": "Curso completo en línea",
+   "fecha_limite": "2026-10-30",
+   "enlace_oficial": "https://ejemplo.org/becas/3",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 4,
+   "nombre": "Beca Ciencia Verde",
+   "entidad": "Red Amazonía Investiga (ejemplo)",
+   "pais": "Brasil",
+   "nivel": "doctorado",
+   "areas": [
+    "Biología",
+    "Ambiental"
+   ],
+   "idioma_requerido": "Portugués B2",
+   "promedio_minimo": 15,
+   "cobertura": "Manutención y pasajes",
+   "fecha_limite": "2027-01-20",
+   "enlace_oficial": "https://ejemplo.org/becas/4",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 5,
+   "nombre": "Beca Mujeres en Ingeniería",
+   "entidad": "Asociación Ingenia (ejemplo)",
+   "pais": "Perú",
+   "nivel": "pregrado",
+   "areas": [
+    "Ingeniería"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 14,
+   "cobertura": "Pensión y laptop",
+   "fecha_limite": "2026-11-30",
+   "enlace_oficial": "https://ejemplo.org/becas/5",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 6,
+   "nombre": "Master in AI Systems",
+   "entidad": "Northbridge Institute (ejemplo)",
+   "pais": "Canadá",
+   "nivel": "maestría",
+   "areas": [
+    "Tecnología",
+    "Ingeniería"
+   ],
+   "idioma_requerido": "Inglés B2",
+   "promedio_minimo": 15,
+   "cobertura": "Matrícula completa",
+   "fecha_limite": "2027-02-15",
+   "enlace_oficial": "https://ejemplo.org/becas/6",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 7,
+   "nombre": "Beca Emprende Rural",
+   "entidad": "Fondo Semilla (ejemplo)",
+   "pais": "Perú",
+   "nivel": "curso",
+   "areas": [
+    "Negocios",
+    "Agronomía"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 12,
+   "cobertura": "Curso y capital semilla",
+   "fecha_limite": "2026-10-25",
+   "enlace_oficial": "https://ejemplo.org/becas/7",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 8,
+   "nombre": "Doctorado en Salud Pública",
+   "entidad": "Universidad Atlántica (ejemplo)",
+   "pais": "México",
+   "nivel": "doctorado",
+   "areas": [
+    "Salud"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 16,
+   "cobertura": "Manutención y seguro",
+   "fecha_limite": "2027-03-01",
+   "enlace_oficial": "https://ejemplo.org/becas/8",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 9,
+   "nombre": "Beca Intercambio Pacífico",
+   "entidad": "Consorcio Universitario (ejemplo)",
+   "pais": "Japón",
+   "nivel": "pregrado",
+   "areas": [
+    "Todas"
+   ],
+   "idioma_requerido": "Inglés B1",
+   "promedio_minimo": 15,
+   "cobertura": "Pasajes y alojamiento",
+   "fecha_limite": "2027-01-10",
+   "enlace_oficial": "https://ejemplo.org/becas/9",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 10,
+   "nombre": "Diplomado Finanzas Sostenibles",
+   "entidad": "Escuela Andes Business (ejemplo)",
+   "pais": "Colombia",
+   "nivel": "curso",
+   "areas": [
+    "Economía",
+    "Negocios"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 13,
+   "cobertura": "Diplomado completo",
+   "fecha_limite": "2026-11-05",
+   "enlace_oficial": "https://ejemplo.org/becas/10",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 11,
+   "nombre": "Maestría en Educación Digital",
+   "entidad": "Universidad del Norte (ejemplo)",
+   "pais": "Argentina",
+   "nivel": "maestría",
+   "areas": [
+    "Educación",
+    "Tecnología"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 14,
+   "cobertura": "Matrícula 70 %",
+   "fecha_limite": "2026-12-20",
+   "enlace_oficial": "https://ejemplo.org/becas/11",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  },
+  {
+   "id": 12,
+   "nombre": "Beca Talento STEM",
+   "entidad": "Fundación Kallpa (ejemplo)",
+   "pais": "Perú",
+   "nivel": "pregrado",
+   "areas": [
+    "Ciencias",
+    "Ingeniería",
+    "Tecnología"
+   ],
+   "idioma_requerido": "Español",
+   "promedio_minimo": 16,
+   "cobertura": "Pensión, alimentación y mentoría",
+   "fecha_limite": "2026-11-20",
+   "enlace_oficial": "https://ejemplo.org/becas/12",
+   "verificada": true,
+   "fuente": "Dato ficticio de práctica"
+  }
+ ]
+}
