@@ -52,7 +52,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 3.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Reto 1: landing en un prompt", "Reto 2: formulario que guarda leads", "Reto 3: chat con IA para clientes", "Reto 4: publicar y medir", "Extra: panel con tu API", "Radar IA al final"];
+  const valioso = ["Productividad y método SPEC", "Ejemplos BecaMatch y Pulso Comercial", "Reto 1: landing o pantalla principal", "Reto 2: datos y aviso por correo", "Reto 3: chat con IA", "Reto 4: publicar y cambio seguro", "MCP para tu productividad", "Radar IA al final"];
   window.ENCUESTAS.cierre3 = {
     titulo: "¿Cómo te fue en la sesión 3?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",

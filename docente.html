@@ -89,7 +89,12 @@ function pintar() {
     bajar("encuesta-" + actual + ".csv", L);
   };
 }
-const RUBRICA = [["hallazgos", "3 hallazgos con cifras", 4], ["cifras", "Cifras correctas", 4], ["grafico", "Gráfico", 3], ["recos", "2 recomendaciones", 3], ["modelos", "Compara modelos y dice en qué fallan", 3], ["extra", "Anomalías o análisis extra", 3]];
+const RUBRICAS = {
+  s1: [["hallazgos", "3 hallazgos con cifras", 4], ["cifras", "Cifras correctas", 4], ["grafico", "Gráfico", 3], ["recos", "2 recomendaciones", 3], ["modelos", "Compara modelos y dice en qué fallan", 3], ["extra", "Anomalías o análisis extra", 3]],
+  s2: [["dash", "Dashboard publicado con hallazgo", 4], ["api", "API con filtros", 3], ["agente", "Agente que consulta la API", 4], ["ppt", "Presentación de 5 láminas", 4], ["hoja", "Hoja publicada, antes y después", 3], ["cifras", "Cifras y causas correctas", 2]],
+  s3: [["app", "App publicada", 4], ["leads", "Registros en /admin y correo", 4], ["chat", "Chat con dato real y prueba trampa", 4], ["spec", "SPEC.md completo", 4], ["cambio", "Cambio seguro registrado", 2], ["extra", "Extra: MCP o panel con API", 2]],
+};
+let RUBRICA = RUBRICAS.s1;
 const abiertos = new Set(); let firma = "", filtro = "";
 const lsGet = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
@@ -106,6 +111,7 @@ function md(t) {
   cerrarTabla(); return out;
 }
 function pintarEntregas() {
+  RUBRICA = RUBRICAS[ent.tarea] || RUBRICAS.s1;
   const all = ent.entregas, porCorreo = {};
   all.forEach(e => { (porCorreo[e.email] = porCorreo[e.email] || []).push(e); });
   const plazo = new Date(ent.plazo).getTime() / 1000;
