@@ -60,3 +60,15 @@ window.ENCUESTAS = {
     preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s3_" + p.id.slice(2) : "s3_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
   };
 })();
+
+// Encuesta de cierre de la sesión 4.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["WhatsApp oficial en Meta", "Bot de WhatsApp con IA", "Prueba de 10 preguntas", "Agente de voz con Vapi", "Llamada que agenda una cita", "Reglas de Meta y Ley 32323", "Extra: todo conectado a tus leads", "Radar IA al final"];
+  window.ENCUESTAS.cierre4 = {
+    titulo: "¿Cómo te fue en la sesión 4?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s4", prefijo: "c4-", contador: "s4_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s4_" + p.id.slice(2) : "s4_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
+  };
+})();
