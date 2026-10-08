@@ -8,6 +8,7 @@ fecha: 2026-10-08
 | Herramienta | Para qué | Dirección |
 |---|---|---|
 | Obsidian | Segundo cerebro local | https://obsidian.md |
+| Manus | Agente que investiga y entrega archivos | https://manus.im |
 | Lovable | Apps con prompts | https://lovable.dev |
 | v0 | Dashboards y APIs | https://v0.app |
 | OpenRouter | Modelos gratis por API | https://openrouter.ai |
