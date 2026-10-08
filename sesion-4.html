@@ -16,9 +16,9 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 4 · WhatsApp oficial y llamadas con IA</h1><p>Jueves 8 de octubre · AI Productivity Engineering · eIA. Cuatro retos de 25 a 30 minutos y un extra.</p></header>
+<header><h1>Sesión 4 · WhatsApp oficial y llamadas con IA</h1><p>Jueves 8 de octubre · AI Productivity Engineering · eIA. Cinco retos y un extra. Empezamos por tu segundo cerebro.</p></header>
 
-<div class="msg"><b>Hoy vas a construir:</b> un bot de WhatsApp oficial, aprobado por Meta, que responde con tu catálogo y pasa a una persona cuando el cliente lo pide, y un agente de voz que atiende llamadas y agenda citas. Todo con datos de práctica y respetando la Ley 32323.</div>
+<div class="msg"><b>Hoy vas a construir:</b> tu segundo cerebro en Obsidian, conectado a la IA, para no perder nada de lo que aprendes y construyes. Después, un bot de WhatsApp oficial, aprobado por Meta, que responde con tu catálogo y pasa a una persona cuando el cliente lo pide, y un agente de voz que atiende llamadas y agenda citas. Todo con datos de práctica y respetando la Ley 32323.</div>
 
 <h2>Antes de empezar</h2>
 <ul>
@@ -26,8 +26,52 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <li>Cuenta en <a href="https://vapi.ai" target="_blank" rel="noopener">Vapi (https://vapi.ai)</a>. Al registrarte recibes US$ 10 de crédito, sin tarjeta.</li>
   <li>Ruta ventas: cuenta gratis en <a href="https://www.make.com" target="_blank" rel="noopener">Make (https://www.make.com)</a> y una clave gratis de Gemini en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio (https://aistudio.google.com/apikey)</a>.</li>
   <li>Ruta código: tu proyecto de Vercel de la sesión 2 y tu clave de OpenRouter o NVIDIA.</li>
+  <li>Instala <a href="https://obsidian.md" target="_blank" rel="noopener">Obsidian (https://obsidian.md)</a>. Es gratis, también para uso en el trabajo.</li>
   <li>Datos de práctica: <code>https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json</code></li>
 </ul>
+
+<h2>Reto 1 · Tu segundo cerebro con IA</h2>
+<div class="reto">
+  <p>Un <b>segundo cerebro</b> es un sistema para guardar lo que aprendes, decides y produces, y encontrarlo cuando lo necesitas. Con IA deja de ser un archivo muerto: la IA ordena, resume, enlaza y responde con <b>tus</b> notas. Usamos <b>Obsidian</b> porque tus notas son archivos Markdown en tu computadora: son tuyas, funcionan sin internet y cualquier IA las puede leer.</p>
+  <h3>El método: PARA y CODE</h3>
+  <ul>
+    <li><b>PARA</b> ordena por acción: <b>P</b>royectos con fecha, <b>Á</b>reas que siguen, <b>R</b>ecursos reutilizables y <b>A</b>rchivo.</li>
+    <li><b>CODE</b> es el ciclo: <b>C</b>apturar, <b>O</b>rganizar, <b>D</b>estilar y <b>E</b>xpresar.</li>
+  </ul>
+  <h3>Paso a paso</h3>
+  <ol>
+    <li>Descarga la plantilla del curso <a href="material/segundo-cerebro.zip">segundo-cerebro.zip</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/segundo-cerebro.zip</code>) y descomprímela.</li>
+    <li>En Obsidian, <b>Abrir carpeta como bóveda</b> y elige <code>Segundo-Cerebro-IA</code>. Lee la nota <b>Inicio</b>.</li>
+    <li>Instala el <a href="https://obsidian.md/clipper" target="_blank" rel="noopener">Web Clipper oficial (https://obsidian.md/clipper)</a> y guarda 3 cosas en <code>00 Inbox</code>: una noticia, un prompt que te sirvió y una idea para tu negocio.</li>
+    <li>Conecta la IA a tu bóveda con una de las rutas de abajo y procesa el Inbox.</li>
+    <li>Destila: pide a la IA las reglas de tu bot. Las usarás en el reto 3.</li>
+  </ol>
+  <p class="nota">La plantilla trae <code>CLAUDE.md</code> y <code>AGENTS.md</code>: las reglas que la IA lee antes de tocar tus notas. Por ejemplo, nunca borrar, solo archivar, y no guardar contraseñas ni datos de clientes.</p>
+  <h3><span class="ruta ventas">Ruta ventas</span> Claude Desktop, sin código</h3>
+  <ol>
+    <li>Instala <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude Desktop (https://claude.ai/download)</a>.</li>
+    <li>En Configuración → Extensiones, instala <b>Filesystem</b> y dale acceso solo a la carpeta de tu bóveda.</li>
+    <li>Pega los prompts de abajo. Claude lee y escribe tus notas, y Obsidian muestra los cambios al instante.</li>
+  </ol>
+  <h3><span class="ruta codigo">Ruta código</span> Claude Code u OpenCode en la bóveda</h3>
+  <ol>
+    <li>En la terminal: <code>cd Segundo-Cerebro-IA</code> y luego <code>claude</code> u <code>opencode</code>.</li>
+    <li>Respaldo gratis: <code>git init</code> y súbelo a un repositorio <b>privado</b> de GitHub. Obsidian Sync es de pago.</li>
+  </ol>
+  <h3>Prompt 1 · Organizar el Inbox</h3>
+  <div class="prompt" id="sc1">Lee CLAUDE.md. Procesa todas las notas de 00 Inbox: muévelas a la carpeta PARA que corresponda, agrega las propiedades tipo, estado y fecha, y enlázalas con notas existentes usando [[ ]]. No borres nada. Al final dame una tabla: nota, carpeta destino y por qué.</div>
+  <button class="copiar" data-copy="sc1" type="button">Copiar prompt</button>
+  <h3>Prompt 2 · Destilar para el reto 3</h3>
+  <div class="prompt" id="sc2">Lee CLAUDE.md. Con mis notas de 01 Proyectos y 03 Recursos, completa la sección «Reglas del bot» de la nota Bot WhatsApp Andina: qué responde, qué no responde, cuándo pasa a un asesor y qué datos pide para un pedido. Enlaza las notas que usaste. Si falta información, escribe PENDIENTE: y la pregunta.</div>
+  <button class="copiar" data-copy="sc2" type="button">Copiar prompt</button>
+  <h3>Prompt 3 · Pregúntale a tu cerebro</h3>
+  <div class="prompt" id="sc3">Lee CLAUDE.md. Según mis notas, ¿qué pendientes tengo esta semana? Ordénalos por fecha de entrega e indica en qué nota está cada uno.</div>
+  <button class="copiar" data-copy="sc3" type="button">Copiar prompt</button>
+  <h3>Prompt 4 · Revisión semanal</h3>
+  <div class="prompt" id="sc4">Lee CLAUDE.md. Haz mi revisión semanal: resume lo que hice según el Diario de los últimos 7 días, marca los proyectos sin avance, propone qué archivar y crea la nota de hoy en Diario con mis 3 prioridades. Muestra el plan antes de mover nada.</div>
+  <button class="copiar" data-copy="sc4" type="button">Copiar prompt</button>
+  <p class="nota"><b>Privacidad:</b> tus notas viven en tu computadora, pero lo que la IA lee se envía a la nube. Para notas sensibles usa un modelo local, como vimos en la sesión 1, con LM Studio u Ollama desde OpenCode. Alternativas a Obsidian: Notion, en la nube, o NotebookLM para hacer preguntas sobre tus documentos.</p>
+</div>
 
 <h2>Las reglas del juego</h2>
 <div class="reto">
@@ -39,7 +83,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
-<h2>Reto 1 · Tu WhatsApp oficial en Meta</h2>
+<h2>Reto 2 · Tu WhatsApp oficial en Meta</h2>
 <div class="reto">
   <ol>
     <li>En Meta for Developers, entra a <b>My Apps → Create app</b> y elige el caso de uso para conectar con clientes por WhatsApp. Crea o elige tu portafolio comercial.</li>
@@ -47,12 +91,12 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li>En el campo <b>To</b>, agrega tu celular con +51 y confírmalo con el código. Puedes registrar hasta 5 números de prueba.</li>
     <li>Pulsa <b>Send message</b>: te llega la plantilla <code>hello_world</code>, que ya viene aprobada.</li>
     <li>Respóndele desde tu celular. Eso abre la ventana de 24 horas en la que tu bot puede contestar con mensajes libres.</li>
-    <li>Anota el <b>Phone number ID</b> y el token: los usarás en el reto 2.</li>
+    <li>Anota el <b>Phone number ID</b> y el token: los usarás en el reto 3.</li>
   </ol>
   <p class="nota">El token temporal vence en 24 horas. Para un bot permanente se crea un usuario del sistema en la configuración del negocio. Lo veremos en la sesión 7.</p>
 </div>
 
-<h2>Reto 2 · Bot de WhatsApp con IA</h2>
+<h2>Reto 3 · Bot de WhatsApp con IA</h2>
 <div class="reto">
   <p>Primero escribe las reglas del bot, como un SPEC corto. Pégalas como instrucciones del modelo en cualquiera de las dos rutas.</p>
   <div class="prompt" id="p1">Eres el asistente de WhatsApp de Distribuidora Andina, una empresa ficticia de práctica.
@@ -96,7 +140,7 @@ CATÁLOGO: [pega aquí el contenido de catalogo-2025.json]</div>
   </ol>
 </div>
 
-<h2>Reto 3 · Agente de voz con Vapi</h2>
+<h2>Reto 4 · Agente de voz con Vapi</h2>
 <div class="reto">
   <ol>
     <li>En Vapi, <b>Assistants → Create Assistant</b> con una plantilla en blanco.</li>
@@ -115,7 +159,7 @@ DATOS: [pega aquí los productos principales con precio, pedido mínimo, zonas, 
   <p class="nota">Con los US$ 10 de crédito tienes decenas de minutos de prueba. El costo real depende de la voz y del modelo que elijas. Los números gratis de Vapi son solo de Estados Unidos y no hacen llamadas salientes.</p>
 </div>
 
-<h2>Reto 4 · Llamada de seguimiento que agenda</h2>
+<h2>Reto 5 · Llamada de seguimiento que agenda</h2>
 <div class="reto">
   <ol>
     <li>En Vapi, <b>Integrations → Tools Provider → Google Calendar</b> y conecta tu cuenta.</li>
@@ -145,6 +189,7 @@ Al final, confirma día y hora.</div>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 4</b> y envía:</p>
   <ul>
+    <li>Captura de tu bóveda en Obsidian con las carpetas PARA y la tabla que devolvió la IA al procesar tu Inbox.</li>
     <li>Captura de la plantilla <code>hello_world</code> recibida en tu celular.</li>
     <li>La tabla de las 10 preguntas con las respuestas del bot y si fueron correctas, con capturas.</li>
     <li>Las reglas de tu bot.</li>

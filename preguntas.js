@@ -64,7 +64,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 4.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["WhatsApp oficial en Meta", "Bot de WhatsApp con IA", "Prueba de 10 preguntas", "Agente de voz con Vapi", "Llamada que agenda una cita", "Reglas de Meta y Ley 32323", "Extra: todo conectado a tus leads", "Radar IA al final"];
+  const valioso = ["Segundo cerebro con Obsidian", "WhatsApp oficial en Meta", "Bot de WhatsApp con IA", "Prueba de 10 preguntas", "Agente de voz con Vapi", "Llamada que agenda una cita", "Reglas de Meta y Ley 32323", "Extra: todo conectado a tus leads", "Radar IA al final"];
   window.ENCUESTAS.cierre4 = {
     titulo: "¿Cómo te fue en la sesión 4?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
