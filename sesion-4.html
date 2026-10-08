@@ -30,6 +30,8 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <li>Datos de práctica: <code>https://unimauro.github.io/curso-ia-productividad/material/catalogo-2025.json</code></li>
 </ul>
 
+<div class="msg"><b>Hoy todo es gratis.</b> No compres nada para esta clase. Usamos: Obsidian, Claude Desktop con el plan gratis, Manus gratis, el número de prueba de Meta, Lovable gratis, Make gratis, Gemini con clave gratis, OpenRouter o NVIDIA gratis, Vercel Hobby y los US$ 10 de regalo de Vapi.<br><b>No necesitas:</b> Claude Pro ni Claude Code, ManyChat Pro, Obsidian Sync, un número de Twilio ni plantillas de marketing de Meta.</div>
+
 <h2>Reto 1 · Tu segundo cerebro con IA</h2>
 <div class="reto">
   <p>Un <b>segundo cerebro</b> es un sistema para guardar lo que aprendes, decides y produces, y encontrarlo cuando lo necesitas. Con IA deja de ser un archivo muerto: la IA ordena, resume, enlaza y responde con <b>tus</b> notas. Usamos <b>Obsidian</b> porque tus notas son archivos Markdown en tu computadora: son tuyas, funcionan sin internet y cualquier IA las puede leer.</p>
@@ -49,13 +51,14 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <p class="nota">La plantilla trae <code>CLAUDE.md</code> y <code>AGENTS.md</code>: las reglas que la IA lee antes de tocar tus notas. Por ejemplo, nunca borrar, solo archivar, y no guardar contraseñas ni datos de clientes.</p>
   <h3><span class="ruta ventas">Ruta ventas</span> Claude Desktop, sin código</h3>
   <ol>
-    <li>Instala <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude Desktop (https://claude.ai/download)</a>.</li>
+    <li>Instala <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude Desktop (https://claude.ai/download)</a>. Funciona con el plan gratis.</li>
     <li>En Configuración → Extensiones, instala <b>Filesystem</b> y dale acceso solo a la carpeta de tu bóveda.</li>
     <li>Pega los prompts de abajo. Claude lee y escribe tus notas, y Obsidian muestra los cambios al instante.</li>
   </ol>
-  <h3><span class="ruta codigo">Ruta código</span> Claude Code u OpenCode en la bóveda</h3>
+  <h3><span class="ruta codigo">Ruta código</span> OpenCode en la bóveda, gratis</h3>
   <ol>
-    <li>En la terminal: <code>cd Segundo-Cerebro-IA</code> y luego <code>claude</code> u <code>opencode</code>.</li>
+    <li>Instala <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode (https://opencode.ai)</a> y conéctalo con tu clave gratis de OpenRouter o de NVIDIA Build.</li>
+    <li>En la terminal: <code>cd Segundo-Cerebro-IA</code> y luego <code>opencode</code>. Claude Code también sirve, pero necesita Claude Pro.</li>
     <li>Respaldo gratis: <code>git init</code> y súbelo a un repositorio <b>privado</b> de GitHub. Obsidian Sync es de pago.</li>
   </ol>
   <h3><span class="ruta ventas">Ruta agente</span> Manus, en la nube</h3>
@@ -118,6 +121,27 @@ Si el cliente quiere comprar, pide nombre, negocio y distrito, y dile que un ase
 Si el cliente pide hablar con una persona, no insistas: dile que un asesor le escribirá.
 CATÁLOGO: [pega aquí el contenido de catalogo-2025.json]</div>
   <button class="copiar" data-copy="p1" type="button">Copiar prompt</button>
+  <h3><span class="ruta ventas">Ruta recomendada hoy</span> WhatsApp dentro de tu app de Lovable</h3>
+  <p>Tu app de la sesión 3 recibe los mensajes, el bot responde con tus reglas y tú gestionas cada conversación desde un panel: ves el chat, tomas el control, respondes a mano y conviertes al contacto en lead. Todo gratis: Lovable Cloud trae uso mensual gratis y la IA usa tu clave gratis de Gemini.</p>
+  <ol>
+    <li>Crea tu clave gratis de Gemini en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio (https://aistudio.google.com/apikey)</a>.</li>
+    <li>Abre tu proyecto de Lovable de la sesión 3 y pega el prompt de abajo, con tus reglas del bot.</li>
+    <li>Cuando Lovable pida los secretos, pega <code>WHATSAPP_TOKEN</code>, <code>WHATSAPP_PHONE_NUMBER_ID</code>, <code>WHATSAPP_VERIFY_TOKEN</code> (una palabra que inventas) y <code>GEMINI_API_KEY</code>.</li>
+    <li>Copia la URL de la función <code>whatsapp-webhook</code> que muestra Lovable Cloud.</li>
+    <li>En Meta, <b>WhatsApp → Configuration</b>: pega esa URL, el mismo verify token, y suscríbete al campo <b>messages</b>.</li>
+    <li>Escríbele a tu número de prueba y mira el mensaje llegar a <code>/admin/whatsapp</code>.</li>
+  </ol>
+  <div class="prompt" id="pw1">Sigue el SPEC del proyecto. Conecta mi app con la WhatsApp Cloud API de Meta para recibir y gestionar mensajes.
+
+1. Crea una función de backend pública whatsapp-webhook. En GET: si hub.verify_token coincide con el secreto WHATSAPP_VERIFY_TOKEN, responde con hub.challenge; si no, error 403. En POST: guarda cada mensaje de texto entrante en la tabla whatsapp_mensajes (teléfono, nombre del perfil, texto, dirección entrante o saliente, fecha) e ignora los avisos de entregado y leído. Responde siempre 200 a Meta.
+
+2. Crea la tabla whatsapp_conversaciones (teléfono, nombre, modo bot o humano, último mensaje, fecha). Si la conversación está en modo bot, genera la respuesta con la API de Gemini usando el secreto GEMINI_API_KEY y estas reglas: [pega aquí las reglas de tu bot]. Envía la respuesta con la API de Meta usando WHATSAPP_TOKEN y WHATSAPP_PHONE_NUMBER_ID, y guárdala como saliente. Si el cliente pide un asesor o una persona, pasa la conversación a modo humano y deja de responder automáticamente.
+
+3. Crea /admin/whatsapp, solo para el dueño: lista de conversaciones con el último mensaje y la hora, vista del chat, un interruptor bot o humano, una caja para responder a mano y un botón "Convertir en lead" que copie el contacto a la tabla leads con origen whatsapp.
+
+4. Guarda todas las claves como secretos, nunca en el código. Revisa la seguridad de las tablas para que solo el dueño pueda leerlas.</div>
+  <button class="copiar" data-copy="pw1" type="button">Copiar prompt</button>
+  <p class="nota">Las respuestas a mano solo se pueden enviar dentro de las 24 horas desde el último mensaje del cliente. Cada número tiene 1.000 mensajes de servicio gratis al mes. Si se te acaban los créditos de Lovable del día, usa la ruta de Make o la de código.</p>
   <h3><span class="ruta ventas">Ruta ventas</span> Make, sin código</h3>
   <ol>
     <li>En Make crea un escenario con tres módulos: <b>WhatsApp Business Cloud → Watch Events</b>, <b>Google Gemini AI</b> para generar la respuesta, y <b>WhatsApp Business Cloud → Send a Message</b>.</li>
@@ -184,7 +208,7 @@ Resuelve sus dudas con los datos del catálogo.
 Ofrece una cita de 20 minutos con un asesor. Revisa la disponibilidad en el calendario, propone dos horarios y crea el evento con su nombre y teléfono.
 Al final, confirma día y hora.</div>
   <button class="copiar" data-copy="p4" type="button">Copiar prompt</button>
-  <p class="nota"><b>Ley 32323:</b> solo llama a quien marcó la casilla de consentimiento en tu formulario de la sesión 3. Guarda la fecha del consentimiento y respeta el "no me llamen". Para llamar a números de Perú necesitas importar un número de pago, por ejemplo de Twilio. En clase lo probamos desde el navegador.</p>
+  <p class="nota"><b>Ley 32323:</b> solo llama a quien marcó la casilla de consentimiento en tu formulario de la sesión 3. Guarda la fecha del consentimiento y respeta el "no me llamen". Para llamar a números de Perú hace falta un número de pago, por ejemplo de Twilio: <b>hoy no lo compres</b>. En clase todo se prueba gratis desde el navegador.</p>
 </div>
 
 <h2>Extra · Todo llega a tus leads</h2>
