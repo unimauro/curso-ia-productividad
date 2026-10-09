@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sesión 5 · Guía de retos</title><link rel="stylesheet" href="estilo.css">
+<style>
+main{max-width:860px}
+h2{color:var(--navy);margin-top:32px}
+h3{margin:18px 0 6px}
+.reto{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0}
+.reto ol,.reto ul{padding-left:1.2em}
+.reto li{margin:6px 0}
+.ruta{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:999px;margin-right:6px}
+.ventas{background:#E2F4EE;color:#0B5E42}.codigo{background:#EEE8FC;color:#4B2A9E}
+@media (prefers-color-scheme: dark){.ventas{background:#10362D;color:#B6F0D8}.codigo{background:#2A2150;color:#D9CCFF}}
+.prompt{background:var(--tint);border-radius:10px;padding:12px 14px;white-space:pre-wrap;font-size:.95rem;margin:8px 0}
+.copiar{width:auto;padding:6px 12px;font-size:.85rem;margin-top:6px}
+code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+</style></head>
+<body><main>
+<header><h1>Sesión 5 · Instagram, TikTok y LinkedIn que venden</h1><p>Martes 13 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra, con la tienda Casas para Gatos como proyecto.</p></header>
+
+<div class="msg"><b>Hoy todo es gratis.</b> Usamos Meta Business Suite, ManyChat gratis, CapCut o Clipchamp, Canva, LinkedIn, tu segundo cerebro con Obsidian y Manus, y tu app de Lovable. <b>No necesitas:</b> ManyChat Pro, anuncios pagados, LinkedIn Premium ni Sales Navigator.</div>
+
+<h2>Las reglas de las redes</h2>
+<ul>
+  <li><b>Instagram:</b> solo herramientas que usan la API oficial de Meta. Un comentario permite un solo mensaje privado en 7 días.</li>
+  <li><b>TikTok:</b> los mensajes automáticos solo funcionan en cuentas de empresa verificadas o con acceso avanzado. La revisión de los textos tarda de 1 a 5 días hábiles.</li>
+  <li><b>LinkedIn:</b> publica y programa con herramientas oficiales. Nunca automatices invitaciones ni mensajes directos: la IA redacta, tú envías.</li>
+  <li><b>Ley 29733 y Ley 32323:</b> pide permiso antes de guardar datos y antes de escribir para vender.</li>
+</ul>
+
+<h2>Reto 1 · Instagram: comentario que abre una conversación</h2>
+<div class="reto">
+  <p>El cliente comenta <b>QUIERO</b> en tu post y recibe un mensaje directo con modelos, precios y el enlace a tu landing.</p>
+  <h3><span class="ruta ventas">Ruta ventas</span> Meta Business Suite, gratis y sin límite</h3>
+  <ol>
+    <li>En <a href="https://business.facebook.com" target="_blank" rel="noopener">Meta Business Suite (https://business.facebook.com)</a>, desde la computadora: <b>Bandeja → Automatizaciones → Crear automatización</b>.</li>
+    <li>Configura la respuesta instantánea, las palabras clave y el comentario a mensaje para tus publicaciones.</li>
+    <li>Puede tardar unos minutos en enviar el mensaje.</li>
+  </ol>
+  <h3><span class="ruta ventas">Ruta ventas</span> ManyChat gratis, para probar hoy</h3>
+  <p><a href="https://manychat.com" target="_blank" rel="noopener">ManyChat (https://manychat.com)</a> tiene una plantilla de comentario a mensaje. El plan gratis llega hasta 25 contactos al mes: sirve para probar, no para una campaña.</p>
+  <h3><span class="ruta codigo">Ruta código</span> Webhook a tu app de Lovable</h3>
+  <p>Mira el Extra al final de esta guía.</p>
+  <h3>Prompt del post</h3>
+  <div class="prompt" id="p1">Escribe un post de Instagram para Casas para Gatos sobre la Casa Premium XL. Gancho en la primera línea, 3 beneficios cortos, precio solo si está en mi catálogo y una llamada a la acción: «Comenta QUIERO y te envío los modelos y precios por mensaje». Máximo 80 palabras y 5 hashtags.</div>
+  <button class="copiar" data-copy="p1" type="button">Copiar prompt</button>
+  <h3>El mensaje automático</h3>
+  <div class="prompt" id="p1b">¡Hola! 😺 Gracias por comentar. Aquí tienes los modelos y precios: [enlace a tu landing con ?utm_source=instagram]. ¿Para cuántos gatos la buscas? Si prefieres, te atiende una persona.</div>
+  <button class="copiar" data-copy="p1b" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 2 · Una semana de contenido con IA</h2>
+<div class="reto">
+  <ol>
+    <li>En Manus, dentro de tu Project «Segundo cerebro», pide una investigación de tendencias y preguntas frecuentes sobre casas para gatos. Guarda el Markdown en tu <code>00 Inbox</code>.</li>
+    <li>Con Claude en tu bóveda, usa el prompt de abajo.</li>
+    <li>Diseña las piezas y el carrusel en <a href="https://www.canva.com" target="_blank" rel="noopener">Canva (https://www.canva.com)</a> gratis.</li>
+    <li>Programa Instagram y Facebook gratis en Meta Business Suite.</li>
+  </ol>
+  <div class="prompt" id="p2">Lee CLAUDE.md y la investigación de Manus en 00 Inbox. Crea en 01 Proyectos la nota «Semana de contenido» con 7 publicaciones para Casas para Gatos: día, red (Instagram, TikTok o LinkedIn), formato, gancho, texto, llamada a la acción y enlace con utm_source de cada red. Mezcla educar, mostrar producto y testimonios ilustrativos. No inventes precios ni cifras.</div>
+  <button class="copiar" data-copy="p2" type="button">Copiar prompt</button>
+  <p class="nota">Los anuncios que abren WhatsApp son de pago. Hoy no publicamos anuncios.</p>
+</div>
+
+<h2>Reto 3 · TikTok: video que vende</h2>
+<div class="reto">
+  <ol>
+    <li>Escribe el guion con el prompt de abajo.</li>
+    <li>Graba 3 tomas verticales de tu producto con el celular, o usa fotos.</li>
+    <li>Edita en <a href="https://www.capcut.com" target="_blank" rel="noopener">CapCut (https://www.capcut.com)</a> o <a href="https://clipchamp.com" target="_blank" rel="noopener">Clipchamp (https://clipchamp.com)</a>: voz con IA y subtítulos automáticos, gratis y sin marca de agua.</li>
+    <li>Publícalo en TikTok y como Reel. Fija el comentario «Escríbeme QUIERO por mensaje».</li>
+  </ol>
+  <div class="prompt" id="p3">Escribe el guion de un video vertical de 30 segundos para TikTok de Casas para Gatos. Formato: gancho que detenga el scroll en 3 segundos, problema del dueño del gato, la Casa Premium XL como solución, y cierre: «Escríbeme QUIERO y te paso modelos y precios». Indica qué se ve en pantalla en cada parte. Lenguaje peruano, cercano. No inventes precios.</div>
+  <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
+  <h3>Mensajes automáticos de TikTok</h3>
+  <p>En TikTok, <b>Business Suite → Message Center</b>: bienvenida de hasta 250 caracteres, preguntas sugeridas con respuestas de hasta 200 y respuesta por palabra clave de hasta 500. Activa antes «Recibir mensajes de todos». Si tu cuenta aún no está verificada, deja los textos listos en tu segundo cerebro.</p>
+</div>
+
+<h2>Reto 4 · LinkedIn para vender a empresas</h2>
+<div class="reto">
+  <p>Casas para Gatos también vende a veterinarias, pet shops y hoteles para mascotas.</p>
+  <ol>
+    <li>Ajusta tu titular para decir a quién ayudas y agrega el enlace a tu landing con <code>?utm_source=linkedin</code>.</li>
+    <li>Arma un carrusel de 5 láminas en Canva o PowerPoint, expórtalo en PDF y súbelo como documento.</li>
+    <li>LinkedIn programa publicaciones gratis hasta 3 meses antes. Si no te deja programar el PDF, publícalo a mano.</li>
+    <li>Prospección asistida: Manus investiga, Claude redacta y tú envías cada mensaje.</li>
+  </ol>
+  <h3>Prompt 1 · Manus investiga</h3>
+  <div class="prompt" id="p4">Busca 10 veterinarias, pet shops u hoteles para mascotas en Lima con página de LinkedIn o sitio web. Para cada uno: nombre, distrito, a qué se dedica, un dato reciente que puedas citar y su enlace. Entrégalo como tabla en Markdown para mi Inbox de Obsidian. No inventes datos.</div>
+  <button class="copiar" data-copy="p4" type="button">Copiar prompt</button>
+  <h3>Prompt 2 · Claude redacta</h3>
+  <div class="prompt" id="p4b">Con la tabla de Manus, redacta para cada empresa un mensaje de LinkedIn de máximo 300 caracteres: menciona su dato reciente, ofrece Casas para Gatos para su tienda o sus clientes y termina con una pregunta abierta. Sin precios ni promesas. Yo reviso y envío cada uno a mano.</div>
+  <button class="copiar" data-copy="p4b" type="button">Copiar prompt</button>
+  <p class="nota">Nunca automatices invitaciones ni mensajes en LinkedIn: restringe esas cuentas. Los formularios de clientes potenciales de LinkedIn van con anuncios pagados; hoy usamos tu landing.</p>
+</div>
+
+<h2>Extra · Instagram llega a tu Admin de Lovable</h2>
+<div class="reto">
+  <p>Seguimos usando Lovable: la misma bandeja de la sesión 4 suma Instagram como canal. Necesitas una app de Meta en modo desarrollo con tu cuenta de Instagram profesional como probadora.</p>
+  <div class="prompt" id="p5">Sigue el SPEC y no rehagas lo que funciona. Agrega Instagram como canal en la bandeja de conversaciones. Crea la función instagram-webhook que verifique la suscripción con un token secreto, reciba comentarios y mensajes, y guarde cada uno en la conversación del lead con canal instagram. Si el comentario dice QUIERO, envía una respuesta privada con el enlace de la landing. Reutiliza la IA y las reglas del bot de WhatsApp. Claves como secretos.</div>
+  <button class="copiar" data-copy="p5" type="button">Copiar prompt</button>
+  <p class="nota">La API de Instagram responde un comentario en privado una sola vez, dentro de 7 días.</p>
+</div>
+
+<h2>Entrega de la sesión 5</h2>
+<div class="reto">
+  <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 5</b> y envía:</p>
+  <ul>
+    <li>Captura del comentario QUIERO y del mensaje automático en Instagram.</li>
+    <li>Tu semana de contenido de tu bóveda, con los enlaces utm de cada red.</li>
+    <li>Tu video corto publicado o su enlace.</li>
+    <li>LinkedIn: carrusel programado o publicado y 3 mensajes redactados.</li>
+    <li>Opcional: Instagram en tu Admin de Lovable.</li>
+  </ul>
+  <p><b>Fecha límite:</b> jueves 15 de octubre, 6:59 p. m., hora de Lima.</p>
+</div>
+
+<h2>Prepárate para la sesión 6</h2>
+<ul>
+  <li>Ten a mano tu Admin de leads de Lovable.</li>
+  <li>Crea tu perfil de empresa en Google para pedir reseñas.</li>
+  <li>Ten tus datos de Yape o Plin para el enlace de pago.</li>
+</ul>
+<p class="nota"><a href="index.html">Volver al inicio del curso</a></p>
+</main>
+<script>
+document.querySelectorAll("button[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const t = document.getElementById(b.dataset.copy).innerText;
+  try { await navigator.clipboard.writeText(t); b.textContent = "Copiado"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Texto seleccionado: cópialo"; }
+  setTimeout(() => b.textContent = "Copiar prompt", 2500);
+}));
+</script>
+</body></html>

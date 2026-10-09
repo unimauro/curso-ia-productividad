@@ -72,3 +72,15 @@ window.ENCUESTAS = {
     preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s4_" + p.id.slice(2) : "s4_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para armar tu segundo cerebro y tu bot de WhatsApp por tu cuenta?" } : {})),
   };
 })();
+
+// Encuesta de cierre de la sesión 5.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Video de apertura", "Instagram: comentario a mensaje", "Semana de contenido con IA", "TikTok: video con IA", "TikTok: mensajes automáticos", "LinkedIn y prospección asistida", "Extra: Instagram en tu Admin", "Radar IA al final"];
+  window.ENCUESTAS.cierre5 = {
+    titulo: "¿Cómo te fue en la sesión 5?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s5", prefijo: "c5-", contador: "s5_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s5_" + p.id.slice(2) : "s5_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para que tus redes generen clientes por tu cuenta?" } : {})),
+  };
+})();

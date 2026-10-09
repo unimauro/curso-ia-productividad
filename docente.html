@@ -36,8 +36,9 @@ main{max-width:1100px}
   <button type="button" data-t="cierre2">Cierre sesión 2</button>
   <button type="button" data-t="cierre3">Cierre sesión 3</button>
   <button type="button" data-t="cierre4">Cierre sesión 4</button>
+  <button type="button" data-t="cierre5">Cierre sesión 5</button>
   <button type="button" data-t="entregas">Entregas</button>
-  <select id="tareaSel" style="padding:10px;border-radius:10px;font:inherit"><option value="s4">Tarea sesión 4</option><option value="s3">Tarea sesión 3</option><option value="s2">Tarea sesión 2</option><option value="s1">Tarea sesión 1</option></select>
+  <select id="tareaSel" style="padding:10px;border-radius:10px;font:inherit"><option value="s5">Tarea sesión 5</option><option value="s4">Tarea sesión 4</option><option value="s3">Tarea sesión 3</option><option value="s2">Tarea sesión 2</option><option value="s1">Tarea sesión 1</option></select>
 </div>
 <div id="out"></div>
 </main>
@@ -93,6 +94,7 @@ function pintar() {
 const RUBRICAS = {
   s1: [["hallazgos", "3 hallazgos con cifras", 4], ["cifras", "Cifras correctas", 4], ["grafico", "Gráfico", 3], ["recos", "2 recomendaciones", 3], ["modelos", "Compara modelos y dice en qué fallan", 3], ["extra", "Anomalías o análisis extra", 3]],
   s2: [["dash", "Dashboard publicado con hallazgo", 4], ["api", "API con filtros", 3], ["agente", "Agente que consulta la API", 4], ["ppt", "Presentación de 5 láminas", 4], ["hoja", "Hoja publicada, antes y después", 3], ["cifras", "Cifras y causas correctas", 2]],
+  s5: [["ig", "Instagram: comentario a mensaje", 5], ["semana", "Semana de contenido con utm", 4], ["video", "Video corto publicado", 4], ["linkedin", "Carrusel y 3 mensajes", 4], ["extra", "Instagram en el Admin", 3]],
   s4: [["cerebro", "Segundo cerebro con PARA e Inbox procesado", 4], ["meta", "WhatsApp oficial: hello_world", 3], ["bot", "Bot con IA que responde", 3], ["prueba", "Prueba de 10 preguntas", 3], ["voz", "Agente de voz atiende", 3], ["agenda", "Agenda una cita", 2], ["reglas", "Reglas del bot y consentimiento", 2]],
   s3: [["app", "App publicada", 4], ["leads", "Registros en /admin y correo", 4], ["chat", "Chat con dato real y prueba trampa", 4], ["spec", "SPEC.md completo", 4], ["cambio", "Cambio seguro registrado", 2], ["extra", "Extra: MCP o panel con API", 2]],
 };
