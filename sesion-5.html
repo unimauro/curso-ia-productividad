@@ -16,36 +16,37 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 5 · Instagram, TikTok y LinkedIn que venden</h1><p>Martes 13 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra, con la tienda Casas para Gatos como proyecto.</p></header>
+<header><h1>Sesión 5 · Instagram, Facebook, TikTok y LinkedIn que venden</h1><p>Martes 13 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra, con la tienda Casas para Gatos como proyecto.</p></header>
 
 <div class="msg"><b>Hoy todo es gratis.</b> Usamos Meta Business Suite, ManyChat gratis, CapCut o Clipchamp, Canva, LinkedIn, tu segundo cerebro con Obsidian y Manus, y tu app de Lovable. <b>No necesitas:</b> ManyChat Pro, anuncios pagados, LinkedIn Premium ni Sales Navigator.</div>
 
 <h2>Las reglas de las redes</h2>
 <ul>
-  <li><b>Instagram:</b> solo herramientas que usan la API oficial de Meta. Un comentario permite un solo mensaje privado en 7 días.</li>
+  <li><b>Instagram y Facebook:</b> solo herramientas con la API oficial de Meta. Un comentario permite un solo mensaje privado, dentro de 7 días.</li>
   <li><b>TikTok:</b> los mensajes automáticos solo funcionan en cuentas de empresa verificadas o con acceso avanzado. La revisión de los textos tarda de 1 a 5 días hábiles.</li>
   <li><b>LinkedIn:</b> publica y programa con herramientas oficiales. Nunca automatices invitaciones ni mensajes directos: la IA redacta, tú envías.</li>
   <li><b>Ley 29733 y Ley 32323:</b> pide permiso antes de guardar datos y antes de escribir para vender.</li>
 </ul>
 
-<h2>Reto 1 · Instagram: comentario que abre una conversación</h2>
+<h2>Reto 1 · Instagram y Facebook: comentario que abre una conversación</h2>
 <div class="reto">
-  <p>El cliente comenta <b>QUIERO</b> en tu post y recibe un mensaje directo con modelos, precios y el enlace a tu landing.</p>
+  <p>El cliente comenta <b>QUIERO</b> en tu post de Instagram o de tu página de Facebook y recibe un mensaje directo o de Messenger con modelos, precios y el enlace a tu landing.</p>
   <h3><span class="ruta ventas">Ruta ventas</span> Meta Business Suite, gratis y sin límite</h3>
   <ol>
     <li>En <a href="https://business.facebook.com" target="_blank" rel="noopener">Meta Business Suite (https://business.facebook.com)</a>, desde la computadora: <b>Bandeja → Automatizaciones → Crear automatización</b>.</li>
+    <li>Elige el canal: Instagram, Messenger o ambos.</li>
     <li>Configura la respuesta instantánea, las palabras clave y el comentario a mensaje para tus publicaciones.</li>
     <li>Puede tardar unos minutos en enviar el mensaje.</li>
   </ol>
   <h3><span class="ruta ventas">Ruta ventas</span> ManyChat gratis, para probar hoy</h3>
-  <p><a href="https://manychat.com" target="_blank" rel="noopener">ManyChat (https://manychat.com)</a> tiene una plantilla de comentario a mensaje. El plan gratis llega hasta 25 contactos al mes: sirve para probar, no para una campaña.</p>
+  <p><a href="https://manychat.com" target="_blank" rel="noopener">ManyChat (https://manychat.com)</a> tiene una plantilla de comentario a mensaje. El plan gratis conecta 2 canales, Instagram y Facebook, y llega hasta 25 contactos al mes: sirve para probar, no para una campaña.</p>
   <h3><span class="ruta codigo">Ruta código</span> Webhook a tu app de Lovable</h3>
   <p>Mira el Extra al final de esta guía.</p>
   <h3>Prompt del post</h3>
-  <div class="prompt" id="p1">Escribe un post de Instagram para Casas para Gatos sobre la Casa Premium XL. Gancho en la primera línea, 3 beneficios cortos, precio solo si está en mi catálogo y una llamada a la acción: «Comenta QUIERO y te envío los modelos y precios por mensaje». Máximo 80 palabras y 5 hashtags.</div>
+  <div class="prompt" id="p1">Escribe un post para Instagram y Facebook de Casas para Gatos sobre la Casa Premium XL. Gancho en la primera línea, 3 beneficios cortos, precio solo si está en mi catálogo y una llamada a la acción: «Comenta QUIERO y te envío los modelos y precios por mensaje». Máximo 80 palabras y 5 hashtags.</div>
   <button class="copiar" data-copy="p1" type="button">Copiar prompt</button>
   <h3>El mensaje automático</h3>
-  <div class="prompt" id="p1b">¡Hola! 😺 Gracias por comentar. Aquí tienes los modelos y precios: [enlace a tu landing con ?utm_source=instagram]. ¿Para cuántos gatos la buscas? Si prefieres, te atiende una persona.</div>
+  <div class="prompt" id="p1b">¡Hola! 😺 Gracias por comentar. Aquí tienes los modelos y precios: [enlace a tu landing con ?utm_source=instagram o facebook]. ¿Para cuántos gatos la buscas? Si prefieres, te atiende una persona.</div>
   <button class="copiar" data-copy="p1b" type="button">Copiar prompt</button>
 </div>
 
@@ -94,10 +95,10 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <p class="nota">Nunca automatices invitaciones ni mensajes en LinkedIn: restringe esas cuentas. Los formularios de clientes potenciales de LinkedIn van con anuncios pagados; hoy usamos tu landing.</p>
 </div>
 
-<h2>Extra · Instagram llega a tu Admin de Lovable</h2>
+<h2>Extra · Instagram y Facebook llegan a tu Admin de Lovable</h2>
 <div class="reto">
-  <p>Seguimos usando Lovable: la misma bandeja de la sesión 4 suma Instagram como canal. Necesitas una app de Meta en modo desarrollo con tu cuenta de Instagram profesional como probadora.</p>
-  <div class="prompt" id="p5">Sigue el SPEC y no rehagas lo que funciona. Agrega Instagram como canal en la bandeja de conversaciones. Crea la función instagram-webhook que verifique la suscripción con un token secreto, reciba comentarios y mensajes, y guarde cada uno en la conversación del lead con canal instagram. Si el comentario dice QUIERO, envía una respuesta privada con el enlace de la landing. Reutiliza la IA y las reglas del bot de WhatsApp. Claves como secretos.</div>
+  <p>Seguimos usando Lovable: la misma bandeja de la sesión 4 suma Instagram y Facebook Messenger como canales. Necesitas una app de Meta en modo desarrollo, con tu cuenta de Instagram profesional como probadora y tu página de Facebook conectada.</p>
+  <div class="prompt" id="p5">Sigue el SPEC y no rehagas lo que funciona. Agrega Instagram y Facebook Messenger como canales en la bandeja de conversaciones. Crea la función meta-webhook que verifique la suscripción con un token secreto, reciba comentarios y mensajes de Instagram y de mi página de Facebook, y guarde cada uno en la conversación del lead con canal instagram o facebook. Si el comentario dice QUIERO, envía una respuesta privada con el enlace de la landing. Reutiliza la IA y las reglas del bot de WhatsApp. Claves como secretos.</div>
   <button class="copiar" data-copy="p5" type="button">Copiar prompt</button>
   <p class="nota">La API de Instagram responde un comentario en privado una sola vez, dentro de 7 días.</p>
 </div>
@@ -106,11 +107,11 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 5</b> y envía:</p>
   <ul>
-    <li>Captura del comentario QUIERO y del mensaje automático en Instagram.</li>
+    <li>Capturas del comentario QUIERO y del mensaje automático en Instagram y en Facebook.</li>
     <li>Tu semana de contenido de tu bóveda, con los enlaces utm de cada red.</li>
     <li>Tu video corto publicado o su enlace.</li>
     <li>LinkedIn: carrusel programado o publicado y 3 mensajes redactados.</li>
-    <li>Opcional: Instagram en tu Admin de Lovable.</li>
+    <li>Opcional: Instagram y Facebook en tu Admin de Lovable.</li>
   </ul>
   <p><b>Fecha límite:</b> jueves 15 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
