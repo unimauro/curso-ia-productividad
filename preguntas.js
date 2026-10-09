@@ -69,6 +69,6 @@ window.ENCUESTAS = {
     titulo: "¿Cómo te fue en la sesión 4?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
     gracias: base.gracias, clave: "encuesta-ia-cierre-s4", prefijo: "c4-", contador: "s4_c1",
-    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s4_" + p.id.slice(2) : "s4_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {})),
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s4_" + p.id.slice(2) : "s4_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para armar tu segundo cerebro y tu bot de WhatsApp por tu cuenta?" } : {})),
   };
 })();
