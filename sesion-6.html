@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sesión 6 · Guía de retos</title><link rel="stylesheet" href="estilo.css">
+<style>
+main{max-width:860px}
+h2{color:var(--navy);margin-top:32px}
+h3{margin:18px 0 6px}
+.reto{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0}
+.reto ol,.reto ul{padding-left:1.2em}
+.reto li{margin:6px 0}
+.ruta{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:999px;margin-right:6px}
+.ventas{background:#E2F4EE;color:#0B5E42}.codigo{background:#EEE8FC;color:#4B2A9E}
+@media (prefers-color-scheme: dark){.ventas{background:#10362D;color:#B6F0D8}.codigo{background:#2A2150;color:#D9CCFF}}
+.prompt{background:var(--tint);border-radius:10px;padding:12px 14px;white-space:pre-wrap;font-size:.95rem;margin:8px 0}
+.copiar{width:auto;padding:6px 12px;font-size:.85rem;margin-top:6px}
+code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+</style></head>
+<body><main>
+<header><h1>Sesión 6 · Leads, reseñas y cobro</h1><p>Jueves 15 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra con Casas para Gatos.</p></header>
+
+<div class="msg"><b>Hoy todo es gratis.</b> Usamos tu Admin de Lovable, Resend (3.000 correos al mes), Culqi en modo de prueba (acepta Yape y tarjetas, sin costo fijo) y, si quieres, HubSpot CRM gratis (hasta 1.000 contactos). No cobras dinero real hoy.</div>
+
+<h2>Si algo falla: plan B por reto</h2>
+<div class="reto">
+  <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
+  <ul>
+    <li><b>Reto 1:</b> Si Lovable no alcanza los créditos del día, exporta los leads a Google Sheets y califícalos con Gemini gratis.</li>
+    <li><b>Reto 2:</b> Si la tarea programada no corre, agrega un botón «Enviar seguimiento» en el Admin y púlsalo tú cada día.</li>
+    <li><b>Reto 3:</b> Si no tienes reseñas, usa las 5 reseñas ficticias de abajo.</li>
+    <li><b>Reto 4:</b> Si Culqi tarda en aprobar tu cuenta de prueba, usa Mercado Pago, que también acepta Yape, o tu QR de Yape.</li>
+    <li><b>Extra:</b> Si el aviso de pago no llega, marca la venta a mano en el Admin con el número de operación.</li>
+  </ul>
+</div>
+
+<h2>Reglas de hoy</h2>
+<div class="reto">
+  <ul>
+    <li><b>Ley 29733:</b> guarda solo lo necesario, con consentimiento, y deja que el cliente pida borrar sus datos.</li>
+    <li><b>Ley 32323:</b> escribe solo a quien aceptó; cada mensaje trae una forma fácil de darse de baja.</li>
+    <li><b>Reseñas reales:</b> nunca inventes ni compres reseñas. La IA redacta y una persona publica.</li>
+    <li><b>Cobros seguros:</b> pasarelas en modo de prueba; nunca pidas datos de tarjeta por chat.</li>
+  </ul>
+</div>
+
+<h2>Reto 1 · Todos los leads en un solo lugar</h2>
+<div class="reto">
+  <p>Tu Admin de Lovable se vuelve tu CRM: un lead por persona, con su canal, su puntaje y su próxima acción.</p>
+  <div class="prompt" id="g1">Sigue el SPEC y reutiliza las tablas existentes. Une en una sola vista de leads todos los canales: web, WhatsApp, Instagram, Facebook y llamada, sin duplicar personas. Agrega puntaje de 0 a 100 calculado por la IA con el historial de conversación, etapa (Nuevo, Contactado, Cotizado, Ganado, Perdido), próxima acción y fecha. Ordena por puntaje y marca en rojo los que llevan más de 3 días sin respuesta.</div>
+  <button class="copiar" data-copy="g1" type="button">Copiar prompt</button>
+  <p class="nota">Opcional: <a href="https://www.hubspot.com/products/crm" target="_blank" rel="noopener">HubSpot CRM gratis (https://www.hubspot.com/products/crm)</a>, con 1.000 contactos, 2 usuarios y 1 embudo.</p>
+</div>
+
+<h2>Reto 2 · Seguimiento automático sin spam</h2>
+<div class="reto">
+  <p>Secuencia de 3 correos (día 1, 3 y 7) para quien no respondió. Lovable la ejecuta sola con una tarea programada, que ves en Cloud → Jobs.</p>
+  <div class="prompt" id="g2">Crea una tarea programada todos los días a las 9:00 a. m. que busque leads con consentimiento y sin respuesta, y les envíe por correo con Resend el mensaje 1, 3 o 7 según los días transcurridos, redactado por la IA con su historial. Cada correo trae un enlace para darse de baja que marca al lead como no contactar. Por WhatsApp solo respondemos dentro de las 24 horas desde el último mensaje del cliente.</div>
+  <button class="copiar" data-copy="g2" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 3 · Responder reseñas con IA</h2>
+<div class="reto">
+  <p>La IA redacta y tú apruebas y publicas desde el panel de tu perfil de empresa en Google o de tu página de Facebook.</p>
+  <p><b>Reseñas de práctica (ficticias):</b> «Llegó rápido y a mi gato le encantó» (5 estrellas) · «La casa llegó con un tornillo suelto» (2 estrellas) · «Buen precio, pero tardaron en responder» (3 estrellas) · «La Premium XL es enorme, perfecta para mis dos gatos» (5 estrellas) · «No me avisaron del retraso» (1 estrella).</p>
+  <div class="prompt" id="g3">Eres el equipo de Casas para Gatos. Redacta respuestas a estas 5 reseñas: agradece por su nombre, menciona algo concreto que dijo y, si es negativa, discúlpate, ofrece una solución y pide continuar por mensaje privado. Máximo 3 líneas, tono cálido, sin datos personales. RESEÑAS: [pega aquí]</div>
+  <button class="copiar" data-copy="g3" type="button">Copiar prompt</button>
+  <div class="prompt" id="g4">Con estas reseñas, dime los 3 temas que más se repiten, qué elogian y qué critican, y propone 3 mejoras concretas para el producto o la atención. Guárdalo como nota en 02 Areas/Ventas de mi bóveda.</div>
+  <button class="copiar" data-copy="g4" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 4 · Cobrar con Yape y tarjeta</h2>
+<div class="reto">
+  <ol>
+    <li>Crea tu cuenta en <a href="https://culqi.com" target="_blank" rel="noopener">Culqi (https://culqi.com)</a> y entra al ambiente de pruebas. Culqi acepta Yape y tarjetas, sin afiliación ni mantenimiento; en producción cobra 3,44% + IGV por pago con tarjeta nacional, Yape o Plin.</li>
+    <li>Genera un link de pago para la Casa Premium XL.</li>
+    <li>Agrégalo al bot y a la app: cuando el lead está CALIENTE, la IA ofrece el enlace.</li>
+    <li>Paga con una tarjeta de prueba y registra la venta en el Admin.</li>
+  </ol>
+  <p class="nota">Mercado Pago también acepta Yape y tiene modo de prueba.</p>
+</div>
+
+<h2>Extra · El pago cierra la venta solo</h2>
+<div class="reto">
+  <div class="prompt" id="g5">Crea la función pago-webhook que reciba el aviso de pago aprobado de la pasarela, verifique su firma con un secreto, busque el lead por correo o teléfono, lo pase a Ganado con el monto y el número de operación, y envíe un correo de agradecimiento con Resend. Si el aviso llega dos veces, no dupliques la venta. Muestra en el Admin las ventas del día.</div>
+  <button class="copiar" data-copy="g5" type="button">Copiar prompt</button>
+</div>
+
+<h2>Entrega de la sesión 6</h2>
+<div class="reto">
+  <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 6</b> y envía:</p>
+  <ul>
+    <li>Captura de tu Admin con leads de 2 canales o más, con puntaje y próxima acción.</li>
+    <li>La secuencia de 3 mensajes y un correo de prueba recibido.</li>
+    <li>5 reseñas respondidas y las 3 mejoras.</li>
+    <li>Tu enlace de pago y la captura del pago de prueba.</li>
+    <li>Opcional: el lead que pasó solo a Ganado.</li>
+  </ul>
+  <p><b>Fecha límite:</b> martes 20 de octubre, 6:59 p. m., hora de Lima.</p>
+</div>
+
+<h2>Prepárate para la sesión 7</h2>
+<ul>
+  <li>El mismo martes 20, crea tu prueba de <a href="https://n8n.io" target="_blank" rel="noopener">n8n Cloud (https://n8n.io)</a>: 14 días gratis, sin tarjeta.</li>
+  <li>Ruta código: instala Node.js para correr n8n gratis en tu computadora.</li>
+  <li>Crea un bot en Telegram con @BotFather.</li>
+  <li>Ten a mano tus claves de Twilio, Gemini y la URL de tu API de la sesión 2.</li>
+</ul>
+<p class="nota"><a href="index.html">Volver al inicio del curso</a></p>
+</main>
+<script>
+document.querySelectorAll("button[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const t = document.getElementById(b.dataset.copy).innerText;
+  try { await navigator.clipboard.writeText(t); b.textContent = "Copiado"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Texto seleccionado: cópialo"; }
+  setTimeout(() => b.textContent = "Copiar prompt", 2500);
+}));
+</script>
+</body></html>

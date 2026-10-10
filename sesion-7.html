@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sesión 7 · Guía de retos</title><link rel="stylesheet" href="estilo.css">
+<style>
+main{max-width:860px}
+h2{color:var(--navy);margin-top:32px}
+h3{margin:18px 0 6px}
+.reto{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0}
+.reto ol,.reto ul{padding-left:1.2em}
+.reto li{margin:6px 0}
+.ruta{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:999px;margin-right:6px}
+.ventas{background:#E2F4EE;color:#0B5E42}.codigo{background:#EEE8FC;color:#4B2A9E}
+@media (prefers-color-scheme: dark){.ventas{background:#10362D;color:#B6F0D8}.codigo{background:#2A2150;color:#D9CCFF}}
+.prompt{background:var(--tint);border-radius:10px;padding:12px 14px;white-space:pre-wrap;font-size:.95rem;margin:8px 0}
+.copiar{width:auto;padding:6px 12px;font-size:.85rem;margin-top:6px}
+code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+</style></head>
+<body><main>
+<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
+
+<div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis.</div>
+
+<h2>Si algo falla: plan B por reto</h2>
+<div class="reto">
+  <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
+  <ul>
+    <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, corre <code>npx n8n</code> en tu computadora o arma el flujo en Make gratis.</li>
+    <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
+    <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
+    <li><b>Reto 4:</b> Si el reporte diario no se envía, ejecuta el flujo a mano y revisa el historial de ejecuciones.</li>
+    <li><b>Extra:</b> Si Claude no ve tu servidor MCP de n8n, prueba la herramienta desde n8n y conéctala luego en modo desarrollador.</li>
+  </ul>
+</div>
+
+<h2>Las reglas de la automatización</h2>
+<div class="reto">
+  <ul>
+    <li><b>Una persona en el circuito</b> para reclamos, pagos y datos sensibles.</li>
+    <li><b>Reintentos:</b> en cada nodo que llama a otro servicio, Settings → Retry on fail, y un Error workflow que te avise.</li>
+    <li><b>Claves en credenciales</b> de n8n, nunca escritas dentro de un nodo.</li>
+    <li><b>Consentimiento:</b> los flujos que escriben a clientes respetan la baja y la Ley 32323.</li>
+  </ul>
+</div>
+
+<h2>Reto 1 · Tu primer flujo con IA</h2>
+<div class="reto">
+  <ol>
+    <li>Nuevo flujo con un nodo <b>Webhook</b> como disparador.</li>
+    <li>Nodo de IA con Google Gemini y tu clave gratis, con el prompt de abajo.</li>
+    <li>Nodo <b>IF</b>: si es COMPRA o INTERESADO, sigue.</li>
+    <li>Pruébalo con <b>Test workflow</b>.</li>
+  </ol>
+  <div class="prompt" id="g1">Clasifica este mensaje de un cliente de Casas para Gatos en una sola palabra: CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO. Devuelve JSON: {&quot;intencion&quot;: &quot;...&quot;, &quot;resumen&quot;: &quot;una línea&quot;}. MENSAJE: {{ $json.body.mensaje }}</div>
+  <button class="copiar" data-copy="g1" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 2 · WhatsApp al CRM</h2>
+<div class="reto">
+  <p>El bot de la sesión 4 pasa a n8n: Twilio llega al Webhook de n8n, la IA responde, Twilio envía la respuesta y n8n guarda el lead en tu Admin de Lovable por API.</p>
+  <ol>
+    <li>En Twilio, la URL del webhook del número pasa a ser la del Webhook de n8n, método POST.</li>
+    <li>Pide a Lovable una función <code>leads-api</code> protegida con un secreto en la cabecera, y llámala desde n8n con un nodo HTTP Request.</li>
+  </ol>
+  <div class="prompt" id="g2">Eres el vendedor de Casas para Gatos. Responde en máximo 2 líneas, en español, sin inventar precios: usa solo el catálogo que te paso. Si el cliente pide una persona, responde que un asesor le escribirá y marca humano: true. Devuelve JSON con respuesta, intencion, producto y humano.</div>
+  <button class="copiar" data-copy="g2" type="button">Copiar prompt</button>
+</div>
+
+<h2>Reto 3 · Aviso al vendedor por Telegram</h2>
+<div class="reto">
+  <ol>
+    <li>Crea tu bot con @BotFather en Telegram y copia el token.</li>
+    <li>En n8n, credencial de Telegram y nodo Send Message a tu chat.</li>
+    <li>Si la intención es COMPRA, avisa: «🔥 Lead caliente · canal · nombre · producto · mensaje · enlace al Admin».</li>
+    <li>Instagram y Facebook: tu función <code>meta-webhook</code> de Lovable llama al mismo Webhook de n8n.</li>
+  </ol>
+</div>
+
+<h2>Reto 4 · Tareas que se hacen solas</h2>
+<div class="reto">
+  <p>Nodo <b>Schedule Trigger</b>, con Retry on fail y un Error workflow.</p>
+  <ul>
+    <li><b>8:00 a. m.:</b> lee tu API de la sesión 2, la IA lo resume en 5 líneas y te llega por correo o Telegram.</li>
+    <li><b>9:00 a. m.:</b> busca leads sin respuesta hace 3 días y avisa al vendedor.</li>
+    <li><b>Lunes:</b> lee fuentes RSS de mascotas y comercio, y la IA elige las 3 noticias que importan.</li>
+  </ul>
+</div>
+
+<h2>Extra · n8n como herramienta de Claude</h2>
+<div class="reto">
+  <ol>
+    <li>Agrega el nodo <b>MCP Server Trigger</b> y conéctale una herramienta: tu flujo de leads.</li>
+    <li>Copia su URL de producción.</li>
+    <li>En Claude Desktop gratis, agrégala como tu único conector propio.</li>
+    <li>Pregunta: «¿Qué leads calientes tengo hoy?».</li>
+  </ol>
+</div>
+
+<h2>Entrega de la sesión 7</h2>
+<div class="reto">
+  <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
+  <ul>
+    <li>Captura de tu flujo de n8n de punta a punta.</li>
+    <li>Un lead de prueba que entró por WhatsApp y llegó a tu Admin.</li>
+    <li>El aviso al vendedor en Telegram o correo.</li>
+    <li>Tu reporte diario recibido, con Retry on fail activado.</li>
+    <li>Opcional: Claude usando tu MCP de n8n.</li>
+  </ul>
+  <p><b>Fecha límite:</b> jueves 22 de octubre, 6:59 p. m., hora de Lima.</p>
+</div>
+
+<h2>Prepárate para la sesión 8</h2>
+<ul>
+  <li>Arma tu equipo de 3 a 4 personas para el trabajo final, mezclando ventas y código.</li>
+  <li>Instala <a href="https://ollama.com" target="_blank" rel="noopener">Ollama (https://ollama.com)</a> o <a href="https://lmstudio.ai" target="_blank" rel="noopener">LM Studio (https://lmstudio.ai)</a>.</li>
+  <li>Reúne tus 20 preguntas de prueba.</li>
+  <li>Ten acceso a tu Admin y a tu hoja de leads.</li>
+</ul>
+<p class="nota"><a href="index.html">Volver al inicio del curso</a></p>
+</main>
+<script>
+document.querySelectorAll("button[data-copy]").forEach(b => b.addEventListener("click", async () => {
+  const t = document.getElementById(b.dataset.copy).innerText;
+  try { await navigator.clipboard.writeText(t); b.textContent = "Copiado"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Texto seleccionado: cópialo"; }
+  setTimeout(() => b.textContent = "Copiar prompt", 2500);
+}));
+</script>
+</body></html>

@@ -84,3 +84,39 @@ window.ENCUESTAS = {
     preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s5_" + p.id.slice(2) : "s5_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para que tus redes generen clientes por tu cuenta?" } : {})),
   };
 })();
+
+// Encuesta de cierre de la sesión 6.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Leads en un solo lugar", "Seguimiento automático", "Responder reseñas con IA", "Cobrar con Yape y tarjeta", "Extra: el pago cierra la venta", "Plan B por reto", "Radar IA al final"];
+  window.ENCUESTAS.cierre6 = {
+    titulo: "¿Cómo te fue en la sesión 6?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s6", prefijo: "c6-", contador: "s6_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s6_" + p.id.slice(2) : "s6_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para no perder clientes y cobrar en línea?" } : {})),
+  };
+})();
+
+// Encuesta de cierre de la sesión 7.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Primer flujo en n8n", "WhatsApp al CRM", "Aviso al vendedor por Telegram", "Tareas programadas", "Extra: n8n como MCP", "Plan B por reto", "Radar IA al final"];
+  window.ENCUESTAS.cierre7 = {
+    titulo: "¿Cómo te fue en la sesión 7?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s7", prefijo: "c7-", contador: "s7_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s7_" + p.id.slice(2) : "s7_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para automatizar tu negocio con n8n?" } : {})),
+  };
+})();
+
+// Encuesta de cierre de la sesión 8.
+(function () {
+  const base = window.ENCUESTAS.cierre;
+  const valioso = ["Dashboard de ventas", "Prueba y seguridad del agente", "Costos y modelo local", "Plan de lanzamiento", "Trabajo final", "Todo el curso"];
+  window.ENCUESTAS.cierre8 = {
+    titulo: "¿Cómo te fue en la sesión 8?",
+    sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
+    gracias: base.gracias, clave: "encuesta-ia-cierre-s8", prefijo: "c8-", contador: "s8_c1",
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s8_" + p.id.slice(2) : "s8_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para lanzar tu sistema con clientes reales?" } : {})),
+  };
+})();
