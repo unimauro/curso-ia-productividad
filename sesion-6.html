@@ -16,9 +16,9 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 6 · Leads, reseñas y cobro</h1><p>Jueves 15 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra con Casas para Gatos.</p></header>
+<header><h1>Sesión 6 · Leads, seguimiento y reseñas</h1><p>Jueves 15 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra con Casas para Gatos.</p></header>
 
-<div class="msg"><b>Hoy todo es gratis.</b> Usamos tu Admin de Lovable, Resend (3.000 correos al mes), Culqi en modo de prueba (acepta Yape y tarjetas, sin costo fijo) y, si quieres, HubSpot CRM gratis (hasta 1.000 contactos). No cobras dinero real hoy.</div>
+<div class="msg"><b>Hoy todo es gratis.</b> Usamos tu Admin de Lovable, Resend (3.000 correos al mes), tu perfil de empresa en Google y, si quieres, HubSpot CRM gratis (hasta 1.000 contactos). <b>No conectamos pagos:</b> la venta y la forma de pago las acuerda una persona con el cliente.</div>
 
 <h2>Si algo falla: plan B por reto</h2>
 <div class="reto">
@@ -27,8 +27,8 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Reto 1:</b> Si Lovable no alcanza los créditos del día, exporta los leads a Google Sheets y califícalos con Gemini gratis.</li>
     <li><b>Reto 2:</b> Si la tarea programada no corre, agrega un botón «Enviar seguimiento» en el Admin y púlsalo tú cada día.</li>
     <li><b>Reto 3:</b> Si no tienes reseñas, usa las 5 reseñas ficticias de abajo.</li>
-    <li><b>Reto 4:</b> Si Culqi tarda en aprobar tu cuenta de prueba, usa Mercado Pago, que también acepta Yape, o tu QR de Yape.</li>
-    <li><b>Extra:</b> Si el aviso de pago no llega, marca la venta a mano en el Admin con el número de operación.</li>
+    <li><b>Reto 4:</b> Si la página de cotización no se genera, pide a la IA la cotización como texto con los precios del catálogo y envíala tú.</li>
+    <li><b>Extra:</b> Si el correo de postventa no sale, envía tú el mensaje por WhatsApp dentro de las 24 horas.</li>
   </ul>
 </div>
 
@@ -38,7 +38,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Ley 29733:</b> guarda solo lo necesario, con consentimiento, y deja que el cliente pida borrar sus datos.</li>
     <li><b>Ley 32323:</b> escribe solo a quien aceptó; cada mensaje trae una forma fácil de darse de baja.</li>
     <li><b>Reseñas reales:</b> nunca inventes ni compres reseñas. La IA redacta y una persona publica.</li>
-    <li><b>Cobros seguros:</b> pasarelas en modo de prueba; nunca pidas datos de tarjeta por chat.</li>
+    <li><b>Cotizaciones claras:</b> precios solo del catálogo, con validez y sin descuentos inventados. El cierre lo confirma una persona.</li>
   </ul>
 </div>
 
@@ -67,21 +67,26 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <button class="copiar" data-copy="g4" type="button">Copiar prompt</button>
 </div>
 
-<h2>Reto 4 · Cobrar con Yape y tarjeta</h2>
+<h2>Reto 4 · Cotización automática</h2>
 <div class="reto">
+  <p>Cuando el lead pide precio, la app arma su cotización en segundos con los precios del catálogo. Una persona confirma la venta y acuerda la forma de pago con el cliente.</p>
   <ol>
-    <li>Crea tu cuenta en <a href="https://culqi.com" target="_blank" rel="noopener">Culqi (https://culqi.com)</a> y entra al ambiente de pruebas. Culqi acepta Yape y tarjetas, sin afiliación ni mantenimiento; en producción cobra 3,44% + IGV por pago con tarjeta nacional, Yape o Plin.</li>
-    <li>Genera un link de pago para la Casa Premium XL.</li>
-    <li>Agrégalo al bot y a la app: cuando el lead está CALIENTE, la IA ofrece el enlace.</li>
-    <li>Paga con una tarjeta de prueba y registra la venta en el Admin.</li>
+    <li>La IA detecta el pedido: producto, cantidad y distrito.</li>
+    <li>La app arma la cotización con número QT-2026-0001, precios del catálogo y validez de 7 días.</li>
+    <li>El bot envía el enlace a la página de cotización y el lead pasa a Cotizado.</li>
+    <li>Una persona confirma la venta por WhatsApp y la marca como Ganado en el Admin.</li>
   </ol>
-  <p class="nota">Mercado Pago también acepta Yape y tiene modo de prueba.</p>
+  <div class="prompt" id="cq1">Sigue el SPEC y no rehagas lo que funciona. Cuando un lead pida precio o cantidad, crea una cotización con número correlativo QT-2026-0001, productos y precios tomados solo del catálogo, subtotal, delivery si aplica, total y validez de 7 días. Publica una página /cotizacion/[id] sin datos sensibles y envía el enlace por el mismo canal. Pasa el lead a Cotizado. Nunca inventes precios ni descuentos.</div>
+  <button class="copiar" data-copy="cq1" type="button">Copiar prompt</button>
+  <p class="nota">En el curso no cobramos en línea: así evitamos manejar dinero y datos de tarjetas.</p>
 </div>
 
-<h2>Extra · El pago cierra la venta solo</h2>
+<h2>Extra · Postventa que pide la reseña</h2>
 <div class="reto">
-  <div class="prompt" id="g5">Crea la función pago-webhook que reciba el aviso de pago aprobado de la pasarela, verifique su firma con un secreto, busque el lead por correo o teléfono, lo pase a Ganado con el monto y el número de operación, y envíe un correo de agradecimiento con Resend. Si el aviso llega dos veces, no dupliques la venta. Muestra en el Admin las ventas del día.</div>
-  <button class="copiar" data-copy="g5" type="button">Copiar prompt</button>
+  <p>Venta cerrada, cliente feliz, reseña real. El círculo se cierra con el Reto 3.</p>
+  <div class="prompt" id="cq2">Crea una tarea programada diaria: a los leads que pasaron a Ganado hace 3 días y tienen consentimiento, envíales con Resend un correo de agradecimiento que pregunte cómo les fue con su Casas para Gatos e incluya el enlace a mi perfil de Google para dejar una reseña. Nunca ofrezcas descuentos ni regalos a cambio. Si responden con una queja, crea una alerta en el Admin para atenderla primero.</div>
+  <button class="copiar" data-copy="cq2" type="button">Copiar prompt</button>
+  <p class="nota">Google prohíbe ofrecer incentivos a cambio de reseñas. Se pide la opinión, no una reseña positiva.</p>
 </div>
 
 <h2>Entrega de la sesión 6</h2>
@@ -91,8 +96,8 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li>Captura de tu Admin con leads de 2 canales o más, con puntaje y próxima acción.</li>
     <li>La secuencia de 3 mensajes y un correo de prueba recibido.</li>
     <li>5 reseñas respondidas y las 3 mejoras.</li>
-    <li>Tu enlace de pago y la captura del pago de prueba.</li>
-    <li>Opcional: el lead que pasó solo a Ganado.</li>
+    <li>Una cotización generada y el lead en Cotizado.</li>
+    <li>Opcional: el correo de postventa que pide la reseña.</li>
   </ul>
   <p><b>Fecha límite:</b> martes 20 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
