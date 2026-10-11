@@ -93,7 +93,7 @@ window.ENCUESTAS = {
     titulo: "¿Cómo te fue en la sesión 6?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
     gracias: base.gracias, clave: "encuesta-ia-cierre-s6", prefijo: "c6-", contador: "s6_c1",
-    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s6_" + p.id.slice(2) : "s6_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para no perder clientes y cobrar en línea?" } : {})),
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s6_" + p.id.slice(2) : "s6_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para no perder clientes y darles seguimiento?" } : {})),
   };
 })();
 
