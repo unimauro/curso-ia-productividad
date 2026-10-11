@@ -35,7 +35,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <h2>Las reglas de la automatización</h2>
 <div class="reto">
   <ul>
-    <li><b>Una persona en el circuito</b> para reclamos, pagos y datos sensibles.</li>
+    <li><b>Una persona en el circuito</b> para reclamos, cierres de venta y datos sensibles.</li>
     <li><b>Reintentos:</b> en cada nodo que llama a otro servicio, Settings → Retry on fail, y un Error workflow que te avise.</li>
     <li><b>Claves en credenciales</b> de n8n, nunca escritas dentro de un nodo.</li>
     <li><b>Consentimiento:</b> los flujos que escriben a clientes respetan la baja y la Ley 32323.</li>
@@ -70,7 +70,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <ol>
     <li>Crea tu bot con @BotFather en Telegram y copia el token.</li>
     <li>En n8n, credencial de Telegram y nodo Send Message a tu chat.</li>
-    <li>Si la intención es COMPRA, avisa: «🔥 Lead caliente · canal · nombre · producto · mensaje · enlace al Admin».</li>
+    <li>Si la intención es COMPRA o se envió una cotización de la sesión 6, avisa: «🔥 Lead caliente · canal · nombre · producto · número de cotización · mensaje · enlace al Admin».</li>
     <li>Instagram y Facebook: tu función <code>meta-webhook</code> de Lovable llama al mismo Webhook de n8n.</li>
   </ol>
 </div>
@@ -80,7 +80,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <p>Nodo <b>Schedule Trigger</b>, con Retry on fail y un Error workflow.</p>
   <ul>
     <li><b>8:00 a. m.:</b> lee tu API de la sesión 2, la IA lo resume en 5 líneas y te llega por correo o Telegram.</li>
-    <li><b>9:00 a. m.:</b> busca leads sin respuesta hace 3 días y avisa al vendedor.</li>
+    <li><b>9:00 a. m.:</b> busca leads sin respuesta hace 3 días y cotizaciones que vencen mañana, y avisa al vendedor.</li>
     <li><b>Lunes:</b> lee fuentes RSS de mascotas y comercio, y la IA elige las 3 noticias que importan.</li>
   </ul>
 </div>
