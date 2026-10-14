@@ -20,7 +20,7 @@
   </fieldset>
   <button type="submit" id="b">Enviar mi tarea</button>
   <p class="err" id="err"></p>
-  <p class="nota">Puedes volver a enviar antes de la fecha límite: el docente verá todas tus versiones y revisará la última.</p>
+  <p class="nota">Puedes volver a enviar cuando quieras, también después de la fecha sugerida: el docente verá todas tus versiones y revisará la última.</p>
 </form>
 </main>
 <script src="preguntas.js"></script>
@@ -38,9 +38,9 @@ function tick() {
   if (!limite) return;
   const txt = limite.toLocaleString("es-PE", { timeZone: "America/Lima", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
   const ms = limite - Date.now();
-  if (ms <= 0) { $("plazo").innerHTML = "<b>El plazo venció</b> el " + txt + " (hora de Lima)."; $("b").disabled = true; return; }
+  if (ms <= 0) { $("plazo").innerHTML = "Fecha sugerida: " + txt + " (hora de Lima). <b>Las entregas siguen abiertas:</b> puedes enviar tu tarea igual."; return; }
   const h = Math.floor(ms / 3600000), m = Math.floor(ms % 3600000 / 60000);
-  $("plazo").innerHTML = "Fecha límite: <b>" + txt + "</b> (hora de Lima). Faltan " + h + " h " + m + " min.";
+  $("plazo").innerHTML = "Fecha sugerida: <b>" + txt + "</b> (hora de Lima). Faltan " + h + " h " + m + " min. Después también puedes entregar.";
 }
 setInterval(tick, 30000); pintarPlazo(); $("tarea").onchange = pintarPlazo;
 try { $("email").value = localStorage.getItem("curso-email") || ""; $("nombre").value = localStorage.getItem("curso-nombre") || ""; } catch (e) {}

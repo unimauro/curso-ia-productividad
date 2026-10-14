@@ -3,7 +3,7 @@
 POST /vote              {token, answers}  -> 201 | 409 si ese dispositivo ya votó
 GET  /results           (X-Admin-Key) -> totales por pregunta y respuestas abiertas
 GET  /plazo?tarea=s1    -> fecha límite de entrega (público)
-POST /entrega           {tarea, email, nombre, grupo, texto, enlace, archivo:{nombre,tipo,b64}} -> 201 | 403 fuera de plazo
+POST /entrega           {tarea, email, nombre, grupo, texto, enlace, archivo:{nombre,tipo,b64}} -> 201 (se acepta también fuera de la fecha sugerida)
 GET  /entregas?tarea=s1 (X-Admin-Key) -> todas las entregas (todas las versiones)
 GET  /archivo?id=N      (X-Admin-Key) -> archivo adjunto
 GET  /health
@@ -295,8 +295,7 @@ code{{background:#EEF4FF;padding:2px 6px;border-radius:6px}}.u{{background:#EEF4
         lim = plazo(tarea)
         if lim is None:
             return self._json(400, {"error": "tarea desconocida"})
-        if time.time() > lim:
-            return self._json(403, {"error": "el plazo de entrega ya venció"})
+        # Sin límite de fecha: la fecha de PLAZOS es solo la sugerida; se acepta la entrega aunque haya pasado.
         if not EMAIL.match(email) or not nombre:
             return self._json(400, {"error": "falta un correo válido o tu nombre"})
         if enlace and not re.match(r"^https?://", enlace):
