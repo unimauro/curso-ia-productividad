@@ -16,9 +16,9 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 5 · Instagram, Facebook, TikTok y LinkedIn que venden</h1><p>Martes 13 de octubre · AI Productivity Engineering · eIA. Cuatro retos y un extra, con la tienda Casas para Gatos como proyecto.</p></header>
+<header><h1>Sesión 5 · Instagram, Facebook, TikTok y LinkedIn que venden</h1><p>Martes 13 de octubre · AI Productivity Engineering · eIA. Empezamos por el agente de voz con Vapi que quedó pendiente de la sesión 4. Luego cuatro retos y un extra, con la tienda Casas para Gatos como proyecto.</p></header>
 
-<div class="msg"><b>Hoy todo es gratis.</b> Usamos Meta Business Suite, ManyChat gratis, CapCut o Clipchamp, Canva, LinkedIn, tu segundo cerebro con Obsidian y Manus, y tu app de Lovable. <b>No necesitas:</b> ManyChat Pro, anuncios pagados, LinkedIn Premium ni Sales Navigator.</div>
+<div class="msg"><b>Hoy todo es gratis.</b> Usamos Vapi con sus US$ 10 de crédito, Meta Business Suite, ManyChat gratis, video con IA en Flow de Google, Kling AI o Higgsfield, voz y presentador con ElevenLabs y HeyGen, imágenes con Gemini o ChatGPT, LinkedIn, tu segundo cerebro con Obsidian y Manus, y tu app de Lovable. Los créditos gratis de las herramientas de video cambian seguido y suelen poner marca de agua. <b>No necesitas:</b> ManyChat Pro, anuncios pagados, LinkedIn Premium ni Sales Navigator.</div>
 
 <h2>Las reglas de las redes</h2>
 <ul>
@@ -32,12 +32,36 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B. Nadie se queda sin terminar.</p>
   <ul>
+    <li><b>Vapi:</b> si no te escucha o la voz no suena en español, da permiso al micrófono y revisa la voz y el transcriptor. Si no, prueba por texto en el chat del asistente.</li>
     <li><b>Reto 1:</b> si Meta Business Suite no te deja crear la automatización, usa ManyChat gratis. Si tu Instagram no es profesional, empieza por Messenger.</li>
     <li><b>Reto 2:</b> si Manus se quedó sin créditos, investiga con <a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM (https://notebooklm.google.com)</a> o con la búsqueda web de Claude o Gemini.</li>
-    <li><b>Reto 3:</b> si tu TikTok no está verificado o CapCut no exporta, haz el video en Clipchamp y guarda los mensajes automáticos en tu bóveda.</li>
+    <li><b>Reto 3:</b> si se acabaron tus créditos de video, cambia de herramienta: Flow, Kling o Higgsfield. Si tu TikTok no está verificado, guarda los mensajes automáticos en tu bóveda.</li>
     <li><b>Reto 4:</b> si LinkedIn no programa tu PDF, publícalo a mano o como imágenes.</li>
     <li><b>Extra:</b> si la app de Meta no conecta en modo desarrollo, quédate con Meta Business Suite y registra el lead a mano en tu Admin.</li>
   </ul>
+</div>
+
+<h2>Pendiente de la sesión 4 · Agente de voz con Vapi</h2>
+<div class="reto">
+  <p>La asistente telefónica de Casas para Gatos. No necesitas número de teléfono: la pruebas hablando desde el navegador.</p>
+  <ol>
+    <li>Crea tu cuenta en <a href="https://vapi.ai" target="_blank" rel="noopener">Vapi (https://vapi.ai)</a>. Al registrarte recibes US$ 10 de crédito, sin tarjeta.</li>
+    <li><b>Assistants → Create Assistant</b> con una plantilla en blanco.</li>
+    <li>Primer mensaje: «Hola, gracias por llamar a Casas para Gatos. ¿En qué te ayudo?»</li>
+    <li>Pega el prompt de abajo con tu catálogo y elige voz y transcriptor en español.</li>
+    <li><b>Talk to Assistant:</b> pregúntale precios y prueba la trampa del descuento.</li>
+  </ol>
+  <div class="prompt" id="pv">Eres la asistente telefónica de Casas para Gatos. Hablas en español peruano, cálido y breve: una idea por turno.
+Al iniciar, di que eres una asistente virtual.
+Solo hablas del negocio con estos datos: [pega tu catálogo]. Si no sabes algo, ofrece que un asesor devuelva la llamada. Nunca inventes precios ni descuentos.
+Di los precios en palabras: «ciento veinte soles».
+Si quiere comprar, toma nombre, distrito y para cuántos gatos, y repítelos.</div>
+  <button class="copiar" data-copy="pv" type="button">Copiar prompt</button>
+  <h3>Cada llamada termina como un lead</h3>
+  <p>Vapi envía un informe al terminar cada llamada a la <b>Server URL</b> que configures en el asistente. WhatsApp sigue por Twilio; la voz entra por Vapi al mismo Admin.</p>
+  <div class="prompt" id="pv2">Sigue el SPEC y no rehagas lo que funciona. Crea la función vapi-webhook que reciba el informe de fin de llamada de Vapi (end-of-call-report) y guarde en la bandeja de conversaciones: teléfono, nombre si lo dijo, resumen de la llamada, fecha y canal «llamada». Valida un secreto en la cabecera para que nadie más pueda escribir. Muestra estos leads en el Admin junto a los de WhatsApp, con un filtro por canal. Claves como secretos.</div>
+  <button class="copiar" data-copy="pv2" type="button">Copiar prompt</button>
+  <p class="nota">Los números gratis de Vapi son solo de Estados Unidos y no hacen llamadas salientes. Antes de llamar a un cliente necesitas su consentimiento: Ley 32323.</p>
 </div>
 
 <h2>Reto 1 · Instagram y Facebook: comentario que abre una conversación</h2>
@@ -67,7 +91,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <ol>
     <li>En Manus, dentro de tu Project «Segundo cerebro», pide una investigación de tendencias y preguntas frecuentes sobre casas para gatos. Guarda el Markdown en tu <code>00 Inbox</code>.</li>
     <li>Con Claude en tu bóveda, usa el prompt de abajo.</li>
-    <li>Diseña las piezas y el carrusel en <a href="https://www.canva.com" target="_blank" rel="noopener">Canva (https://www.canva.com)</a> gratis.</li>
+    <li>Genera las piezas con IA en Gemini o ChatGPT, a partir de la foto real de tu producto.</li>
     <li>Programa Instagram y Facebook gratis en Meta Business Suite.</li>
   </ol>
   <div class="prompt" id="p2">Lee CLAUDE.md y la investigación de Manus en 00 Inbox. Crea en 01 Proyectos la nota «Semana de contenido» con 7 publicaciones para Casas para Gatos: día, red (Instagram, TikTok o LinkedIn), formato, gancho, texto, llamada a la acción y enlace con utm_source de cada red. Mezcla educar, mostrar producto y testimonios ilustrativos. No inventes precios ni cifras.</div>
@@ -79,12 +103,27 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <ol>
     <li>Escribe el guion con el prompt de abajo.</li>
-    <li>Graba 3 tomas verticales de tu producto con el celular, o usa fotos.</li>
-    <li>Edita en <a href="https://www.capcut.com" target="_blank" rel="noopener">CapCut (https://www.capcut.com)</a> o <a href="https://clipchamp.com" target="_blank" rel="noopener">Clipchamp (https://clipchamp.com)</a>: voz con IA y subtítulos automáticos, gratis y sin marca de agua.</li>
+    <li>Imagen del producto: tu foto real, o una escena generada con Gemini o ChatGPT a partir de ella.</li>
+    <li>De imagen a video con IA: 3 clips verticales cortos en <a href="https://labs.google/flow" target="_blank" rel="noopener">Flow de Google (https://labs.google/flow)</a>, <a href="https://klingai.com" target="_blank" rel="noopener">Kling AI (https://klingai.com)</a> o <a href="https://higgsfield.ai" target="_blank" rel="noopener">Higgsfield (https://higgsfield.ai)</a>.</li>
+    <li>Voz en off con <a href="https://elevenlabs.io" target="_blank" rel="noopener">ElevenLabs (https://elevenlabs.io)</a> o un presentador con <a href="https://www.heygen.com" target="_blank" rel="noopener">HeyGen (https://www.heygen.com)</a>.</li>
+    <li>Une los clips y pon subtítulos en el editor del propio TikTok.</li>
     <li>Publícalo en TikTok y como Reel. Fija el comentario «Escríbeme QUIERO por mensaje».</li>
   </ol>
   <div class="prompt" id="p3">Escribe el guion de un video vertical de 30 segundos para TikTok de Casas para Gatos. Formato: gancho que detenga el scroll en 3 segundos, problema del dueño del gato, la Casa Premium XL como solución, y cierre: «Escríbeme QUIERO y te paso modelos y precios». Indica qué se ve en pantalla en cada parte. Lenguaje peruano, cercano. No inventes precios.</div>
   <button class="copiar" data-copy="p3" type="button">Copiar prompt</button>
+  <h3>Tres rutas para generar el video</h3>
+  <ul>
+    <li><b>Flow de Google:</b> entra con tu cuenta de Google, crea un proyecto, elige de imagen a video en vertical 9:16, sube la imagen, pega el prompt y descarga el clip. Repite por escena.</li>
+    <li><b>Kling AI o Higgsfield:</b> crea tu cuenta, elige Image to Video, sube la imagen, pega el prompt, vertical 9:16 y 5 segundos. Descarga y repite por escena.</li>
+    <li><b>HeyGen, con presentador:</b> crea tu cuenta, Create video, elige un avatar, pega tu guion de 30 segundos, elige una voz en español y descarga.</li>
+  </ul>
+  <h3>Prompt de la imagen de la escena</h3>
+  <div class="prompt" id="p3b">Usa la foto que adjunto de la Casa Premium XL de Casas para Gatos. Crea una imagen vertical 9:16, realista, en una sala peruana con luz de mañana: un gato atigrado entra curioso a la casa. No cambies la forma ni los colores del producto. Sin texto ni logos inventados.</div>
+  <button class="copiar" data-copy="p3b" type="button">Copiar prompt</button>
+  <h3>Prompt de imagen a video</h3>
+  <div class="prompt" id="p3c">Anima esta imagen en un clip vertical 9:16 de unos 6 segundos. El gato se acomoda dentro de la casa y se queda dormido. Cámara fija con un acercamiento lento, luz natural, movimiento suave y realista. Mantén el producto igual que en la imagen. Sin texto en pantalla ni música.</div>
+  <button class="copiar" data-copy="p3c" type="button">Copiar prompt</button>
+  <p class="nota">Parte siempre de la foto real de tu producto para que la IA no invente otro modelo. Al publicar, marca el video como contenido generado con IA. Los planes gratis suelen poner marca de agua y varios no permiten uso comercial.</p>
   <h3>Mensajes automáticos de TikTok</h3>
   <p>En TikTok, <b>Business Suite → Message Center</b>: bienvenida de hasta 250 caracteres, preguntas sugeridas con respuestas de hasta 200 y respuesta por palabra clave de hasta 500. Activa antes «Recibir mensajes de todos». Si tu cuenta aún no está verificada, deja los textos listos en tu segundo cerebro.</p>
 </div>
@@ -94,7 +133,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <p>Casas para Gatos también vende a veterinarias, pet shops y hoteles para mascotas.</p>
   <ol>
     <li>Ajusta tu titular para decir a quién ayudas y agrega el enlace a tu landing con <code>?utm_source=linkedin</code>.</li>
-    <li>Arma un carrusel de 5 láminas en Canva o PowerPoint, expórtalo en PDF y súbelo como documento.</li>
+    <li>Arma un carrusel de 5 láminas con Claude o Gamma, expórtalo en PDF y súbelo como documento.</li>
     <li>LinkedIn programa publicaciones gratis hasta 3 meses antes. Si no te deja programar el PDF, publícalo a mano.</li>
     <li>Prospección asistida: Manus investiga, Claude redacta y tú envías cada mensaje.</li>
   </ol>
@@ -119,9 +158,10 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <h2>¿Lo lograste? Revisa antes de entregar</h2>
 <div class="reto">
   <ul>
+    <li><b>Vapi:</b> tu asistente saluda, responde precios de tu catálogo en español y no inventa descuentos.</li>
     <li><b>Reto 1:</b> comentaste QUIERO desde otra cuenta, llegó el mensaje automático y el enlace abre tu landing.</li>
-    <li><b>Reto 2:</b> 7 publicaciones en tu bóveda, cada una con su enlace utm, y al menos una pieza en Canva.</li>
-    <li><b>Reto 3:</b> video de unos 30 segundos con voz y subtítulos, publicado con el comentario fijado.</li>
+    <li><b>Reto 2:</b> 7 publicaciones en tu bóveda, cada una con su enlace utm, y al menos una pieza generada con IA.</li>
+    <li><b>Reto 3:</b> video de unos 30 segundos hecho con IA, con voz y subtítulos, publicado con el comentario fijado.</li>
     <li><b>Reto 4:</b> titular que dice a quién ayudas, carrusel publicado o programado y 3 mensajes revisados por ti.</li>
   </ul>
   <p class="nota">LinkedIn redujo 40% las vistas de los posts genéricos hechos con IA. Usa la IA para investigar y ordenar, pero pon tu opinión y tus datos.</p>
@@ -131,11 +171,12 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 5</b> y envía:</p>
   <ul>
+    <li>Tu agente de voz: captura o grabación de tu prueba en Vapi.</li>
     <li>Capturas del comentario QUIERO y del mensaje automático en Instagram y en Facebook.</li>
     <li>Tu semana de contenido de tu bóveda, con los enlaces utm de cada red.</li>
     <li>Tu video corto publicado o su enlace.</li>
     <li>LinkedIn: carrusel programado o publicado y 3 mensajes redactados.</li>
-    <li>Opcional: Instagram y Facebook en tu Admin de Lovable.</li>
+    <li>Opcional: Instagram, Facebook y llamadas en tu Admin de Lovable.</li>
   </ul>
   <p><b>Fecha límite:</b> jueves 15 de octubre, 6:59 p. m., hora de Lima.</p>
 </div>
