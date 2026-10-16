@@ -88,7 +88,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 6.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Leads en un solo lugar", "Seguimiento automático", "Responder reseñas con IA", "Cotización automática", "Extra: postventa que pide la reseña", "Plan B por reto", "Radar IA al final"];
+  const valioso = ["Kit de IA y asistente con contexto", "TikTok con video IA", "Leads en un solo lugar", "Seguimiento automático", "Responder reseñas con IA", "Cotización automática", "Extra: postventa que pide la reseña", "Plan B por reto", "Radar IA al final"];
   window.ENCUESTAS.cierre6 = {
     titulo: "¿Cómo te fue en la sesión 6?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
