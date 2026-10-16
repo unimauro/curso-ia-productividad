@@ -16,7 +16,7 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Empezamos publicando en TikTok el video con IA de la sesión 5. Luego un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
+<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Empezamos con un avatar con IA: tu vendedor en video. Luego un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
 
 <div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis.</div>
 
@@ -24,7 +24,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
-    <li><b>TikTok:</b> si tu cuenta no está verificada y no deja crear mensajes automáticos, publica el video igual y deja los textos en tu bóveda.</li>
+    <li><b>Avatar:</b> si HeyGen se quedó sin créditos o tarda, usa Higgsfield, o grábate con el celular leyendo el mismo guion.</li>
     <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, corre <code>npx n8n</code> en tu computadora o arma el flujo en Make gratis.</li>
     <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
     <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
@@ -43,19 +43,19 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
-<h2>Pendiente de la sesión 5 · TikTok que vende</h2>
+<h2>Avatar con IA: tu vendedor en video</h2>
 <div class="reto">
-  <p>Ya tienes tu video hecho con IA en la sesión 5. Hoy lo publicas y dejas listos los mensajes automáticos.</p>
+  <p>Un presentador digital que explica tu producto en 30 segundos. Sirve para TikTok, Reels, WhatsApp y tu landing.</p>
   <ol>
-    <li>Sube a TikTok el video vertical que generaste en la sesión 5.</li>
-    <li>Pon subtítulos automáticos en el editor de TikTok y marca «contenido generado con IA».</li>
-    <li>Escribe el texto y los hashtags con tu Proyecto de IA, con enlace a tu landing con <code>?utm_source=tiktok</code>.</li>
-    <li>Fija el comentario «Escríbeme QUIERO por mensaje».</li>
-    <li>En <b>Business Suite → Message Center</b>, pega los textos del prompt de abajo.</li>
+    <li>Crea tu cuenta gratis en <a href="https://www.heygen.com" target="_blank" rel="noopener">HeyGen (https://www.heygen.com)</a> o usa <a href="https://higgsfield.ai" target="_blank" rel="noopener">Higgsfield (https://higgsfield.ai)</a>.</li>
+    <li><b>Create video → Avatar:</b> elige uno de la galería, o crea el tuyo con tu foto.</li>
+    <li>Pega el guion del prompt de abajo y elige una voz en español latino.</li>
+    <li>Formato vertical 9:16 y genera. Revisa que no diga precios inventados.</li>
+    <li>Publícalo en TikTok o Reels con «Escríbeme QUIERO» y márcalo como hecho con IA.</li>
   </ol>
-  <div class="prompt" id="t1">Para la cuenta de TikTok de Casas para Gatos escribe: 1) un mensaje de bienvenida de máximo 250 caracteres; 2) tres preguntas sugeridas con su respuesta de máximo 200 caracteres: precios, envíos y formas de pago; 3) la respuesta a la palabra clave QUIERO, de máximo 500 caracteres, con los modelos y el enlace a mi landing con utm_source=tiktok. Usa solo los datos de mi catálogo. Español peruano, cálido. No inventes precios.</div>
+  <div class="prompt" id="t1">Escribe un guion de 30 segundos para un presentador digital de Casas para Gatos que habla a cámara. Empieza con una pregunta que enganche en 3 segundos, presenta la Casa Premium XL con 2 beneficios concretos y cierra con: «Escríbeme QUIERO y te paso modelos y precios». Máximo 75 palabras, español peruano cercano, frases cortas para que la voz suene natural. Usa solo datos de mi catálogo y no inventes precios.</div>
   <button class="copiar" data-copy="t1" type="button">Copiar prompt</button>
-  <p class="nota">Los mensajes automáticos solo funcionan con cuenta de empresa verificada o con acceso avanzado. Si la tuya no lo está, publica igual y deja los textos en tu bóveda.</p>
+  <p class="nota">El plan gratis de HeyGen da pocos videos al mes, en 720p y con marca de agua: para la clase alcanza. Usa tu propio rostro o un avatar de galería, nunca la cara ni la voz de otra persona sin su permiso.</p>
 </div>
 
 <h2>Reto 1 · Tu primer flujo con IA</h2>
@@ -115,7 +115,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
-    <li>Tu TikTok publicado, con comentario fijado y mensajes automáticos listos.</li>
+    <li>Tu video con avatar de 30 segundos, o su enlace publicado.</li>
     <li>Captura de tu flujo de n8n de punta a punta.</li>
     <li>Un lead de prueba que entró por WhatsApp y llegó a tu Admin.</li>
     <li>El aviso al vendedor en Telegram o correo.</li>
