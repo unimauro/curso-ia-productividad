@@ -16,14 +16,15 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
+<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Empezamos por TikTok con video IA, pendiente de la sesión 5. Luego un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
 
-<div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis.</div>
+<div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis, y para TikTok video con IA en Flow de Google, Kling AI, Higgsfield o HeyGen.</div>
 
 <h2>Si algo falla: plan B por reto</h2>
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
+    <li><b>TikTok:</b> si se acabaron tus créditos de video, cambia de herramienta: Flow, Kling o Higgsfield. Si tu TikTok no está verificado, deja los mensajes automáticos listos en tu bóveda.</li>
     <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, corre <code>npx n8n</code> en tu computadora o arma el flujo en Make gratis.</li>
     <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
     <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
@@ -40,6 +41,32 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Claves en credenciales</b> de n8n, nunca escritas dentro de un nodo.</li>
     <li><b>Consentimiento:</b> los flujos que escriben a clientes respetan la baja y la Ley 32323.</li>
   </ul>
+</div>
+
+<h2>Pendiente de la sesión 5 · TikTok: video que vende con IA</h2>
+<div class="reto">
+  <ol>
+    <li>Escribe el guion con tu Proyecto de IA y el prompt de abajo.</li>
+    <li>Imagen del producto: tu foto real, o una escena generada con Gemini o ChatGPT a partir de ella.</li>
+    <li>De imagen a video con IA: 3 clips verticales en <a href="https://labs.google/flow" target="_blank" rel="noopener">Flow de Google (https://labs.google/flow)</a>, <a href="https://klingai.com" target="_blank" rel="noopener">Kling AI (https://klingai.com)</a> o <a href="https://higgsfield.ai" target="_blank" rel="noopener">Higgsfield (https://higgsfield.ai)</a>.</li>
+    <li>Voz en off con <a href="https://elevenlabs.io" target="_blank" rel="noopener">ElevenLabs (https://elevenlabs.io)</a> o un presentador con <a href="https://www.heygen.com" target="_blank" rel="noopener">HeyGen (https://www.heygen.com)</a>.</li>
+    <li>Une los clips y pon subtítulos en el editor del propio TikTok. Publica y fija el comentario «Escríbeme QUIERO por mensaje».</li>
+  </ol>
+  <div class="prompt" id="t1">Escribe el guion de un video vertical de 30 segundos para TikTok de Casas para Gatos. Formato: gancho que detenga el scroll en 3 segundos, problema del dueño del gato, la Casa Premium XL como solución, y cierre: «Escríbeme QUIERO y te paso modelos y precios». Para cada escena indica qué se ve en pantalla, el prompt de imagen a video y el texto de la voz en off. Lenguaje peruano, cercano. No inventes precios.</div>
+  <button class="copiar" data-copy="t1" type="button">Copiar prompt</button>
+  <h3>Tres rutas para generar el video</h3>
+  <ul>
+    <li><b>Flow de Google:</b> crea un proyecto, elige de imagen a video en vertical 9:16, sube la imagen, pega el prompt y descarga. Repite por escena.</li>
+    <li><b>Kling AI o Higgsfield:</b> Image to Video, sube la imagen, pega el prompt, vertical 9:16 y 5 segundos. Descarga y repite.</li>
+    <li><b>HeyGen, con presentador:</b> Create video, elige un avatar, pega tu guion, voz en español y descarga.</li>
+  </ul>
+  <h3>Prompt de la imagen de la escena</h3>
+  <div class="prompt" id="t2">Usa la foto que adjunto de la Casa Premium XL de Casas para Gatos. Crea una imagen vertical 9:16, realista, en una sala peruana con luz de mañana: un gato atigrado entra curioso a la casa. No cambies la forma ni los colores del producto. Sin texto ni logos inventados.</div>
+  <button class="copiar" data-copy="t2" type="button">Copiar prompt</button>
+  <h3>Prompt de imagen a video</h3>
+  <div class="prompt" id="t3">Anima esta imagen en un clip vertical 9:16 de unos 6 segundos. Empieza con acción: el gato salta hacia la casa. Luego se acomoda dentro y se queda dormido. Cámara con un acercamiento lento, luz natural, movimiento suave y realista. Mantén el producto igual que en la imagen. Sin texto en pantalla.</div>
+  <button class="copiar" data-copy="t3" type="button">Copiar prompt</button>
+  <p class="nota">Los créditos gratis cambian seguido y suelen poner marca de agua. Al publicar, marca el video como contenido generado con IA. Mensajes automáticos de TikTok: Business Suite → Message Center, solo con cuenta verificada o acceso avanzado.</p>
 </div>
 
 <h2>Reto 1 · Tu primer flujo con IA</h2>
@@ -99,6 +126,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
+    <li>Tu TikTok con video IA publicado o su enlace (pendiente de la sesión 5).</li>
     <li>Captura de tu flujo de n8n de punta a punta.</li>
     <li>Un lead de prueba que entró por WhatsApp y llegó a tu Admin.</li>
     <li>El aviso al vendedor en Telegram o correo.</li>
