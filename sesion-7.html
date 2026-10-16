@@ -16,7 +16,7 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Empezamos con un avatar con IA: tu vendedor en video. Luego un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
+<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
 
 <div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis.</div>
 
@@ -24,7 +24,6 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
-    <li><b>Avatar:</b> si HeyGen se quedó sin créditos o tarda, usa Higgsfield, o grábate con el celular leyendo el mismo guion.</li>
     <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, corre <code>npx n8n</code> en tu computadora o arma el flujo en Make gratis.</li>
     <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
     <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
@@ -41,21 +40,6 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Claves en credenciales</b> de n8n, nunca escritas dentro de un nodo.</li>
     <li><b>Consentimiento:</b> los flujos que escriben a clientes respetan la baja y la Ley 32323.</li>
   </ul>
-</div>
-
-<h2>Avatar con IA: tu vendedor en video</h2>
-<div class="reto">
-  <p>Un presentador digital que explica tu producto en 30 segundos. Sirve para TikTok, Reels, WhatsApp y tu landing.</p>
-  <ol>
-    <li>Crea tu cuenta gratis en <a href="https://www.heygen.com" target="_blank" rel="noopener">HeyGen (https://www.heygen.com)</a> o usa <a href="https://higgsfield.ai" target="_blank" rel="noopener">Higgsfield (https://higgsfield.ai)</a>.</li>
-    <li><b>Create video → Avatar:</b> elige uno de la galería, o crea el tuyo con tu foto.</li>
-    <li>Pega el guion del prompt de abajo y elige una voz en español latino.</li>
-    <li>Formato vertical 9:16 y genera. Revisa que no diga precios inventados.</li>
-    <li>Publícalo en TikTok o Reels con «Escríbeme QUIERO» y márcalo como hecho con IA.</li>
-  </ol>
-  <div class="prompt" id="t1">Escribe un guion de 30 segundos para un presentador digital de Casas para Gatos que habla a cámara. Empieza con una pregunta que enganche en 3 segundos, presenta la Casa Premium XL con 2 beneficios concretos y cierra con: «Escríbeme QUIERO y te paso modelos y precios». Máximo 75 palabras, español peruano cercano, frases cortas para que la voz suene natural. Usa solo datos de mi catálogo y no inventes precios.</div>
-  <button class="copiar" data-copy="t1" type="button">Copiar prompt</button>
-  <p class="nota">El plan gratis de HeyGen da pocos videos al mes, en 720p y con marca de agua: para la clase alcanza. Usa tu propio rostro o un avatar de galería, nunca la cara ni la voz de otra persona sin su permiso.</p>
 </div>
 
 <h2>Reto 1 · Tu primer flujo con IA</h2>
@@ -115,7 +99,6 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
-    <li>Tu video con avatar de 30 segundos, o su enlace publicado.</li>
     <li>Captura de tu flujo de n8n de punta a punta.</li>
     <li>Un lead de prueba que entró por WhatsApp y llegó a tu Admin.</li>
     <li>El aviso al vendedor en Telegram o correo.</li>

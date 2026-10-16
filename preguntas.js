@@ -88,7 +88,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 6.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Kit de IA y asistente con contexto", "Leads en un solo lugar", "Seguimiento automático", "Responder reseñas con IA", "Cotización automática", "Extra: postventa que pide la reseña", "Plan B por reto", "Radar IA al final"];
+  const valioso = ["Kit de IA y asistente con contexto", "Avatar con IA", "Leads en un solo lugar", "Seguimiento automático", "Responder reseñas con IA", "Cotización automática", "Extra: postventa que pide la reseña", "Plan B por reto", "Radar IA al final"];
   window.ENCUESTAS.cierre6 = {
     titulo: "¿Cómo te fue en la sesión 6?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
@@ -100,7 +100,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 7.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Avatar con IA", "Primer flujo en n8n", "WhatsApp al CRM", "Aviso al vendedor por Telegram", "Tareas programadas", "Extra: n8n como MCP", "Plan B por reto", "Radar IA al final"];
+  const valioso = ["Primer flujo en n8n", "WhatsApp al CRM", "Aviso al vendedor por Telegram", "Tareas programadas", "Extra: n8n como MCP", "Plan B por reto", "Radar IA al final"];
   window.ENCUESTAS.cierre7 = {
     titulo: "¿Cómo te fue en la sesión 7?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
