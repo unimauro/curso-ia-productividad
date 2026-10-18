@@ -24,7 +24,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
-    <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, corre <code>npx n8n</code> en tu computadora o arma el flujo en Make gratis.</li>
+    <li><b>Reto 1:</b> Si tu prueba de n8n Cloud venció, instala n8n en tu computadora con una línea (<code>curl -fsSL https://get.n8n.io | sh</code> en Mac o Linux, o Docker en Windows) o arma el flujo en Make gratis. Ojo: <code>npx n8n</code> deja de funcionar con n8n 3.0.</li>
     <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
     <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
     <li><b>Reto 4:</b> Si el reporte diario no se envía, ejecuta el flujo a mano y revisa el historial de ejecuciones.</li>
@@ -52,6 +52,14 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ol>
   <div class="prompt" id="g1">Clasifica este mensaje de un cliente de Casas para Gatos en una sola palabra: CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO. Devuelve JSON: {&quot;intencion&quot;: &quot;...&quot;, &quot;resumen&quot;: &quot;una línea&quot;}. MENSAJE: {{ $json.body.mensaje }}</div>
   <button class="copiar" data-copy="g1" type="button">Copiar prompt</button>
+  <h3>Atajo: que la IA arme el flujo por ti</h3>
+  <p><b>En n8n Cloud:</b> abre <b>n8n Assistant</b> y pídele el flujo en español.</p>
+  <div class="prompt" id="g1b">Crea un flujo para Casas para Gatos: un Webhook recibe {mensaje, nombre, canal}; un nodo de Google Gemini clasifica la intención en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO y devuelve JSON; un IF deja pasar solo COMPRA e INTERESADO; al final responde al Webhook con la intención. Activa Retry on fail en el nodo de Gemini.</div>
+  <button class="copiar" data-copy="g1b" type="button">Copiar prompt</button>
+  <p><b>Desde Gemini o ChatGPT:</b> pide el JSON y pégalo en el lienzo de n8n con Ctrl+V. Luego elige tus credenciales a mano.</p>
+  <div class="prompt" id="g1c">Genera el JSON de un flujo de n8n importable con estos nodos: Webhook (POST, campo mensaje), Google Gemini Chat Model que clasifica la intención de un cliente de Casas para Gatos en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO, un IF que deja pasar COMPRA e INTERESADO y un Respond to Webhook. Sin credenciales ni claves dentro del JSON. Devuelve solo el JSON.</div>
+  <button class="copiar" data-copy="g1c" type="button">Copiar prompt</button>
+  <p class="nota">n8n Assistant está en vista previa: revisa siempre el flujo antes de activarlo. Fuente: docs.n8n.io/changelog.</p>
 </div>
 
 <h2>Reto 2 · WhatsApp al CRM</h2>
@@ -81,7 +89,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <ul>
     <li><b>8:00 a. m.:</b> lee tu API de la sesión 2, la IA lo resume en 5 líneas y te llega por correo o Telegram.</li>
     <li><b>9:00 a. m.:</b> busca leads sin respuesta hace 3 días y cotizaciones que vencen mañana, y avisa al vendedor.</li>
-    <li><b>Lunes:</b> lee fuentes RSS de mascotas y comercio, y la IA elige las 3 noticias que importan.</li>
+    <li><b>Postventa diaria:</b> a los leads en Ganado hace 3 días, con consentimiento, envía gracias y el enlace a tu perfil de Google para que opinen. Sin descuentos ni regalos a cambio; si responden con una queja, avisa primero al vendedor.</li>
   </ul>
 </div>
 
