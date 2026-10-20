@@ -16,31 +16,33 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 7 · Agentes que trabajan en la nube</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. n8n, Claude Code, ChatGPT y Jules trabajan por ti mientras haces otra cosa. Hoy no hace falta Telegram.</p></header>
+<header><h1>Sesión 7 · Agentes que trabajan en la nube</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Claude Code, ChatGPT, OpenClaw o Hermes trabajan por ti; n8n conecta todo. Hoy no hace falta Telegram.</p></header>
 
-<div class="msg"><b>Ruta gratis completa:</b> n8n Cloud (prueba de 14 días), Jules de Google (15 tareas al día), Manus y Gemini. Si tienes Claude Pro o ChatGPT Plus, úsalos; si no, el docente los muestra en vivo.</div>
+<div class="msg"><b>Ruta gratis completa:</b> Jules de Google (15 tareas al día), Manus, Gemini, GitHub Codespaces y n8n Cloud (prueba de 14 días). Si tienes Claude Pro o ChatGPT Plus, úsalos; si no, el docente los muestra en vivo.</div>
 
 <h2>La clase de hoy, paso a paso</h2>
 <div class="reto">
+  <p>Primero los agentes, al final n8n.</p>
   <ol>
-    <li><b>n8n Cloud:</b> un flujo que clasifica mensajes con IA. <i>(Reto 1)</i></li>
-    <li><b>Conecta tu app a GitHub:</b> en Lovable, GitHub → Connect → crea el repositorio. <i>(Reto 2)</i></li>
-    <li><b>Claude Code o Jules:</b> el agente agrega una página a tu app y abre un pull request. <i>(Reto 2)</i></li>
-    <li><b>ChatGPT en modo agente:</b> una hoja con 5 competidores y sus fuentes. <i>(Reto 3)</i></li>
-    <li><b>Tarea programada:</b> un agente revisa la competencia cada lunes. <i>(Reto 4)</i></li>
-    <li><b>OpenClaw o Hermes:</b> demo del docente; tú, si te alcanza el tiempo. <i>(Reto 5)</i></li>
+    <li><b>Claude Code o Jules:</b> conecta tu app a GitHub; el agente agrega una página y abre un PR. <i>(Reto 1)</i></li>
+    <li><b>ChatGPT en modo agente:</b> hoja con 5 competidores y sus fuentes; Dots en demo. <i>(Reto 2)</i></li>
+    <li><b>Tareas programadas y /loop:</b> un agente revisa la competencia cada lunes. <i>(Reto 3)</i></li>
+    <li><b>Servidor gratis:</b> GitHub Codespaces, una computadora en la nube sin tarjeta. <i>(Reto 4)</i></li>
+    <li><b>OpenClaw o Hermes:</b> tu agente personal en ese servidor. <i>(Reto 4)</i></li>
+    <li><b>n8n Cloud:</b> un flujo que clasifica mensajes con IA. <i>(Reto 5)</i></li>
   </ol>
 </div>
 
 <h2>Agentes en la nube: el mapa</h2>
 <div class="reto">
   <ul>
-    <li><b><a href="https://n8n.io">n8n Cloud</a>:</b> flujos, tú dibujas los pasos. Prueba de 14 días gratis.</li>
-    <li><b><a href="https://jules.google">Jules de Google</a>:</b> programa en tu repo y abre un PR. Gratis: 15 tareas al día.</li>
+        <li><b><a href="https://jules.google">Jules de Google</a>:</b> programa en tu repo y abre un PR. Gratis: 15 tareas al día.</li>
     <li><b><a href="https://claude.ai/code">Claude Code en la web</a>:</b> programa en tu repo, abre un PR y corre tareas programadas. Plan Pro.</li>
     <li><b>ChatGPT en modo agente:</b> navega, investiga y te entrega un archivo. Plan Plus. <b>Codex en la nube</b>, también con Plus.</li>
     <li><b><a href="https://manus.im">Manus</a>:</b> investiga y arma informes. Créditos gratis.</li>
-    <li><b>OpenClaw o Hermes:</b> agente personal de código abierto; se instala.</li>
+    <li><b>Dots de ChatGPT:</b> agente siempre activo; por ahora Pro y Business Premium.</li>
+    <li><b>OpenClaw o Hermes:</b> agente personal de código abierto; gratis en GitHub Codespaces.</li>
+    <li><b><a href="https://n8n.io">n8n Cloud</a>:</b> flujos, tú dibujas los pasos. Prueba de 14 días gratis.</li>
     <li><b>Muse de Meta:</b> por ahora solo en EE. UU. y Canadá.</li>
   </ul>
   <p class="nota">Los límites de cada plan cambian seguido: revísalos el día que los uses.</p>
@@ -60,74 +62,68 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
-    <li><b>Reto 1:</b> si tu prueba de n8n Cloud venció, arma el flujo en Make gratis o usa el atajo con IA.</li>
-    <li><b>Reto 2:</b> si no tienes Claude Pro, usa Jules gratis con el mismo repo y el mismo prompt.</li>
-    <li><b>Reto 3:</b> si no tienes ChatGPT Plus, usa Manus o Deep Research de Gemini con el mismo prompt.</li>
-    <li><b>Reto 4:</b> si no ves las tareas programadas, usa n8n con Schedule Trigger y un nodo AI Agent, o una tarea programada de Gemini.</li>
-    <li><b>Reto 5:</b> si el agente no se instala, mira la demo y pruébalo en casa con Hermes Desktop.</li>
+    <li><b>Reto 1:</b> si no tienes Claude Pro, usa Jules gratis con el mismo repo y el mismo prompt.</li>
+    <li><b>Reto 2:</b> si no tienes ChatGPT Plus, usa Manus o Deep Research de Gemini con el mismo prompt.</li>
+    <li><b>Reto 3:</b> si no ves las tareas programadas, prográmala en n8n (Reto 5) o en Gemini.</li>
+    <li><b>Reto 4:</b> si Codespaces no arranca, usa Google Cloud Shell o instala Hermes Desktop en tu computadora.</li>
+    <li><b>Reto 5:</b> si tu prueba de n8n Cloud venció, arma el flujo en Make gratis o corre n8n en tu Codespace con Docker.</li>
   </ul>
 </div>
 
-<h2>Reto 1 · Tu primer flujo con IA en n8n</h2>
-<div class="reto">
-  <ol>
-    <li>En n8n Cloud, nuevo flujo con un nodo <b>Webhook</b> como disparador.</li>
-    <li>Nodo de IA con Google Gemini y tu clave gratis, con el prompt de abajo.</li>
-    <li>Nodo <b>IF</b>: si es COMPRA o INTERESADO, sigue.</li>
-    <li>Pruébalo con <b>Test workflow</b>.</li>
-  </ol>
-  <div class="prompt" id="g1">Clasifica este mensaje de un cliente de Casas para Gatos en una sola palabra: CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO. Devuelve JSON: {&quot;intencion&quot;: &quot;...&quot;, &quot;resumen&quot;: &quot;una línea&quot;}. MENSAJE: {{ $json.body.mensaje }}</div>
-  <button class="copiar" data-copy="g1" type="button">Copiar prompt</button>
-  <h3>Atajo: que la IA arme el flujo por ti</h3>
-  <p><b>En n8n Cloud:</b> abre <b>n8n Assistant</b> y pídele el flujo en español.</p>
-  <div class="prompt" id="g1b">Crea un flujo para Casas para Gatos: un Webhook recibe {mensaje, nombre, canal}; un nodo de Google Gemini clasifica la intención en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO y devuelve JSON; un IF deja pasar solo COMPRA e INTERESADO; al final responde al Webhook con la intención. Activa Retry on fail en el nodo de Gemini.</div>
-  <button class="copiar" data-copy="g1b" type="button">Copiar prompt</button>
-  <p><b>Desde Gemini o ChatGPT:</b> pide el JSON y pégalo en el lienzo de n8n con Ctrl+V. Luego elige tus credenciales a mano.</p>
-  <div class="prompt" id="g1c">Genera el JSON de un flujo de n8n importable con estos nodos: Webhook (POST, campo mensaje), Google Gemini Chat Model que clasifica la intención de un cliente de Casas para Gatos en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO, un IF que deja pasar COMPRA e INTERESADO y un Respond to Webhook. Sin credenciales ni claves dentro del JSON. Devuelve solo el JSON.</div>
-  <button class="copiar" data-copy="g1c" type="button">Copiar prompt</button>
-</div>
-
-<h2>Reto 2 · Claude Code en la nube mejora tu app</h2>
+<h2>Reto 1 · Claude Code o Jules mejoran tu app</h2>
 <div class="reto">
   <ol>
     <li>En Lovable: <b>GitHub → Connect</b> y crea el repositorio de tu app (cuenta de <a href="https://github.com">GitHub</a> gratis).</li>
     <li>Abre <a href="https://claude.ai/code">claude.ai/code</a> (Pro) o <a href="https://jules.google">jules.google</a> (gratis) y elige ese repositorio.</li>
-    <li>Pega la tarea de abajo con las <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a> y deja que trabaje: mientras tanto, avanza el Reto 3.</li>
+    <li>Pega la tarea de abajo con las <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a> y deja que trabaje: mientras tanto, avanza el Reto 2.</li>
     <li>Revisa el pull request y fusiónalo: Lovable se actualiza solo desde la rama principal.</li>
   </ol>
   <div class="prompt" id="cc1">En este repo de la app de Casas para Gatos, crea una rama y agrega la página /preguntas-frecuentes con las 10 preguntas del archivo que te pego, enlazada desde el menú y adaptada al celular. No cambies precios, no toques Supabase ni claves. Corre el build y abre un pull request con un resumen en español de lo que cambiaste y cómo probarlo. PREGUNTAS: [pega aquí]</div>
   <button class="copiar" data-copy="cc1" type="button">Copiar prompt</button>
 </div>
 
-<h2>Reto 3 · ChatGPT en modo agente: tu investigador</h2>
+<h2>Reto 2 · ChatGPT en modo agente: tu investigador</h2>
 <div class="reto">
   <ol>
     <li>ChatGPT Plus: en el chat, <b>+ → Modo agente</b>, y pega el prompt.</li>
     <li>Ruta gratis: el mismo prompt en <a href="https://manus.im">Manus</a> o en Deep Research de <a href="https://gemini.google.com">Gemini</a>.</li>
-    <li>Mientras trabaja, revisa tu PR del Reto 2.</li>
+    <li>Mientras trabaja, revisa tu PR del Reto 1.</li>
     <li>Al final, abre 2 fuentes y comprueba que el precio es real.</li>
   </ol>
-  <div class="prompt" id="ag3">Investiga 5 tiendas en línea de Perú que vendan casas o camas para gatos. Para cada una: nombre, web, el producto más parecido a la Casa Premium XL, precio en soles, costo de delivery en Lima y si aceptan Yape. Entrégame una hoja de cálculo descargable y 3 conclusiones para Casas para Gatos. Cita la página de cada dato; si no lo encuentras, escribe «no encontrado».</div>
+  <div class="prompt" id="ag3">Investiga 5 tiendas en línea de Perú que vendan casas o camas para gatos. Para cada una: nombre, web, el producto más parecido a la Casa Premium XL, precio en soles, costo de delivery en Lima y si aceptan Yape. Entrégame una hoja de cálculo descargable y 3 conclusiones para Casas para Gatos. Cita la página de cada dato; si no lo encuentras, escribe «no encontrado».  <h3>¿Y Dots?</h3>
+  <p><a href="https://openai.com/index/introducing-dots/">Dots</a> (OpenAI, 29 de septiembre) son agentes siempre activos de ChatGPT, con su propia computadora en la nube: siguen trabajando cuando cierras el chat y te piden permiso para lo sensible. Por ahora solo en <b>Pro y Business Premium</b>, no en Plus. Con Plus haces casi lo mismo con el modo agente y las tareas programadas del Reto 3.</p>
+</div>
   <button class="copiar" data-copy="ag3" type="button">Copiar prompt</button>
   <p class="nota">No inicies sesión con tus claves dentro del navegador del agente ni le pidas que compre.</p>
 </div>
 
-<h2>Reto 4 · Agentes que trabajan de noche</h2>
+<h2>Reto 3 · Agentes que trabajan solos: tareas programadas y /loop</h2>
 <div class="reto">
   <p>Una tarea programada en la nube, sin tu computadora prendida. Elige dónde:</p>
   <ul>
     <li><b>Claude:</b> <a href="https://claude.ai/code/routines">claude.ai/code/routines</a> (Pro), semanal.</li>
     <li><b>ChatGPT:</b> tareas programadas, en la barra lateral.</li>
-    <li><b>Gratis:</b> n8n con Schedule Trigger y un nodo AI Agent.</li>
+    <li><b>Gratis:</b> n8n con Schedule Trigger y un nodo AI Agent (Reto 5).</li>
     <li>Pruébala ya con <b>Ejecutar ahora</b> y revisa el resultado.</li>
   </ul>
-  <div class="prompt" id="ag4">Cada lunes a las 7:00 a. m.: revisa los precios de estas 5 tiendas competidoras [pega la lista del Reto 3], compáralos con nuestro catálogo y dime qué cambió desde la semana pasada. Si un competidor bajó más de 10% en un producto parecido, márcalo como alerta. Termina con una recomendación de una línea. Nunca cambies nuestros precios ni escribas a nadie.</div>
+  <div class="prompt" id="ag4">Cada lunes a las 7:00 a. m.: revisa los precios de estas 5 tiendas competidoras [pega la lista del Reto 2], compáralos con nuestro catálogo y dime qué cambió desde la semana pasada. Si un competidor bajó más de 10% en un producto parecido, márcalo como alerta. Termina con una recomendación de una línea. Nunca cambies nuestros precios ni escribas a nadie.</div>
   <button class="copiar" data-copy="ag4" type="button">Copiar prompt</button>
+  <h3>/loop en Claude Code (demo del docente)</h3>
+  <p>En la terminal, <code>claude</code> y luego <code>/loop 10m &lt;tu tarea&gt;</code> la repite cada 10 minutos; <code>/loop &lt;tu tarea&gt;</code> deja que Claude decida cuándo volver. Vive en tu computadora: si la apagas, se detiene. Para que corra sin ti, usa las tareas programadas de arriba.</p>
+  <div class="prompt" id="lp1">/loop 10m revisa mi repo de Casas para Gatos: si Jules o Claude abrieron un pull request nuevo, resume en 3 líneas qué cambia, corre el build y dime si pasa. Si falla, explícame el error en una línea. No fusiones nada.</div>
+  <button class="copiar" data-copy="lp1" type="button">Copiar prompt</button>
 </div>
-
-<h2>Reto 5 · Tu agente personal: OpenClaw o Hermes (demo)</h2>
+<h2>Reto 4 · Tu agente en un servidor gratis: OpenClaw o Hermes</h2>
 <div class="reto">
-  <p>Se instalan en tu computadora y traen su propio chat: <b>no necesitas Telegram</b>.</p>
+  <h3>Tu servidor gratis en 3 minutos: GitHub Codespaces</h3>
+  <ol>
+    <li>Entra a <a href="https://github.com/codespaces">github.com/codespaces</a> con tu cuenta del Reto 1 → <b>New codespace</b> → <b>Blank</b>. Sin tarjeta.</li>
+    <li><b>Hermes:</b> en la terminal, <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</code>, luego <code>source ~/.bashrc</code> y <code>hermes setup</code> con tu clave de Gemini. Conversa con <code>hermes</code>.</li>
+    <li><b>U OpenClaw:</b> <code>nvm install 24</code> y <code>curl -fsSL https://openclaw.ai/install.sh | bash</code>; Quick start con tu clave de Gemini.</li>
+    <li>Al terminar, <b>detén el codespace</b> para no gastar tus horas gratis.</li>
+  </ol>
+  <p class="nota">GitHub Free: 120 horas-núcleo al mes en Codespaces (60 h con 2 núcleos). Se suspende a los 30 min sin uso. Otras opciones: Google Cloud Shell (50 h por semana) u Oracle Cloud Always Free (servidor 24/7, pide tarjeta).</p>
+  <p>¿Prefieres tu computadora? Mismos pasos, sin Telegram: el chat viene incluido.</p>
   <h3>Ruta A · Hermes Agent</h3>
   <ol>
     <li>Mac o Windows: descarga <b>Hermes Desktop</b> en <a href="https://hermes-agent.nousresearch.com">hermes-agent.nousresearch.com</a>. O en la terminal (Mac, Linux o WSL2): <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</code></li>
@@ -150,15 +146,34 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
+<h2>Reto 5 · n8n conecta todo: tu primer flujo con IA</h2>
+<div class="reto">
+  <ol>
+    <li>En n8n Cloud, nuevo flujo con un nodo <b>Webhook</b> como disparador.</li>
+    <li>Nodo de IA con Google Gemini y tu clave gratis, con el prompt de abajo.</li>
+    <li>Nodo <b>IF</b>: si es COMPRA o INTERESADO, sigue.</li>
+    <li>Pruébalo con <b>Test workflow</b>.</li>
+  </ol>
+  <div class="prompt" id="g1">Clasifica este mensaje de un cliente de Casas para Gatos en una sola palabra: CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO. Devuelve JSON: {&quot;intencion&quot;: &quot;...&quot;, &quot;resumen&quot;: &quot;una línea&quot;}. MENSAJE: {{ $json.body.mensaje }}</div>
+  <button class="copiar" data-copy="g1" type="button">Copiar prompt</button>
+  <h3>Atajo: que la IA arme el flujo por ti</h3>
+  <p><b>En n8n Cloud:</b> abre <b>n8n Assistant</b> y pídele el flujo en español.</p>
+  <div class="prompt" id="g1b">Crea un flujo para Casas para Gatos: un Webhook recibe {mensaje, nombre, canal}; un nodo de Google Gemini clasifica la intención en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO y devuelve JSON; un IF deja pasar solo COMPRA e INTERESADO; al final responde al Webhook con la intención. Activa Retry on fail en el nodo de Gemini.</div>
+  <button class="copiar" data-copy="g1b" type="button">Copiar prompt</button>
+  <p><b>Desde Gemini o ChatGPT:</b> pide el JSON y pégalo en el lienzo de n8n con Ctrl+V. Luego elige tus credenciales a mano.</p>
+  <div class="prompt" id="g1c">Genera el JSON de un flujo de n8n importable con estos nodos: Webhook (POST, campo mensaje), Google Gemini Chat Model que clasifica la intención de un cliente de Casas para Gatos en CONSULTA, INTERESADO, COMPRA, RECLAMO u OTRO, un IF que deja pasar COMPRA e INTERESADO y un Respond to Webhook. Sin credenciales ni claves dentro del JSON. Devuelve solo el JSON.</div>
+  <button class="copiar" data-copy="g1c" type="button">Copiar prompt</button>
+</div>
+
 <h2>Entrega de la sesión 7</h2>
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
-    <li>Captura de tu flujo de n8n clasificando un mensaje.</li>
     <li>Enlace al PR de Claude Code o Jules, y la página nueva en tu app.</li>
     <li>La hoja de competidores con la fuente de cada dato.</li>
     <li>Captura de tu tarea programada y su primer resultado.</li>
-    <li>Opcional: OpenClaw o Hermes respondiendo con tu catálogo.</li>
+    <li>Captura de Hermes u OpenClaw respondiendo con tu catálogo en Codespaces.</li>
+    <li>Captura de tu flujo de n8n clasificando un mensaje.</li>
   </ul>
   <p><b>Fecha sugerida:</b> jueves 22 de octubre, 6:59 p. m., hora de Lima. Las entregas siguen abiertas después de esa fecha.</p>
 </div>
