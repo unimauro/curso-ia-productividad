@@ -100,12 +100,12 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 7.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Primer flujo en n8n", "WhatsApp al CRM", "Aviso al vendedor por Telegram", "Tareas programadas", "Agente con OpenClaw o Hermes", "Extra: n8n como MCP", "Plan B por reto", "Radar IA al final"];
+  const valioso = ["Primer flujo en n8n", "Claude Code o Jules mejorando mi app", "ChatGPT en modo agente", "Tareas programadas en la nube", "OpenClaw o Hermes", "Plan B por reto", "Radar IA al final"];
   window.ENCUESTAS.cierre7 = {
     titulo: "¿Cómo te fue en la sesión 7?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",
     gracias: base.gracias, clave: "encuesta-ia-cierre-s7", prefijo: "c7-", contador: "s7_c1",
-    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s7_" + p.id.slice(2) : "s7_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para automatizar tu negocio con n8n y agentes?" } : {})),
+    preguntas: base.preguntas.map(p => Object.assign({}, p, { id: (p.id.startsWith("t_") ? "t_s7_" + p.id.slice(2) : "s7_" + p.id) }, p.id === "c3" ? { opciones: valioso } : {}, p.id === "c4" ? { texto: "¿Qué tan seguro te sientes para delegar trabajo a agentes en la nube?" } : {})),
   };
 })();
 
