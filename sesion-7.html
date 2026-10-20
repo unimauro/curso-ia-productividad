@@ -16,9 +16,19 @@ h3{margin:18px 0 6px}
 code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
 </style></head>
 <body><main>
-<header><h1>Sesión 7 · n8n: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Un solo flujo que une WhatsApp, redes, leads, avisos y reportes.</p></header>
+<header><h1>Sesión 7 · n8n y agentes: conecta todo</h1><p>Martes 20 de octubre · AI Productivity Engineering · eIA. Flujos con n8n y un agente personal con OpenClaw o Hermes que trabaja por ti.</p></header>
 
 <div class="msg"><b>Hoy todo es gratis.</b> n8n Cloud trae una prueba de 14 días con 1.000 ejecuciones, sin tarjeta. n8n en tu computadora es gratis y sin límite. Telegram es gratis para bots. Usamos Gemini con clave gratis.</div>
+
+<h2>Tres formas de poner la IA a trabajar</h2>
+<div class="reto">
+  <ul>
+    <li><b>n8n · flujos:</b> tú dibujas los pasos (disparador, IA, decisión, acción). Ideal para procesos que se repiten igual. También tiene un nodo AI Agent.</li>
+    <li><b><a href="https://openclaw.ai">OpenClaw</a> · agente personal:</b> vive en Telegram, WhatsApp, Signal o Discord; recuerda, usa skills y actúa en tu computadora. Código abierto (MIT), versión 2.0 desde agosto de 2026.</li>
+    <li><b><a href="https://hermes-agent.nousresearch.com">Hermes Agent</a> · agente que aprende:</b> de Nous Research, código abierto (MIT). Crea sus propias skills con lo que hace y recuerda; app de escritorio, Telegram y tareas programadas.</li>
+  </ul>
+  <p><b>Regla:</b> flujo cuando sabes los pasos; agente cuando sabes el objetivo pero los pasos cambian. Lo mejor: el agente llama a tus flujos de n8n.</p>
+</div>
 
 <h2>Si algo falla: plan B por reto</h2>
 <div class="reto">
@@ -28,6 +38,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Reto 2:</b> Si Twilio no llega a n8n en tu computadora, usa n8n Cloud o deja que Lovable reciba el mensaje y llame a n8n por webhook.</li>
     <li><b>Reto 3:</b> Si Telegram no conecta, avisa al vendedor por correo con Gmail o Resend.</li>
     <li><b>Reto 4:</b> Si el reporte diario no se envía, ejecuta el flujo a mano y revisa el historial de ejecuciones.</li>
+    <li><b>Reto 5:</b> Si el agente no se instala, usa Hermes Desktop, o arma un AI Agent en n8n con memoria y HTTP Request.</li>
     <li><b>Extra:</b> Si Claude no ve tu servidor MCP de n8n, prueba la herramienta desde n8n y conéctala luego en modo desarrollador.</li>
   </ul>
 </div>
@@ -93,6 +104,41 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
+<h2>Reto 5 · Tu agente personal: OpenClaw o Hermes</h2>
+<div class="reto">
+  <p>Elige una ruta. Hazlo en tu computadora personal, no en la del trabajo. Crea un <b>bot de Telegram nuevo</b> con @BotFather, distinto del Reto 3.</p>
+  <h3>Ruta A · Hermes Agent</h3>
+  <ol>
+    <li>Mac o Windows: descarga <b>Hermes Desktop</b> en <a href="https://hermes-agent.nousresearch.com">hermes-agent.nousresearch.com</a>. O en la terminal (Mac, Linux o WSL2): <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</code></li>
+    <li><code>hermes setup</code>: elige Gemini (tu clave de AI Studio) u OpenRouter.</li>
+    <li><code>hermes doctor</code> para verificar.</li>
+    <li><code>hermes gateway setup</code>: conecta Telegram con el token de tu bot nuevo.</li>
+  </ol>
+  <h3>Ruta B · OpenClaw</h3>
+  <ol>
+    <li>Necesitas Node.js 24 o más reciente (<code>node --version</code>).</li>
+    <li>Mac o Linux: <code>curl -fsSL https://openclaw.ai/install.sh | bash</code>. Windows (PowerShell): <code>iwr -useb https://openclaw.ai/install.ps1 | iex</code></li>
+    <li>El asistente arranca solo: elige Quick start, tu clave de Gemini y el canal Telegram con tu bot nuevo.</li>
+    <li><code>openclaw dashboard</code> abre el panel en el navegador.</li>
+  </ol>
+  <h3>Ponlo a trabajar para Casas para Gatos</h3>
+  <ol>
+    <li>Dale contexto: el <a href="material/casas-para-gatos/catalogo-casas-para-gatos.md">catálogo</a> y las <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a>.</li>
+    <li>Pruébalo: pregúntale por Telegram el precio de la Casa Comfort.</li>
+    <li>Prográmalo: que te escriba cada día a las 8:00 a. m. con el resumen.</li>
+    <li>Conéctalo a n8n: que llame a tu Webhook del Reto 1 para clasificar mensajes.</li>
+  </ol>
+  <div class="prompt" id="ag1">Eres el asistente de operaciones de Casas para Gatos. Usa solo el catálogo y las preguntas frecuentes que te paso; nunca inventes precios ni descuentos. Tarea diaria a las 8:00 a. m.: lee [URL de tu API de la sesión 2], resume en 5 líneas ventas, leads nuevos y cotizaciones por vencer, y envíamelo por Telegram. Pide mi permiso antes de escribir a un cliente, pagar o borrar algo.</div>
+  <button class="copiar" data-copy="ag1" type="button">Copiar prompt</button>
+  <h3>Agentes con manos: las reglas</h3>
+  <ul>
+    <li><b>Canal aparte:</b> bot de Telegram o número secundario. Nunca conectes tu WhatsApp personal.</li>
+    <li><b>Skills verificadas:</b> en enero de 2026 Cisco halló una skill de terceros para OpenClaw que robaba datos. Instala solo lo que entiendes.</li>
+    <li><b>Claves con límite:</b> las claves quedan guardadas en archivos de tu computadora. Usa claves con tope de gasto y bórralas si dejas de usarlo.</li>
+    <li><b>Permiso antes de actuar:</b> escribir a clientes, pagar o borrar siempre pasa por tu aprobación.</li>
+  </ul>
+</div>
+
 <h2>Extra · n8n como herramienta de Claude</h2>
 <div class="reto">
   <ol>
@@ -111,6 +157,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li>Un lead de prueba que entró por WhatsApp y llegó a tu Admin.</li>
     <li>El aviso al vendedor en Telegram o correo.</li>
     <li>Tu reporte diario recibido, con Retry on fail activado.</li>
+    <li>Tu agente (Hermes u OpenClaw) respondiendo en Telegram con un dato del catálogo.</li>
     <li>Opcional: Claude usando tu MCP de n8n.</li>
   </ul>
   <p><b>Fecha sugerida:</b> jueves 22 de octubre, 6:59 p. m., hora de Lima. Las entregas siguen abiertas después de esa fecha.</p>
