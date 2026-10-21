@@ -24,7 +24,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Primero los agentes, al final n8n.</p>
   <ol>
-    <li><b>Claude Code o Jules:</b> conecta tu app a GitHub; el agente agrega una página y abre un PR. <i>(Reto 1)</i></li>
+    <li><b>Codex, Claude Code o Jules:</b> conecta tu app a GitHub; el agente agrega una página y abre un PR. <i>(Reto 1)</i></li>
     <li><b>ChatGPT en modo agente:</b> hoja con 5 competidores y sus fuentes; Dots en demo. <i>(Reto 2)</i></li>
     <li><b>Tareas programadas y /loop:</b> un agente revisa la competencia cada lunes. <i>(Reto 3)</i></li>
     <li><b>Servidor gratis:</b> GitHub Codespaces, una computadora en la nube sin tarjeta. <i>(Reto 4)</i></li>
@@ -38,7 +38,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <ul>
         <li><b><a href="https://jules.google">Jules de Google</a>:</b> programa en tu repo y abre un PR. Gratis: 15 tareas al día.</li>
     <li><b><a href="https://claude.ai/code">Claude Code en la web</a>:</b> programa en tu repo, abre un PR y corre tareas programadas. Plan Pro.</li>
-    <li><b>ChatGPT en modo agente:</b> navega, investiga y te entrega un archivo. Plan Plus. <b>Codex en la nube</b>, también con Plus.</li>
+    <li><b>ChatGPT en modo agente:</b> navega, investiga y te entrega un archivo. Plan Plus. <b><a href="https://chatgpt.com/codex">Codex</a></b>: programa en tu repo y abre un PR, también con Plus.</li>
     <li><b><a href="https://manus.im">Manus</a>:</b> investiga y arma informes. Créditos gratis.</li>
     <li><b>Dots de ChatGPT:</b> agente siempre activo; por ahora Pro y Business Premium.</li>
     <li><b>OpenClaw o Hermes:</b> agente personal de código abierto; gratis en GitHub Codespaces.</li>
@@ -62,7 +62,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p><b>Regla:</b> si en 5 minutos no avanzas, pasa al plan B.</p>
   <ul>
-    <li><b>Reto 1:</b> si no tienes Claude Pro, usa Jules gratis con el mismo repo y el mismo prompt.</li>
+    <li><b>Reto 1:</b> si no tienes ChatGPT Plus ni Claude Pro, usa Jules gratis con el mismo repo y el mismo prompt.</li>
     <li><b>Reto 2:</b> si no tienes ChatGPT Plus, usa Manus o Deep Research de Gemini con el mismo prompt.</li>
     <li><b>Reto 3:</b> si no ves las tareas programadas, prográmala en n8n (Reto 5) o en Gemini.</li>
     <li><b>Reto 4:</b> si Codespaces no arranca, usa Google Cloud Shell o instala Hermes Desktop en tu computadora.</li>
@@ -70,16 +70,24 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
-<h2>Reto 1 · Claude Code o Jules mejoran tu app</h2>
+<h2>Reto 1 · Codex, Claude Code o Jules mejoran tu app</h2>
 <div class="reto">
   <ol>
     <li>En Lovable: <b>GitHub → Connect</b> y crea el repositorio de tu app (cuenta de <a href="https://github.com">GitHub</a> gratis).</li>
-    <li>Abre <a href="https://claude.ai/code">claude.ai/code</a> (Pro) o <a href="https://jules.google">jules.google</a> (gratis) y elige ese repositorio.</li>
+    <li>Abre <a href="https://chatgpt.com/codex">chatgpt.com/codex</a> (ChatGPT Plus), <a href="https://claude.ai/code">claude.ai/code</a> (Pro) o <a href="https://jules.google">jules.google</a> (gratis) y elige ese repositorio.</li>
     <li>Pega la tarea de abajo con las <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a> y deja que trabaje: mientras tanto, avanza el Reto 2.</li>
     <li>Revisa el pull request y fusiónalo: Lovable se actualiza solo desde la rama principal.</li>
   </ol>
   <div class="prompt" id="cc1">En este repo de la app de Casas para Gatos, crea una rama y agrega la página /preguntas-frecuentes con las 10 preguntas del archivo que te pego, enlazada desde el menú y adaptada al celular. No cambies precios, no toques Supabase ni claves. Corre el build y abre un pull request con un resumen en español de lo que cambiaste y cómo probarlo. PREGUNTAS: [pega aquí]</div>
   <button class="copiar" data-copy="cc1" type="button">Copiar prompt</button>
+  <h3>Codex paso a paso (ChatGPT Plus)</h3>
+  <ol>
+    <li>Entra a <a href="https://chatgpt.com/codex">chatgpt.com/codex</a> con tu cuenta de ChatGPT.</li>
+    <li>Conecta GitHub y da acceso <b>solo al repo de tu app</b>.</li>
+    <li>Crea el entorno eligiendo ese repo, pega la tarea y pulsa <b>Code</b> (<b>Ask</b> solo responde, no cambia nada).</li>
+    <li>Revisa el diff y los registros, y pulsa <b>Create PR</b>.</li>
+  </ol>
+  <p class="nota"><b>Jules</b> es el agente de código en la nube de Google: mismo flujo (repo, tarea, PR), gratis con 15 tareas al día. Tip: lanza la misma tarea en dos agentes y compara los PR.</p>
 </div>
 
 <h2>Reto 2 · ChatGPT en modo agente: tu investigador</h2>
@@ -110,7 +118,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <button class="copiar" data-copy="ag4" type="button">Copiar prompt</button>
   <h3>/loop en Claude Code (demo del docente)</h3>
   <p>En la terminal, <code>claude</code> y luego <code>/loop 10m &lt;tu tarea&gt;</code> la repite cada 10 minutos; <code>/loop &lt;tu tarea&gt;</code> deja que Claude decida cuándo volver. Vive en tu computadora: si la apagas, se detiene. Para que corra sin ti, usa las tareas programadas de arriba.</p>
-  <div class="prompt" id="lp1">/loop 10m revisa mi repo de Casas para Gatos: si Jules o Claude abrieron un pull request nuevo, resume en 3 líneas qué cambia, corre el build y dime si pasa. Si falla, explícame el error en una línea. No fusiones nada.</div>
+  <div class="prompt" id="lp1">/loop 10m revisa mi repo de Casas para Gatos: si Codex, Jules o Claude abrieron un pull request nuevo, resume en 3 líneas qué cambia, corre el build y dime si pasa. Si falla, explícame el error en una línea. No fusiones nada.</div>
   <button class="copiar" data-copy="lp1" type="button">Copiar prompt</button>
 </div>
 <h2>Reto 4 · Tu agente en un servidor gratis: OpenClaw o Hermes</h2>
@@ -169,7 +177,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
-    <li>Enlace al PR de Claude Code o Jules, y la página nueva en tu app.</li>
+    <li>Enlace al PR de Codex, Claude Code o Jules, y la página nueva en tu app.</li>
     <li>La hoja de competidores con la fuente de cada dato.</li>
     <li>Captura de tu tarea programada y su primer resultado.</li>
     <li>Captura de Hermes u OpenClaw respondiendo con tu catálogo en Codespaces.</li>
