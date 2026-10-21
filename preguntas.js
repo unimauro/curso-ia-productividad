@@ -100,7 +100,7 @@ window.ENCUESTAS = {
 // Encuesta de cierre de la sesión 7.
 (function () {
   const base = window.ENCUESTAS.cierre;
-  const valioso = ["Codex, Claude Code o Jules mejorando mi app", "ChatGPT en modo agente y Dots", "Tareas programadas y /loop", "OpenClaw o Hermes en Codespaces", "Primer flujo en n8n", "Plan B por reto", "Radar IA al final"];
+  const valioso = ["Videojuego con Codex, Claude Code o Jules", "ChatGPT en modo agente y Dots", "Tareas programadas y /loop", "OpenClaw o Hermes en Codespaces", "Primer flujo en n8n", "Plan B por reto", "Radar IA al final"];
   window.ENCUESTAS.cierre7 = {
     titulo: "¿Cómo te fue en la sesión 7?",
     sub: "AI Productivity Engineering · eIA · Encuesta anónima de cierre, 2 minutos. Un solo voto por persona.",

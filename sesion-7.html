@@ -24,7 +24,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Primero los agentes, al final n8n.</p>
   <ol>
-    <li><b>Codex, Claude Code o Jules:</b> conecta tu app a GitHub; el agente agrega una página y abre un PR. <i>(Reto 1)</i></li>
+    <li><b>Codex, Claude Code o Jules:</b> el agente crea tu videojuego Sky Warriors y lo publica en GitHub Pages. <i>(Reto 1)</i></li>
     <li><b>ChatGPT en modo agente:</b> hoja con 5 competidores y sus fuentes; Dots en demo. <i>(Reto 2)</i></li>
     <li><b>Tareas programadas y /loop:</b> un agente revisa la competencia cada lunes. <i>(Reto 3)</i></li>
     <li><b>Servidor gratis:</b> GitHub Codespaces, una computadora en la nube sin tarjeta. <i>(Reto 4)</i></li>
@@ -70,24 +70,128 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   </ul>
 </div>
 
-<h2>Reto 1 · Codex, Claude Code o Jules mejoran tu app</h2>
+<h2>Reto 1 · Un agente crea tu videojuego: Sky Warriors</h2>
 <div class="reto">
+  <p>Le das al agente un prompt de nivel profesional y él programa, prueba y publica un juego de combate aéreo jugable. Tú revisas y apruebas.</p>
+  <p><b>Prompt completo en Markdown:</b> <a href="material/retos/sky-warriors-prompt.md">sky-warriors-prompt.md</a> (<code>https://unimauro.github.io/curso-ia-productividad/material/retos/sky-warriors-prompt.md</code>)</p>
   <ol>
-    <li>En Lovable: <b>GitHub → Connect</b> y crea el repositorio de tu app (cuenta de <a href="https://github.com">GitHub</a> gratis).</li>
+    <li>En <a href="https://github.com/new">github.com/new</a> crea el repositorio <code>sky-warriors</code>, público y con README.</li>
     <li>Abre <a href="https://chatgpt.com/codex">chatgpt.com/codex</a> (ChatGPT Plus), <a href="https://claude.ai/code">claude.ai/code</a> (Pro) o <a href="https://jules.google">jules.google</a> (gratis) y elige ese repositorio.</li>
-    <li>Pega la tarea de abajo con las <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a> y deja que trabaje: mientras tanto, avanza el Reto 2.</li>
-    <li>Revisa el pull request y fusiónalo: Lovable se actualiza solo desde la rama principal.</li>
+    <li>Pega el prompt completo de abajo y deja que trabaje: mientras tanto, avanza el Reto 2. En esta clase pedimos la <b>fase 1</b>: el modo 2D jugable.</li>
+    <li>Revisa el pull request y fusiónalo. En el repo: <b>Settings → Pages → Source: GitHub Actions</b>. Tu juego queda en <code>https://TU-USUARIO.github.io/sky-warriors/</code>.</li>
   </ol>
-  <div class="prompt" id="cc1">En este repo de la app de Casas para Gatos, crea una rama y agrega la página /preguntas-frecuentes con las 10 preguntas del archivo que te pego, enlazada desde el menú y adaptada al celular. No cambies precios, no toques Supabase ni claves. Corre el build y abre un pull request con un resumen en español de lo que cambiaste y cómo probarlo. PREGUNTAS: [pega aquí]</div>
-  <button class="copiar" data-copy="cc1" type="button">Copiar prompt</button>
+  <div class="prompt" id="sw1"># SKY WARRIORS: EVOLUTION — Videojuego web 2D, 2.5D y 3D
+
+Actúa como un equipo senior de desarrollo de videojuegos formado por un Game Director, Game Designer, Graphics Engineer, Gameplay Programmer, Sound Designer, UI/UX Designer y QA Engineer.
+
+Tu objetivo es diseñar, implementar y entregar un videojuego de combate aéreo completamente funcional para navegadores modernos, con una arquitectura escalable y gráficos atractivos.
+
+**No construyas solamente una demostración visual. Debes desarrollar un videojuego realmente jugable.**
+
+## 1. Concepto general
+
+Nombre: Sky Warriors: Evolution.
+
+Género: Arcade Shooter / Aerial Combat.
+
+Inspiración: 1942, Raiden, Sky Force y Ace Combat, sin copiar recursos protegidos.
+
+Modos de juego:
+- 2D: combate aéreo clásico con desplazamiento vertical.
+- 2.5D: perspectiva isométrica, profundidad y efectos visuales.
+- 3D: aviones tridimensionales, cámara dinámica y escenarios inmersivos.
+
+El jugador podrá seleccionar el modo desde el menú principal. Diseña la arquitectura para compartir las reglas de combate entre los tres modos.
+
+## 2. Stack tecnológico
+
+Utiliza:
+- TypeScript y Vite.
+- Phaser para el motor de juego 2D.
+- Three.js para el renderizado 3D.
+- React para menús, configuración y paneles.
+- Zustand para estado global.
+- Web Audio API o Howler.js para efectos de sonido.
+- IndexedDB o localStorage para guardar progresos.
+- Vitest y Playwright para pruebas.
+- GitHub Actions para integración y despliegue.
+- GitHub Pages para publicar el videojuego.
+
+Prioriza rendimiento, modularidad y compatibilidad con Chrome, Edge, Firefox y Safari.
+
+## 3. Controles de teclado
+
+| Tecla | Acción |
+|---|---|
+| W / ↑ | Avanzar |
+| S / ↓ | Retroceder |
+| A / ← | Mover a la izquierda |
+| D / → | Mover a la derecha |
+| Espacio | Disparo principal |
+| J | Misiles |
+| K | Arma especial |
+| Shift | Turbo |
+| Q / E | Rotación en modo 3D |
+| C | Cambiar cámara |
+| P / Esc | Pausa |
+| M | Activar o silenciar sonido |
+
+Permite personalizar los controles y guardar la configuración.
+
+## 4. Mecánicas de juego
+
+- Vidas, barra de energía y escudo temporal tras recibir daño.
+- Puntaje, multiplicador por combos y récord guardado localmente.
+- Enemigos con patrones distintos: cazas rápidos, bombarderos resistentes, torretas y enjambres.
+- Un jefe al final de cada nivel, con fases y puntos débiles.
+- Mejoras que caen de los enemigos: disparo doble, misiles, escudo, vida extra y bomba especial.
+- Dificultad progresiva por nivel y tres niveles de dificultad: fácil, normal y difícil.
+- Al menos 3 niveles con escenarios distintos: costa, desierto y ciudad nocturna.
+
+## 5. Gráficos, sonido e interfaz
+
+- Gráficos generados por código o recursos propios con licencia libre; nada copiado de juegos existentes.
+- Explosiones, partículas, destellos y vibración de cámara al recibir daño.
+- Música y efectos de sonido con volumen ajustable.
+- Menú principal, selección de modo, pausa, opciones, pantalla de fin de partida y tabla de récords.
+- Indicadores en pantalla: vidas, energía, puntaje, arma activa y nivel.
+- Funciona en celular con controles táctiles: joystick virtual y botones de disparo.
+
+## 6. Calidad y pruebas
+
+- Pruebas unitarias con Vitest para colisiones, puntaje y daño.
+- Una prueba de Playwright que abra el juego, inicie una partida y compruebe que el puntaje sube.
+- 60 cuadros por segundo en una computadora común; usa pools de objetos para balas y enemigos.
+- Sin errores en la consola del navegador.
+
+## 7. Entrega por fases
+
+**Fase 1 (obligatoria en esta tarea):** menú principal y modo 2D completamente jugable, con al menos 1 nivel, enemigos, jefe, mejoras, puntaje, sonido, pausa y fin de partida. Publicado en GitHub Pages con un flujo de GitHub Actions.
+
+**Fase 2:** modo 2.5D isométrico usando las mismas reglas de combate.
+
+**Fase 3:** modo 3D con Three.js, cámara dinámica y rotación con Q y E.
+
+## 8. Reglas para el agente
+
+- Trabaja en una rama y abre un pull request; no subas cambios directo a la rama principal.
+- El README debe explicar cómo jugar, cómo correrlo en local (`npm install` y `npm run dev`) y la estructura del proyecto.
+- Corre las pruebas y el build antes de abrir el pull request.
+- Resume en español lo que hiciste, lo que falta y cómo probarlo.
+</div>
+  <button class="copiar" data-copy="sw1" type="button">Copiar prompt</button>
   <h3>Codex paso a paso (ChatGPT Plus)</h3>
   <ol>
     <li>Entra a <a href="https://chatgpt.com/codex">chatgpt.com/codex</a> con tu cuenta de ChatGPT.</li>
-    <li>Conecta GitHub y da acceso <b>solo al repo de tu app</b>.</li>
-    <li>Crea el entorno eligiendo ese repo, pega la tarea y pulsa <b>Code</b> (<b>Ask</b> solo responde, no cambia nada).</li>
+    <li>Conecta GitHub y da acceso <b>solo al repo <code>sky-warriors</code></b>.</li>
+    <li>Crea el entorno eligiendo ese repo, pega el prompt y pulsa <b>Code</b> (<b>Ask</b> solo responde, no cambia nada).</li>
     <li>Revisa el diff y los registros, y pulsa <b>Create PR</b>.</li>
   </ol>
-  <p class="nota"><b>Jules</b> es el agente de código en la nube de Google: mismo flujo (repo, tarea, PR), gratis con 15 tareas al día. Tip: lanza la misma tarea en dos agentes y compara los PR.</p>
+  <p class="nota"><b>Jules</b> es el agente de código en la nube de Google: mismo flujo (repo, tarea, PR), gratis con 15 tareas al día. Tip: lanza el mismo prompt en dos agentes y compara qué juego quedó mejor.</p>
+  <h3>Bonus: el mismo agente en tu app de Casas para Gatos</h3>
+  <p>En Lovable, <b>GitHub → Connect</b>, y pídele al agente la página de <a href="material/casas-para-gatos/preguntas-frecuentes.md">preguntas frecuentes</a>:</p>
+  <div class="prompt" id="cc1">En este repo de la app de Casas para Gatos, crea una rama y agrega la página /preguntas-frecuentes con las 10 preguntas del archivo que te pego, enlazada desde el menú y adaptada al celular. No cambies precios, no toques Supabase ni claves. Corre el build y abre un pull request con un resumen en español de lo que cambiaste y cómo probarlo. PREGUNTAS: [pega aquí]</div>
+  <button class="copiar" data-copy="cc1" type="button">Copiar prompt</button>
 </div>
 
 <h2>Reto 2 · ChatGPT en modo agente: tu investigador</h2>
@@ -95,7 +199,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
   <ol>
     <li>ChatGPT Plus: en el chat, <b>+ → Modo agente</b>, y pega el prompt.</li>
     <li>Ruta gratis: el mismo prompt en <a href="https://manus.im">Manus</a> o en Deep Research de <a href="https://gemini.google.com">Gemini</a>.</li>
-    <li>Mientras trabaja, revisa tu PR del Reto 1.</li>
+    <li>Mientras trabaja, revisa el PR de tu juego del Reto 1.</li>
     <li>Al final, abre 2 fuentes y comprueba que el precio es real.</li>
   </ol>
   <div class="prompt" id="ag3">Investiga 5 tiendas en línea de Perú que vendan casas o camas para gatos. Para cada una: nombre, web, el producto más parecido a la Casa Premium XL, precio en soles, costo de delivery en Lima y si aceptan Yape. Entrégame una hoja de cálculo descargable y 3 conclusiones para Casas para Gatos. Cita la página de cada dato; si no lo encuentras, escribe «no encontrado».  <h3>¿Y Dots?</h3>
@@ -183,7 +287,7 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
 <div class="reto">
   <p>Entra a <a href="entregar.html">Entregar la tarea</a>, elige <b>Sesión 7</b> y envía:</p>
   <ul>
-    <li>Enlace al PR de Codex, Claude Code o Jules, y la página nueva en tu app.</li>
+    <li>Enlace a tu juego Sky Warriors publicado en GitHub Pages y al PR del agente.</li>
     <li>La hoja de competidores con la fuente de cada dato.</li>
     <li>Captura de tu tarea programada y su primer resultado.</li>
     <li>Captura de Hermes u OpenClaw respondiendo con tu catálogo en Codespaces.</li>
