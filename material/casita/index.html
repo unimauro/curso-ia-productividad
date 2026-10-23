@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="es" data-api="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Casita de Agentes</title>
+<style>
+:root{--bg:#f6f1e9;--card:#fffdf9;--ink:#2b2420;--muted:#7a6d63;--line:#e7ddd0;--accent:#d9734e;--ok:#3f9b5f;--warn:#d9a13b;--bad:#d24b4b;--work:#3b6fd9;--rest:#7a5cc7}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1815;--card:#26211d;--ink:#f3ece4;--muted:#b3a597;--line:#3a332d}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.barra{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.barra h1{font-size:18px;margin:0}
+#modo{font-size:12px;padding:3px 8px;border-radius:99px;background:var(--line);color:var(--muted)}
+#modo.vivo{background:var(--ok);color:#fff}
+.ayuda{margin-left:auto;font-size:12px;color:var(--muted)}
+main{display:flex;flex-direction:column;height:calc(100% - 49px)}
+#escena{position:relative;flex:0 0 58vh;min-height:300px}
+#escena canvas{display:block;width:100%;height:100%;touch-action:none}
+#pista{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(43,36,32,.85);color:#fff;padding:6px 12px;border-radius:99px;font-size:13px;display:none}
+aside{flex:1;overflow:auto;padding:12px 16px;border-top:1px solid var(--line);background:var(--card)}
+@media (min-width:900px){main{flex-direction:row}#escena{flex:1;height:100%}aside{flex:0 0 360px;border-top:0;border-left:1px solid var(--line)}}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:6px 0 8px}
+#lista{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+#lista button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:5px 10px;font:inherit;font-size:13px;cursor:pointer}
+#lista button.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.punto{width:9px;height:9px;border-radius:50%}
+.chip{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;color:#fff}
+#detalle .vacio{color:var(--muted)}
+#detalle h3{margin:0 0 2px;font-size:20px}
+.rol{color:var(--muted);margin:0 0 8px}
+.tarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+ol.hist{padding-left:18px;margin:6px 0;font-size:13px;color:var(--muted)}
+textarea{width:100%;min-height:64px;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--ink);font:inherit}
+.acciones{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.acciones button{border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+.acciones button.sec{background:var(--line);color:var(--ink)}
+#aviso{font-size:12px;color:var(--bad);min-height:16px;margin-top:6px}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<header class="barra"><h1>🏡 Casita de Agentes</h1><span id="modo">Demo</span><span class="ayuda">WASD o toca el piso para caminar · E o clic para hablar</span></header>
+<main>
+  <div id="escena"><div id="pista"></div></div>
+  <aside>
+    <h2>Tus agentes</h2>
+    <div id="lista"></div>
+    <div id="detalle"><p class="vacio">Acércate a un agente o elígelo en la lista.</p></div>
+  </aside>
+</main>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ---------- Configuración: ?api=https://... y #clave=... activan el modo en vivo ----------
+const API = new URLSearchParams(location.search).get('api') || document.documentElement.dataset.api || null;
+const CLAVE = new URLSearchParams(location.hash.slice(1)).get('clave') || '';
+const ESTADOS = {
+  libre:       { txt: 'Libre',       emoji: '☕', color: '#3f9b5f', cuarto: 'sala' },
+  trabajando:  { txt: 'Trabajando',  emoji: '💻', color: '#3b6fd9', cuarto: 'oficina' },
+  esperando:   { txt: 'Esperándote', emoji: '⏳', color: '#d9a13b', cuarto: 'cocina' },
+  error:       { txt: 'Con error',   emoji: '⚠️', color: '#d24b4b', cuarto: null },
+  descansando: { txt: 'Descansando', emoji: '🌙', color: '#7a5cc7', cuarto: 'jardin' },
+};
+
+// ---------- Escena ----------
+const cont = document.getElementById('escena');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+cont.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbfe3f2);
+scene.fog = new THREE.Fog(0xbfe3f2, 45, 90);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+camera.position.set(0, 21, 19);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.maxPolarAngle = 1.2; controls.minDistance = 8; controls.maxDistance = 45;
+
+scene.add(new THREE.HemisphereLight(0xfff4e0, 0x6b8f4e, 1.1));
+const sol = new THREE.DirectionalLight(0xffffff, 1.6);
+sol.position.set(12, 22, 8); sol.castShadow = true;
+sol.shadow.mapSize.set(2048, 2048);
+Object.assign(sol.shadow.camera, { left: -18, right: 18, top: 18, bottom: -18 });
+scene.add(sol);
+
+const mat = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85 });
+function caja(w, h, d, color, x, y, z, padre = scene) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color));
+  m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; padre.add(m); return m;
+}
+
+// Suelo y cuartos
+const pasto = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), mat(0x9ccc65));
+pasto.rotation.x = -Math.PI / 2; pasto.receiveShadow = true; scene.add(pasto);
+const pisos = [];
+[[-5, -3.5, 0xc8a27a], [5, -3.5, 0xe8d5b0], [-5, 3.5, 0xdfe7ea], [5, 3.5, 0x8bc34a]].forEach(([x, z, c]) => {
+  const p = caja(10, 0.1, 7, c, x, 0.05, z); pisos.push(p);
+});
+pisos.push(pasto);
+
+// Paredes bajas (casa sin techo, vista de maqueta) y sus cajas de colisión
+const muros = [];
+function pared(x1, z1, x2, z2) {
+  const h = 1.4, t = 0.3, vertical = x1 === x2;
+  const w = vertical ? t : Math.abs(x2 - x1), d = vertical ? Math.abs(z2 - z1) : t;
+  caja(w, h, d, 0xf5efe6, (x1 + x2) / 2, h / 2, (z1 + z2) / 2);
+  muros.push({ x1: Math.min(x1, x2) - t / 2, x2: Math.max(x1, x2) + t / 2, z1: Math.min(z1, z2) - t / 2, z2: Math.max(z1, z2) + t / 2 });
+}
+pared(-10, -7, 10, -7); pared(-10, -7, -10, 7); pared(10, -7, 10, 0); pared(-10, 7, 0, 7);
+pared(0, -7, 0, -4); pared(0, -2.5, 0, 0);          // oficina | sala
+pared(-10, 0, -5, 0); pared(-3.5, 0, 0, 0);          // oficina | cocina
+pared(0, 0, 4, 0); pared(6, 0, 10, 0);               // sala | jardín
+pared(0, 0, 0, 3); pared(0, 4.5, 0, 7);              // cocina | jardín
+
+// Oficina: escritorios con monitor que se enciende cuando alguien trabaja
+const escritorios = [];
+for (const z of [-5.8, -2.8]) for (const x of [-8.5, -5.5, -2.5]) {
+  caja(1.8, 0.1, 0.8, 0x8d6748, x, 0.78, z);
+  caja(0.1, 0.75, 0.6, 0x6e5038, x - 0.8, 0.4, z); caja(0.1, 0.75, 0.6, 0x6e5038, x + 0.8, 0.4, z);
+  const mon = caja(0.8, 0.5, 0.06, 0x222222, x, 1.15, z - 0.2);
+  mon.material = new THREE.MeshStandardMaterial({ color: 0x1d2433, emissive: 0x5aa0ff, emissiveIntensity: 0 });
+  escritorios.push({ x, z: z + 0.9, rot: Math.PI, mon });
+}
+// Sala: sofá, alfombra, tele
+caja(5, 0.5, 1, 0xd9734e, 5, 0.35, -6.3); caja(5, 0.8, 0.3, 0xc0623f, 5, 0.75, -6.75);
+caja(4.5, 0.02, 3, 0xf2c14e, 5, 0.11, -3.5);
+caja(2.4, 1.2, 0.15, 0x222222, 5, 1.2, -0.4);
+// Cocina: mesón, refri, mesa
+caja(6, 1, 0.8, 0xb8c4c9, -6, 0.5, 6.4); caja(1, 2, 0.9, 0xeeeeee, -9.2, 1, 6.3);
+const mesa = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 0.1, 24), mat(0xa47551));
+mesa.position.set(-5, 0.8, 3.8); mesa.castShadow = true; scene.add(mesa);
+caja(0.15, 0.75, 0.15, 0x7a5638, -5, 0.4, 3.8);
+// Jardín: árboles y flores
+function arbol(x, z) {
+  caja(0.3, 1.4, 0.3, 0x7a5638, x, 0.7, z);
+  const copa = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0), mat(0x4f9a3a));
+  copa.position.set(x, 2, z); copa.castShadow = true; scene.add(copa);
+  muros.push({ x1: x - 0.3, x2: x + 0.3, z1: z - 0.3, z2: z + 0.3 });
+}
+arbol(8.5, 2); arbol(2, 6); arbol(13, -4); arbol(-13, 3);
+for (let i = 0; i < 14; i++) caja(0.2, 0.25, 0.2, [0xff7aa2, 0xffd34e, 0xffffff][i % 3], 1 + Math.random() * 8.5, 0.15, 5.5 + Math.random() * 1.2);
+
+// ---------- Cuartos, puertas y rutas ----------
+const cuartoDe = (x, z) => x < 0 ? (z < 0 ? 'oficina' : 'cocina') : (z < 0 ? 'sala' : 'jardin');
+const PUERTAS = {
+  'oficina|sala': { x: 0, z: -3.25 }, 'oficina|cocina': { x: -4.25, z: 0 },
+  'sala|jardin': { x: 5, z: 0 }, 'cocina|jardin': { x: 0, z: 3.75 },
+};
+const vecinos = { oficina: ['sala', 'cocina'], sala: ['oficina', 'jardin'], cocina: ['oficina', 'jardin'], jardin: ['sala', 'cocina'] };
+const puerta = (a, b) => PUERTAS[a + '|' + b] || PUERTAS[b + '|' + a];
+function ruta(desde, hasta) {
+  const a = cuartoDe(desde.x, desde.z), b = cuartoDe(hasta.x, hasta.z);
+  const prev = { [a]: null }, cola = [a];
+  while (cola.length) { const c = cola.shift(); for (const v of vecinos[c]) if (!(v in prev)) { prev[v] = c; cola.push(v); } }
+  const cuartos = []; for (let c = b; c; c = prev[c]) cuartos.unshift(c);
+  const pts = [];
+  for (let i = 1; i < cuartos.length; i++) pts.push(puerta(cuartos[i - 1], cuartos[i]));
+  pts.push({ x: hasta.x, z: hasta.z });
+  return pts;
+}
+const LUGARES = {
+  oficina: escritorios,
+  sala: [[3, -5.5, 0], [4.5, -5.5, 0], [6, -5.5, 0], [7.5, -5.5, 0], [3.5, -2, Math.PI], [6.5, -2, Math.PI]].map(([x, z, rot]) => ({ x, z, rot })),
+  cocina: [[-5, 2.4, 0], [-5, 5.2, Math.PI], [-6.5, 3.8, Math.PI / 2], [-3.5, 3.8, -Math.PI / 2], [-8, 2, 0], [-2, 2, 0]].map(([x, z, rot]) => ({ x, z, rot })),
+  jardin: [[3, 2.5, 1], [5.5, 4.5, -1], [7.5, 3, 0], [3.5, 4.5, 2], [6.5, 2, 0.5], [8.5, 5.5, -2]].map(([x, z, rot]) => ({ x, z, rot })),
+};
+
+// ---------- Personajes ----------
+function etiquetaCanvas(titulo, sub, color) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 150;
+  const g = c.getContext('2d');
+  g.fillStyle = 'rgba(255,253,249,.95)'; g.beginPath(); g.roundRect(6, 6, 500, 120, 30); g.fill();
+  g.fillStyle = color; g.beginPath(); g.roundRect(6, 6, 18, 120, [30, 0, 0, 30]); g.fill();
+  g.fillStyle = '#2b2420'; g.font = 'bold 48px system-ui'; g.textAlign = 'center'; g.fillText(titulo, 262, 62);
+  g.fillStyle = '#7a6d63'; g.font = '34px system-ui'; g.fillText(sub, 262, 108);
+  return c;
+}
+function personaje(color, titulo, sub, colorEtq) {
+  const g = new THREE.Group();
+  const cuerpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.35, 0.6, 6, 12), mat(color));
+  cuerpo.position.y = 0.75; cuerpo.castShadow = true; g.add(cuerpo);
+  const cabeza = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 12), mat(0xf1c9a5));
+  cabeza.position.y = 1.5; cabeza.castShadow = true; g.add(cabeza);
+  for (const s of [-1, 1]) {
+    const ojo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), mat(0x222222));
+    ojo.position.set(0.11 * s, 1.55, 0.27); g.add(ojo);
+  }
+  const aro = new THREE.Mesh(new THREE.RingGeometry(0.45, 0.6, 28), new THREE.MeshBasicMaterial({ color: colorEtq, transparent: true, opacity: 0.85 }));
+  aro.rotation.x = -Math.PI / 2; aro.position.y = 0.13; g.add(aro);
+  const canvas = etiquetaCanvas(titulo, sub, colorEtq);
+  const tex = new THREE.CanvasTexture(canvas); tex.colorSpace = THREE.SRGBColorSpace;
+  const etq = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false }));
+  etq.scale.set(2.6, 0.76, 1); etq.position.y = 2.35; etq.renderOrder = 10; g.add(etq);
+  scene.add(g);
+  return { g, cuerpo, aro, canvas, tex, ruta: [], rot: null };
+}
+function reetiquetar(p, titulo, sub, color) {
+  const nuevo = etiquetaCanvas(titulo, sub, color);
+  p.canvas.getContext('2d').clearRect(0, 0, 512, 150);
+  p.canvas.getContext('2d').drawImage(nuevo, 0, 0);
+  p.tex.needsUpdate = true; p.aro.material.color.set(color);
+}
+
+const yo = personaje(0x2f4fa8, 'Tú', 'dueño de casa', '#d9734e');
+yo.g.position.set(1.5, 0, -1.5);
+
+// ---------- Agentes ----------
+const agentes = new Map();   // id -> { datos, p }
+let seleccionado = null;
+
+function lugarPara(datos) {
+  const est = ESTADOS[datos.estado] || ESTADOS.libre;
+  if (!est.cuarto) return null;                       // con error: se queda donde está
+  const ids = [...agentes.keys()].sort();
+  const i = Math.max(0, ids.indexOf(datos.id));
+  const lista = LUGARES[est.cuarto], l = lista[i % lista.length], extra = Math.floor(i / lista.length) * 0.6;
+  return { x: l.x + extra, z: l.z, rot: l.rot };
+}
+function aplicar(datos) {
+  let a = agentes.get(datos.id);
+  const nuevo = !a;
+  const est = ESTADOS[datos.estado] || ESTADOS.libre;
+  if (!a) {
+    const p = personaje(new THREE.Color(datos.color || '#888'), datos.nombre, est.emoji + ' ' + est.txt, est.color);
+    p.g.position.set(5 + Math.random(), 0, 1 + Math.random());
+    a = { datos: {}, p }; agentes.set(datos.id, a);
+  }
+  const cambio = a.datos.estado !== datos.estado;
+  a.datos = datos;
+  reetiquetar(a.p, datos.nombre, est.emoji + ' ' + est.txt, est.color);
+  if (cambio) {
+    const l = lugarPara(datos);
+    if (l && nuevo) { a.p.g.position.set(l.x, 0, l.z); a.p.g.rotation.y = l.rot; a.p.rot = l.rot; }
+    else if (l) { a.p.ruta = ruta(a.p.g.position, l); a.p.rot = l.rot; }
+  }
+}
+function quitarFaltantes(ids) {
+  for (const [id, a] of agentes) if (!ids.has(id)) { scene.remove(a.p.g); agentes.delete(id); if (seleccionado === id) seleccionado = null; }
+}
+
+// ---------- Panel ----------
+const $lista = document.getElementById('lista'), $det = document.getElementById('detalle');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function pintarPanel() {
+  $lista.innerHTML = [...agentes.values()].map(({ datos: d }) => {
+    const e = ESTADOS[d.estado] || ESTADOS.libre;
+    return `<button data-id="${esc(d.id)}" class="${d.id === seleccionado ? 'sel' : ''}"><span class="punto" style="background:${e.color}"></span>${esc(d.nombre)}</button>`;
+  }).join('');
+  const a = agentes.get(seleccionado);
+  if (!a) { $det.innerHTML = '<p class="vacio">Acércate a un agente o elígelo en la lista.</p>'; return; }
+  const d = a.datos, e = ESTADOS[d.estado] || ESTADOS.libre;
+  const borrador = document.getElementById('nuevaTarea')?.value || '';
+  $det.innerHTML = `<h3>${esc(d.nombre)}</h3><p class="rol">${esc(d.rol)}</p>
+    <span class="chip" style="background:${e.color}">${e.emoji} ${e.txt}</span>
+    <div class="tarea"><b>Tarea:</b> ${esc(d.tarea) || '<span class="vacio">sin tarea</span>'}${d.nota ? `<br><small>${esc(d.nota)}</small>` : ''}</div>
+    ${d.historial?.length ? `<h2>Últimos resultados</h2><ol class="hist">${d.historial.slice(-5).reverse().map(h => `<li>${esc(h.texto)}</li>`).join('')}</ol>` : ''}
+    ${API && !CLAVE ? '<p class="vacio">Para darle tareas, háblale desde Claude con el conector de la casita.</p>' : `<h2>Pídele algo</h2>
+    <textarea id="nuevaTarea" placeholder="Ej.: revisa los leads de hoy y prepárame un resumen">${esc(borrador)}</textarea>
+    <div class="acciones"><button id="asignar">Asignar tarea</button><button class="sec" id="liberar">Marcar libre</button></div>
+    <div id="aviso"></div>`}`;
+}
+$lista.addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) seleccionar(b.dataset.id); });
+$det.addEventListener('click', async ev => {
+  if (ev.target.id === 'asignar') {
+    const t = document.getElementById('nuevaTarea').value.trim();
+    if (!t) return;
+    await accion({ id: seleccionado, tarea: t });
+    document.getElementById('nuevaTarea').value = '';
+  } else if (ev.target.id === 'liberar') {
+    await accion({ id: seleccionado, estado: 'libre' });
+  }
+});
+function seleccionar(id) {
+  seleccionado = id; pintarPanel();
+  const a = agentes.get(id);
+  if (a) yo.ruta = ruta(yo.g.position, { x: a.p.g.position.x + 1.2, z: a.p.g.position.z + 0.8 });
+}
+
+// ---------- Datos: en vivo (API) o demo local ----------
+const $modo = document.getElementById('modo');
+async function accion(cuerpo) {
+  if (!API) { demoAccion(cuerpo); return; }
+  try {
+    const r = await fetch(API + '/accion', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Clave': CLAVE }, body: JSON.stringify(cuerpo) });
+    if (!r.ok) throw new Error((await r.json()).error || r.status);
+    await sincronizar();
+  } catch (e) { const av = document.getElementById('aviso'); if (av) av.textContent = 'No se pudo: ' + e.message; }
+}
+async function sincronizar() {
+  try {
+    const r = await fetch(API + '/estado', { headers: { 'X-Clave': CLAVE } });
+    if (!r.ok) throw new Error(r.status === 401 ? 'clave incorrecta' : r.status);
+    const { agentes: lista } = await r.json();
+    lista.forEach(aplicar); quitarFaltantes(new Set(lista.map(a => a.id)));
+    $modo.textContent = 'En vivo'; $modo.className = 'vivo';
+  } catch (e) { $modo.textContent = 'Sin conexión: ' + e.message; $modo.className = ''; }
+  if (document.activeElement?.id !== 'nuevaTarea') pintarPanel();
+}
+
+const DEMO = [
+  { id: 'vendedor', nombre: 'Vendedora', rol: 'Responde WhatsApp y cotiza', color: '#e07a5f' },
+  { id: 'investigador', nombre: 'Investigador', rol: 'Busca y resume información', color: '#81b29a' },
+  { id: 'programador', nombre: 'Programadora', rol: 'Escribe y revisa código', color: '#3d5a80' },
+  { id: 'contador', nombre: 'Contador', rol: 'Cobranzas y facturas', color: '#f2cc8f' },
+  { id: 'disenador', nombre: 'Diseñador', rol: 'Posts, videos y avatares', color: '#9c6ade' },
+];
+const TAREAS_DEMO = ['Responder 12 leads nuevos', 'Resumir noticias de IA de la semana', 'Revisar el pull request del login', 'Enviar recordatorios de pago', 'Preparar el video del avatar'];
+function demoAccion({ id, tarea, estado }) {
+  const a = agentes.get(id); if (!a) return;
+  const d = { ...a.datos };
+  if (tarea) { d.tarea = tarea; d.estado = 'trabajando'; }
+  if (estado) { if (estado === 'libre' && d.tarea) d.historial = [...(d.historial || []), { texto: 'Listo: ' + d.tarea }]; d.estado = estado; if (estado === 'libre') d.tarea = ''; }
+  aplicar(d); pintarPanel();
+}
+if (API) {
+  sincronizar(); setInterval(sincronizar, 2000);
+} else {
+  DEMO.forEach((d, i) => aplicar({ ...d, estado: i < 2 ? 'trabajando' : i === 2 ? 'esperando' : 'libre', tarea: i < 2 ? TAREAS_DEMO[i] : '', historial: [] }));
+  pintarPanel();
+  setInterval(() => {
+    const ids = [...agentes.keys()], id = ids[Math.floor(Math.random() * ids.length)], d = agentes.get(id).datos;
+    const sig = { libre: 'trabajando', trabajando: Math.random() < 0.15 ? 'error' : 'esperando', esperando: 'libre', error: 'libre', descansando: 'libre' }[d.estado];
+    if (sig === 'trabajando') demoAccion({ id, tarea: TAREAS_DEMO[ids.indexOf(id)] });
+    else demoAccion({ id, estado: Math.random() < 0.2 && sig === 'libre' ? 'descansando' : sig });
+  }, 5000);
+}
+
+// ---------- Controles del jugador ----------
+const teclas = new Set();
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA') return;
+  teclas.add(e.key.toLowerCase());
+  if (e.key.toLowerCase() === 'e' && cercano) seleccionar(cercano);
+});
+addEventListener('keyup', e => teclas.delete(e.key.toLowerCase()));
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+let abajo = null;
+renderer.domElement.addEventListener('pointerdown', e => abajo = [e.clientX, e.clientY]);
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!abajo || Math.hypot(e.clientX - abajo[0], e.clientY - abajo[1]) > 6) return;
+  const r = renderer.domElement.getBoundingClientRect();
+  ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+  ray.setFromCamera(ptr, camera);
+  for (const [id, a] of agentes) if (ray.intersectObject(a.p.g, true).length) return seleccionar(id);
+  const hit = ray.intersectObjects(pisos)[0];
+  if (hit) yo.ruta = ruta(yo.g.position, { x: hit.point.x, z: hit.point.z });
+});
+const choca = (x, z) => muros.some(m => x > m.x1 - 0.3 && x < m.x2 + 0.3 && z > m.z1 - 0.3 && z < m.z2 + 0.3);
+
+// ---------- Bucle ----------
+const $pista = document.getElementById('pista');
+let cercano = null;
+const reloj = new THREE.Clock();
+const girar = (a, b, k) => { let d = ((b - a + Math.PI) % (2 * Math.PI)) - Math.PI; if (d < -Math.PI) d += 2 * Math.PI; return a + d * k; };
+function caminar(p, dt, vel) {
+  if (!p.ruta.length) return false;
+  const o = p.ruta[0], dx = o.x - p.g.position.x, dz = o.z - p.g.position.z, d = Math.hypot(dx, dz);
+  if (d < 0.08) { p.ruta.shift(); return p.ruta.length > 0; }
+  const s = Math.min(d, vel * dt);
+  p.g.position.x += dx / d * s; p.g.position.z += dz / d * s;
+  p.g.rotation.y = girar(p.g.rotation.y, Math.atan2(dx, dz), Math.min(1, 10 * dt));
+  return true;
+}
+function animar() {
+  const dt = Math.min(reloj.getDelta(), 0.05), t = reloj.elapsedTime;
+  // Tú: teclado relativo a la cámara
+  const f = new THREE.Vector3().subVectors(controls.target, camera.position).setY(0).normalize();
+  const der = new THREE.Vector3(-f.z, 0, f.x);
+  const mv = new THREE.Vector3();
+  if (teclas.has('w') || teclas.has('arrowup')) mv.add(f);
+  if (teclas.has('s') || teclas.has('arrowdown')) mv.sub(f);
+  if (teclas.has('d') || teclas.has('arrowright')) mv.add(der);
+  if (teclas.has('a') || teclas.has('arrowleft')) mv.sub(der);
+  let andando = false;
+  if (mv.lengthSq()) {
+    yo.ruta = []; mv.normalize().multiplyScalar(5 * dt);
+    const p = yo.g.position;
+    if (!choca(p.x + mv.x, p.z)) p.x += mv.x;
+    if (!choca(p.x, p.z + mv.z)) p.z += mv.z;
+    yo.g.rotation.y = girar(yo.g.rotation.y, Math.atan2(mv.x, mv.z), Math.min(1, 12 * dt));
+    andando = true;
+  } else andando = caminar(yo, dt, 5);
+  yo.cuerpo.position.y = 0.75 + (andando ? Math.abs(Math.sin(t * 12)) * 0.08 : 0);
+
+  // Agentes
+  cercano = null; let mejor = 2;
+  for (const [id, a] of agentes) {
+    const p = a.p, est = a.datos.estado;
+    const anda = caminar(p, dt, 3);
+    if (!anda && p.rot != null) p.g.rotation.y = girar(p.g.rotation.y, p.rot, Math.min(1, 6 * dt));
+    p.cuerpo.position.y = 0.75 + (anda ? Math.abs(Math.sin(t * 10)) * 0.08 : est === 'trabajando' ? Math.sin(t * 20) * 0.015 : 0);
+    p.g.position.y = !anda && est === 'error' ? Math.abs(Math.sin(t * 6)) * 0.25 : 0;
+    p.aro.scale.setScalar(id === seleccionado ? 1.25 + Math.sin(t * 4) * 0.1 : 1);
+    const dist = p.g.position.distanceTo(yo.g.position);
+    if (dist < mejor) { mejor = dist; cercano = id; }
+  }
+  // Monitores encendidos donde alguien trabaja sentado
+  for (const e of escritorios) {
+    let on = false;
+    for (const a of agentes.values()) if (a.datos.estado === 'trabajando' && !a.p.ruta.length && Math.hypot(a.p.g.position.x - e.x, a.p.g.position.z - e.z) < 0.3) on = true;
+    e.mon.material.emissiveIntensity += ((on ? 0.9 + Math.sin(t * 3) * 0.1 : 0) - e.mon.material.emissiveIntensity) * 0.1;
+  }
+  $pista.style.display = cercano && cercano !== seleccionado ? 'block' : 'none';
+  if (cercano) $pista.textContent = 'E o clic para hablar con ' + agentes.get(cercano).datos.nombre;
+
+  // Cámara sigue al jugador
+  const k = 1 - Math.exp(-3 * dt);
+  const delta = new THREE.Vector3().subVectors(yo.g.position, controls.target).setY(0).multiplyScalar(k);
+  controls.target.add(delta); camera.position.add(delta);
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animar);
+}
+function ajustar() {
+  const w = cont.clientWidth, h = cont.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(ajustar).observe(cont); ajustar();
+controls.target.copy(yo.g.position);
+animar();
+</script>
+</body>
+</html>

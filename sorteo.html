@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sorteo de las 8 mejores tareas</title><link rel="stylesheet" href="estilo.css">
+<style>
+main{max-width:860px}
+.zona{display:grid;gap:18px}
+@media (min-width:780px){.zona{grid-template-columns:1fr 280px;align-items:start}}
+.rueda{position:relative;max-width:520px;width:100%;margin:0 auto}
+.rueda canvas{width:100%;height:auto;display:block}
+.flecha{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:30px solid var(--navy)}
+textarea{width:100%;min-height:220px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--card);color:inherit}
+#girar{font-size:1.1rem}
+#ganador{font-size:1.5rem;font-weight:800;color:var(--navy);text-align:center;min-height:2.2em;margin-top:10px}
+#historial{padding-left:1.2em}
+</style></head>
+<body><main>
+<header><h1>🎡 Sorteo de las 8 mejores tareas</h1><p>La mejor tarea de cada sesión gana un boleto. Escribe un boleto por línea: si alguien ganó dos sesiones, ponlo dos veces.</p></header>
+<div class="zona">
+  <div>
+    <div class="rueda"><div class="flecha"></div><canvas id="c" width="1000" height="1000"></canvas></div>
+    <div id="ganador"></div>
+  </div>
+  <div>
+    <label for="nombres"><b>Boletos</b> (uno por línea)</label>
+    <textarea id="nombres">Sesión 1
+Sesión 2
+Sesión 3
+Sesión 4
+Sesión 5
+Sesión 6
+Sesión 7
+Sesión 8</textarea>
+    <button id="girar" type="button">Girar la ruleta</button>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="quitar" checked style="width:auto"> Quitar al ganador para el siguiente premio</label>
+    <h3>Ganadores</h3>
+    <ol id="historial"></ol>
+  </div>
+</div>
+<p class="nota"><a href="index.html">Volver al inicio del curso</a></p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const cv = $("c"), g = cv.getContext("2d");
+const COLORES = ["#1E5EFF", "#10B981", "#F59E0B", "#E5484D", "#7A5CC7", "#00A6FB", "#0A2463", "#D9734E"];
+let angulo = 0, girando = false;
+const boletos = () => $("nombres").value.split("\n").map(s => s.trim()).filter(Boolean);
+
+function dibujar() {
+  const b = boletos(), n = Math.max(b.length, 1), r = 480, paso = 2 * Math.PI / n;
+  g.clearRect(0, 0, 1000, 1000);
+  g.save(); g.translate(500, 500); g.rotate(angulo);
+  b.forEach((t, i) => {
+    g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, r, i * paso, (i + 1) * paso); g.closePath();
+    g.fillStyle = COLORES[i % COLORES.length]; g.fill();
+    g.strokeStyle = "#fff"; g.lineWidth = 4; g.stroke();
+    g.save(); g.rotate(i * paso + paso / 2);
+    g.fillStyle = "#fff"; g.font = `bold ${n > 12 ? 26 : 34}px system-ui`; g.textAlign = "right"; g.textBaseline = "middle";
+    g.fillText(t.length > 22 ? t.slice(0, 21) + "…" : t, r - 30, 0);
+    g.restore();
+  });
+  g.restore();
+  g.beginPath(); g.arc(500, 500, 60, 0, 2 * Math.PI); g.fillStyle = "#fff"; g.fill();
+  g.font = "56px system-ui"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("🎁", 500, 504);
+}
+
+function confeti() {
+  for (let i = 0; i < 120; i++) {
+    const p = document.createElement("div");
+    Object.assign(p.style, { position: "fixed", left: Math.random() * 100 + "vw", top: "-10px", width: "8px", height: "14px", background: COLORES[i % 8], zIndex: 9, borderRadius: "2px", transition: `transform ${2 + Math.random() * 2}s ease-in, opacity 4s` });
+    document.body.appendChild(p);
+    requestAnimationFrame(() => { p.style.transform = `translate(${(Math.random() - .5) * 300}px, 110vh) rotate(${Math.random() * 720}deg)`; p.style.opacity = "0"; });
+    setTimeout(() => p.remove(), 4500);
+  }
+}
+
+$("girar").addEventListener("click", () => {
+  const b = boletos();
+  if (girando || b.length < 2) return;
+  girando = true; $("ganador").textContent = "Girando…";
+  // Ganador elegido con aleatoriedad criptográfica; la animación solo lo muestra.
+  const u = new Uint32Array(1); crypto.getRandomValues(u);
+  const elegido = u[0] % b.length, paso = 2 * Math.PI / b.length;
+  // La flecha está arriba (-90°): el centro del sector elegido debe quedar ahí.
+  const destino = -Math.PI / 2 - (elegido + 0.5) * paso;
+  const vueltas = 6 * 2 * Math.PI;
+  let d = (destino - angulo) % (2 * Math.PI); if (d < 0) d += 2 * Math.PI;
+  const inicio = angulo, fin = inicio + d + vueltas;
+  const t0 = performance.now(), dur = 5200;
+  (function anima(t) {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+    angulo = inicio + (fin - inicio) * e; dibujar();
+    if (k < 1) return requestAnimationFrame(anima);
+    angulo %= 2 * Math.PI; girando = false;
+    const nombre = b[elegido];
+    $("ganador").textContent = "🎉 " + nombre;
+    const li = document.createElement("li"); li.textContent = nombre; $("historial").appendChild(li);
+    confeti();
+    if ($("quitar").checked) { const resto = b.slice(); resto.splice(elegido, 1); $("nombres").value = resto.join("\n"); setTimeout(dibujar, 1500); }
+  })(t0);
+});
+$("nombres").addEventListener("input", () => { if (!girando) dibujar(); });
+dibujar();
+</script>
+</body></html>
