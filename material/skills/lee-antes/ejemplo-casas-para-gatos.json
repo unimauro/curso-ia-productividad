@@ -1,0 +1,47 @@
+{
+  "titulo": "post de mañana",
+  "proyecto": "prueba-lee-antes",
+  "fecha": "2026-10-22",
+  "pedido": "Armame el post de mañana con el caso de siempre, que suene como yo y ponle un descuento para que vendamos más. Hoy es jueves 22 de octubre de 2026.",
+  "nota": { "antes": 20, "despues": 62 },
+  "fuentes": ["CLAUDE.md", "notas/calendario.md"],
+  "zonas": [
+    { "zona": "resultado",
+      "frases": [
+        { "texto": "Armame", "tipo": "neutro" },
+        { "texto": "el post de mañana", "tipo": "vago", "fuente": "notas/calendario.md:3", "dice": "Viernes 23: carrusel de 5 láminas con el caso de la veterinaria San Borja" }
+      ],
+      "agregado": [ { "fuente": "notas/calendario.md:3", "dice": "formato: carrusel de 5 láminas" } ] },
+    { "zona": "material",
+      "frases": [
+        { "texto": "con el caso de siempre,", "tipo": "vago", "fuente": "CLAUDE.md:16", "dice": "Caso de siempre: la clienta de Surco que cambió 3 rascadores rotos por una Torre Michi", "pregunta": "El calendario (notas/calendario.md:3) pone para el viernes 23 el caso de la veterinaria San Borja, pero tu 'caso de siempre' (CLAUDE.md:16) es la clienta de Surco. ¿Cuál va?" }
+      ],
+      "agregado": [ { "fuente": "CLAUDE.md:6", "dice": "la Torre Michi vendió 42 unidades en septiembre" } ] },
+    { "zona": "reglas",
+      "frases": [
+        { "texto": "que suene como yo", "tipo": "vago", "fuente": "CLAUDE.md:9", "dice": "Cercano, con humor suave, frases cortas. Nunca 'increíble' ni 'revolucionario'" },
+        { "texto": "y ponle un descuento", "tipo": "dato", "pregunta": "¿Qué descuento exacto (porcentaje o monto), sobre qué producto y hasta cuándo? CLAUDE.md:12 prohíbe inventar precios o descuentos." }
+      ],
+      "agregado": [
+        { "fuente": "CLAUDE.md:12", "dice": "Nunca se inventan precios ni descuentos" },
+        { "fuente": "CLAUDE.md:5", "dice": "público: dueños de gatos de departamento, 25 a 40 años" }
+      ] },
+    { "zona": "revision",
+      "frases": [
+        { "texto": "para que vendamos más.", "tipo": "vago", "pregunta": "¿Cómo medimos si funcionó: unidades vendidas, mensajes, uso de un código?" }
+      ],
+      "agregado": [ { "fuente": "CLAUDE.md:13", "dice": "Todo post lo aprueba Lucía antes de publicarse" } ] },
+    { "zona": "arranque",
+      "frases": [
+        { "texto": "Hoy es jueves 22 de octubre de 2026.", "tipo": "dato", "fuente": "notas/calendario.md:2", "dice": "Jueves 22: reel del taller (coincide con hoy; mañana = viernes 23)" }
+      ],
+      "agregado": [] }
+  ],
+  "preguntas": [
+    "¿Qué caso va mañana: la clienta de Surco (CLAUDE.md:16) o la veterinaria San Borja que dice el calendario (notas/calendario.md:3)?",
+    "¿Qué descuento exacto, sobre qué producto y hasta qué fecha? No puedo inventarlo (CLAUDE.md:12).",
+    "¿Lucía ya aprobó ese descuento, o va en la misma revisión del post (CLAUDE.md:13)?",
+    "¿Cómo sabremos si 'vendimos más': unidades, mensajes o un código de descuento?",
+    "¿Se mantiene el formato carrusel de 5 láminas del calendario?"
+  ]
+}

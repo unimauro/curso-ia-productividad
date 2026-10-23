@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visor lee-antes</title>
+<meta name="description" content="Anima el JSON de la skill lee-antes: cómo un pedido vago se convierte en uno respaldado por los archivos del proyecto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e13; --panel:#10161e; --panel2:#151d27; --line:#223040; --line2:#2c3b4e;
+  --tx:#e8eef5; --mut:#8d9aab; --dim:#5f6d7e;
+  --ok:#34d399; --okbg:rgba(52,211,153,.10);
+  --q:#fb7185;  --qbg:rgba(251,113,133,.11);
+  --warn:#b4bdc9; --warnbg:rgba(180,189,201,.08);
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:16px;line-height:1.45;overflow-x:hidden;padding-bottom:96px}
+button{font:inherit;color:inherit}
+.wrap{max-width:1320px;margin:0 auto;padding:16px}
+.mono{font-family:var(--mono)}
+.mut{color:var(--mut)}
+
+/* ---------- cabecera ---------- */
+.brand{font-family:var(--mono);font-size:13px;color:var(--mut);display:flex;align-items:center;gap:8px;letter-spacing:.02em}
+.brand .led{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+h1{font-size:26px;line-height:1.15;margin:10px 0 6px;font-weight:700;overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:13px;color:var(--mut)}
+.meta b{color:var(--tx);font-weight:600}
+.pedido{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--mut)}
+#pedido{margin:6px 0 0;font-size:18px;line-height:1.55;overflow-wrap:anywhere}
+#pedido .frag{border-radius:4px;padding:0 1px;transition:background .4s,color .4s;box-shadow:inset 0 -2px 0 transparent}
+#pedido .frag.pick{background:rgba(255,255,255,.12)}
+#pedido .frag.taken{color:var(--mut);box-shadow:inset 0 -2px 0 var(--c)}
+
+/* ---------- panel de carga ---------- */
+.carga{margin-top:12px;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:12px 14px}
+.carga[hidden]{display:none}
+.carga textarea{width:100%;min-height:160px;margin-top:8px;background:#070a0e;color:var(--tx);border:1px solid var(--line2);border-radius:8px;padding:10px;font:13px/1.45 var(--mono);resize:vertical}
+.carga .fila{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.error{margin-top:12px;border:1px solid var(--q);background:var(--qbg);border-radius:12px;padding:12px 14px;font-size:15px}
+.error[hidden]{display:none}
+.error b{color:var(--q)}
+.error ul{margin:6px 0 0;padding-left:20px}
+.error li{margin:2px 0;overflow-wrap:anywhere}
+
+/* ---------- escenario ---------- */
+.stage{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:16px}
+#threads{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:6}
+#threads path{fill:none;stroke-width:2.2;stroke-linecap:round}
+#threads circle{filter:drop-shadow(0 0 6px currentColor)}
+
+.side{order:-1;position:sticky;top:0;z-index:5;margin:0 -16px;padding:10px 16px;background:rgba(10,14,19,.95);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:minmax(0,1fr);gap:8px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.score{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"l l" "b m" "b c";column-gap:14px;align-items:center}
+.score .lbl{grid-area:l}
+.score .big{grid-area:b;font-family:var(--mono);font-weight:700;font-size:38px;line-height:1;margin-top:2px;font-variant-numeric:tabular-nums}
+.score .meter{grid-area:m;align-self:end}
+.score .counts{grid-area:c;align-self:start}
+.score .big small{font-size:14px;color:var(--mut);font-weight:400;margin-left:2px}
+.meter{position:relative;height:6px;border-radius:3px;background:#1d2733;margin-top:8px;overflow:visible;width:100%}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:linear-gradient(90deg,#8d9aab,var(--ok));width:0}
+.meter b{position:absolute;top:-3px;width:2px;height:12px;background:var(--tx);opacity:.6}
+.counts{display:flex;flex-wrap:wrap;gap:2px 10px;font-family:var(--mono);font-size:12px;color:var(--mut);margin-top:7px}
+.counts b{color:var(--tx)}
+.counts .ok b{color:var(--ok)} .counts .q b{color:var(--q)}
+.files ul{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.file{font-family:var(--mono);font-size:11.5px;background:var(--panel2);border:1px solid var(--line2);border-radius:7px;padding:3px 7px;display:flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:100%;transition:border-color .3s,background .3s}
+.file .fname{overflow-wrap:anywhere}
+.file .fname::before{content:"▤ ";color:var(--dim)}
+.file.hit{border-color:var(--ok);background:var(--okbg)}
+.file.miss{border-color:var(--q)}
+.file .hits{display:flex;flex-wrap:wrap;gap:3px}
+.file .hits span{color:var(--ok);font-size:11px;background:rgba(52,211,153,.14);border-radius:4px;padding:0 4px}
+.files.miss ul{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.flash{animation:flash .9s}
+@keyframes flash{0%{box-shadow:0 0 0 0 rgba(52,211,153,.7)}100%{box-shadow:0 0 0 10px rgba(52,211,153,0)}}
+
+/* ---------- carriles ---------- */
+.lanes{display:flex;flex-direction:column;gap:10px;min-width:0}
+.lane{--c:#888;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:12px;padding:10px 12px;transition:border-color .3s,box-shadow .3s,opacity .3s}
+.lane.activa{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 24px -6px var(--c)}
+.lane-h{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.lane-n{font-family:var(--mono);font-size:12px;color:var(--c);opacity:.85}
+.lane-h b{font-size:17px;color:var(--c);letter-spacing:.01em}
+.lane-h small{font-size:13px;color:var(--mut)}
+.items{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.items:empty{display:none}
+.empty{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:6px}
+.lane.vacia .empty{color:var(--warn)}
+.lane.vacia{opacity:.8;border-left-style:dashed}
+
+.item{position:relative;max-width:100%;min-width:0;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:7px 10px;font-size:16px;display:flex;flex-direction:column;gap:4px}
+.item .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;padding:1px 5px;background:#1f2a37;color:var(--mut);white-space:nowrap}
+.txt{overflow-wrap:anywhere}
+.t-neutro{background:transparent;border-style:dashed;border-color:#26323f}
+.t-neutro .txt{color:var(--mut)}
+.t-claro .tag{color:var(--c);background:rgba(255,255,255,.05)}
+.t-dato .tag{color:#e8eef5;background:#2a3646}
+.t-aprobacion .tag{color:#fde68a;background:rgba(253,230,138,.12)}
+.t-vago .tag{color:#0a0e13;background:var(--warn)}
+.item.blink{animation:blink .45s steps(2,end) infinite}
+@keyframes blink{0%{border-color:var(--warn);background:rgba(180,189,201,.18)}100%{border-color:var(--line2);background:var(--panel2)}}
+.item.st-ok{border-color:var(--ok);background:var(--okbg)}
+.item.st-q{border-color:var(--q);background:var(--qbg)}
+.item.st-vago{border:1px dashed var(--warn);background:var(--warnbg)}
+.item.st-vago::after{content:"⚠ sin fuente ni pregunta";font-family:var(--mono);font-size:11px;color:var(--warn)}
+.res{font-size:14px;line-height:1.4;display:flex;flex-direction:column;gap:2px;border-top:1px solid rgba(255,255,255,.07);padding-top:5px}
+.res[hidden]{display:none}
+.src{font-family:var(--mono);font-size:12px;color:var(--ok);overflow-wrap:anywhere}
+.src::before{content:"↳ "}
+.dice{color:#cfe9dd;overflow-wrap:anywhere}
+.preg{color:#ffd0d8;overflow-wrap:anywhere}
+.preg::before{content:"? ";font-family:var(--mono);font-weight:700;color:var(--q)}
+.item.add{border-style:dashed;border-color:var(--ok);background:transparent}
+.item.add .tag{color:var(--ok);background:rgba(52,211,153,.12)}
+.item.oculto{opacity:0}
+.item.reveal{animation:reveal .45s ease-out}
+@keyframes reveal{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+/* ---------- cierre ---------- */
+.cierre{margin-top:18px;background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:16px}
+.cierre[hidden]{display:none}
+.cierre h2{margin:0 0 6px;font-size:22px}
+.cierre h3{margin:16px 0 6px;font-size:16px;color:var(--q);font-family:var(--mono);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.resumen{margin:0;font-size:17px;color:#d6dee8}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stat b{display:block;font-family:var(--mono);font-size:26px;line-height:1.1}
+.stat span{font-size:13px;color:var(--mut)}
+.stat.ok b{color:var(--ok)} .stat.q b{color:var(--q)}
+.cierre ol{margin:0;padding-left:22px}
+.cierre li{margin:6px 0;overflow-wrap:anywhere}
+.cierre .nota-fin{margin-top:12px;font-size:14px;color:var(--mut)}
+
+footer{margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--dim);text-align:center;line-height:1.6}
+
+/* ---------- controles ---------- */
+.controls{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(10,14,19,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.prog{height:3px;background:#1a232e}
+.prog i{display:block;height:100%;width:0;background:var(--ok)}
+.btns{max-width:1320px;margin:0 auto;padding:8px 16px calc(8px + env(safe-area-inset-bottom));display:flex;gap:6px}
+.btn{flex:1 1 0;min-width:0;background:var(--panel2);border:1px solid var(--line2);border-radius:9px;padding:9px 4px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--mut)}
+.btn:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.btn.pri{background:#173326;border-color:#23573f;color:#bff3db}
+.btn kbd{display:none;font-family:var(--mono);font-size:11px;color:var(--mut);border:1px solid var(--line2);border-radius:4px;padding:0 4px;font-weight:400}
+.btn .l{display:none}
+.drop{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(6,9,12,.85);border:3px dashed var(--ok);font-size:22px;font-weight:600;color:var(--ok);text-align:center;padding:16px}
+.drop.on{display:flex}
+
+/* ---------- escritorio ---------- */
+@media (min-width:860px){
+  body{font-size:17px}
+  .wrap{padding:24px 28px}
+  h1{font-size:36px}
+  #pedido{font-size:21px}
+  .stage{grid-template-columns:minmax(0,1fr) 290px;gap:22px;align-items:start}
+  .side{order:0;margin:0;padding:0;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;top:16px;display:flex;flex-direction:column;align-items:stretch;gap:14px}
+  .score{display:block}
+  .score,.files{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .score .big{font-size:76px}
+  .score .big small{font-size:20px}
+  .counts{font-size:14px}
+  .files ul{flex-direction:column}
+  .file{font-size:13.5px;padding:8px 10px;border-radius:8px}
+  .lane{display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;padding:12px 14px}
+  .lane-h{flex-direction:column;gap:2px}
+  .lane-h b{font-size:19px}
+  .items{margin-top:0}
+  .lane-b{min-width:0}
+  .empty{margin-top:4px}
+  .item{font-size:17px}
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .btn{flex:0 1 auto;padding:9px 14px;font-size:14px}
+  .btn kbd,.btn .l{display:inline}
+  .btn .s{display:none}
+  .btns{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){ .item.blink{animation-duration:1.2s} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="led"></span>lee-antes <span>· visor</span></div>
+    <h1 id="titulo"></h1>
+    <div class="meta"><span>proyecto <b id="proyecto"></b></span><span>fecha <b id="fecha"></b></span><span id="origen"></span></div>
+    <div class="pedido"><div class="lbl">Pedido original</div><p id="pedido"></p></div>
+  </header>
+
+  <div class="error" id="error" role="alert" hidden></div>
+
+  <section class="carga" id="carga" hidden>
+    <div class="lbl">Pega aquí el JSON que guardó la skill</div>
+    <textarea id="pegado" spellcheck="false" placeholder='{ "titulo": "…", "pedido": "…", "zonas": [ … ] }'></textarea>
+    <div class="fila">
+      <button class="btn pri" id="bVer" type="button">Ver animación</button>
+      <button class="btn" id="bEjemplo" type="button">Usar el ejemplo</button>
+      <button class="btn" id="bCerrar" type="button">Cerrar</button>
+    </div>
+  </section>
+
+  <main class="stage" id="stage">
+    <section class="lanes" id="lanes" aria-label="Las 7 zonas del pedido"></section>
+    <aside class="side" id="side">
+      <div class="score">
+        <div class="lbl">Nota del pedido</div>
+        <div class="big"><span id="nota">0</span><small>/100</small></div>
+        <div class="meter"><i id="meterFill"></i><b id="meterAntes"></b></div>
+        <div class="counts"><span class="ok"><b id="cDatos">0</b> datos</span><span class="q"><b id="cPreg">0</b> preguntas</span></div>
+      </div>
+      <div class="files" id="filesBox">
+        <div class="lbl">Archivos del proyecto</div>
+        <ul id="files"></ul>
+      </div>
+    </aside>
+    <svg id="threads" aria-hidden="true"></svg>
+  </main>
+
+  <section class="cierre" id="cierre" hidden>
+    <h2>Lo que hizo el agente</h2>
+    <p class="resumen" id="resumen"></p>
+    <div class="stats" id="stats"></div>
+    <h3>Preguntas pendientes</h3>
+    <ol id="preguntas"></ol>
+    <p class="nota-fin" id="notaFin"></p>
+  </section>
+
+  <footer>Visor de la skill lee-antes · curso AI Productivity Engineering · idea inspirada en La Araña de EXPOSURE</footer>
+</div>
+
+<nav class="controls" aria-label="Controles">
+  <div class="prog"><i id="prog"></i></div>
+  <div class="btns">
+    <button class="btn pri" id="bPlay" type="button"><span id="playTxt">Pausa</span><kbd>Espacio</kbd></button>
+    <button class="btn" id="bReset" type="button"><span class="s">Reiniciar</span><span class="l">Reiniciar</span><kbd>R</kbd></button>
+    <button class="btn" id="bEnd" type="button"><span class="s">Final</span><span class="l">Ir al final</span><kbd>F</kbd></button>
+    <button class="btn" id="bOpen" type="button"><span class="s">Abrir</span><span class="l">Abrir JSON</span></button>
+    <button class="btn" id="bPaste" type="button"><span class="s">Pegar</span><span class="l">Pegar JSON</span></button>
+  </div>
+</nav>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<div class="drop" id="drop">Suelta aquí el archivo .json</div>
+
+<script>
+(() => {
+'use strict';
+
+const ZONAS = [
+  { id: 'rol',          nombre: 'Rol',          desc: 'quién responde',             color: '#6cb6ff' },
+  { id: 'resultado',    nombre: 'Resultado',    desc: 'qué debe existir al final',  color: '#a78bfa' },
+  { id: 'material',     nombre: 'Material',     desc: 'con qué se apoya',           color: '#f2b55e' },
+  { id: 'responsables', nombre: 'Responsables', desc: 'quién hace y quién decide',  color: '#22d3ee' },
+  { id: 'reglas',       nombre: 'Reglas',       desc: 'qué no se hace, qué tono',   color: '#fb923c' },
+  { id: 'revision',     nombre: 'Revisión',     desc: 'quién lo revisa',            color: '#e879f9' },
+  { id: 'arranque',     nombre: 'Arranque',     desc: 'por dónde empieza',          color: '#a3e635' }
+];
+const TIPOS = { neutro: 'neutro', claro: 'claro', vago: 'vago', dato: 'dato', aprobacion: 'aprobación' };
+const OK = '#34d399', Q = '#fb7185';
+const DURACION_OBJETIVO = 25; // segundos
+
+// Ejemplo del curso: negocio ficticio "Casas para Gatos".
+const EJEMPLO = {
+  titulo: 'post de mañana',
+  proyecto: 'casas-para-gatos',
+  fecha: '2026-10-22',
+  pedido: 'Actúa como mi community manager. Armame el post de mañana con el caso de siempre; tú lo redactas y yo lo publico. Nada de precios y que suene como yo. Que lo revise Ana antes. Empieza por el calendario.',
+  nota: { antes: 35, despues: 82 },
+  fuentes: ['CLAUDE.md', 'notas/calendario.md', 'notas/casos.md', 'notas/voz.md'],
+  zonas: [
+    { zona: 'rol',
+      frases: [ { texto: 'Actúa como mi community manager.', tipo: 'claro', fuente: 'CLAUDE.md:3', dice: 'Rol: community manager de Casas para Gatos, tienda online en Lima' } ],
+      agregado: [] },
+    { zona: 'resultado',
+      frases: [
+        { texto: 'Armame', tipo: 'neutro' },
+        { texto: 'el post de mañana', tipo: 'vago', fuente: 'notas/calendario.md:12', dice: 'viernes 23: post de caso de cliente' } ],
+      agregado: [ { fuente: 'CLAUDE.md:8', dice: 'formato carrusel de 5 láminas, 1080 × 1350' } ] },
+    { zona: 'material',
+      frases: [ { texto: 'con el caso de siempre;', tipo: 'vago', pregunta: '¿El caso de la tienda de Surco o el de la veterinaria?' } ],
+      agregado: [ { fuente: 'notas/casos.md:4', dice: 'casos aprobados para publicar: tienda de Surco y veterinaria Patitas' } ] },
+    { zona: 'responsables',
+      frases: [ { texto: 'tú lo redactas y yo lo publico.', tipo: 'claro' } ],
+      agregado: [ { fuente: 'CLAUDE.md:15', dice: 'Rosa (dueña) decide qué se publica' } ] },
+    { zona: 'reglas',
+      frases: [
+        { texto: 'Nada de precios', tipo: 'claro', fuente: 'CLAUDE.md:11', dice: 'no publicar precios: cambian cada semana' },
+        { texto: 'y que suene como yo.', tipo: 'vago', fuente: 'notas/voz.md:2', dice: 'tono cálido, tutea, frases cortas, máximo 1 emoji' } ],
+      agregado: [] },
+    { zona: 'revision',
+      frases: [ { texto: 'Que lo revise Ana antes.', tipo: 'aprobacion', pregunta: '¿Ana revisa solo el texto o también las imágenes del carrusel?' } ],
+      agregado: [] },
+    { zona: 'arranque',
+      frases: [ { texto: 'Empieza por el calendario.', tipo: 'dato', fuente: 'notas/calendario.md:3', dice: 'semana del 19 al 25 de octubre de 2026' } ],
+      agregado: [] }
+  ],
+  preguntas: [
+    '¿El caso de la tienda de Surco o el de la veterinaria?',
+    '¿Ana revisa solo el texto o también las imágenes del carrusel?'
+  ]
+};
+
+// ---------- utilidades DOM (solo textContent: nunca innerHTML con datos) ----------
+const $ = id => document.getElementById(id);
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = String(text);
+  return e;
+}
+function svgEl(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+const ease = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const plural = (n, uno, varios) => n + ' ' + (n === 1 ? uno : varios);
+const RE_FUENTE = /^(.+):(\d+)$/;
+
+// ---------- validación ----------
+function validar(d) {
+  const e = [];
+  const esTexto = v => typeof v === 'string';
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return ['El JSON debe ser un objeto { … } con "pedido", "nota" y "zonas".'];
+  if (!esTexto(d.pedido) || !d.pedido.trim()) e.push('Falta "pedido": el texto original que escribió el usuario.');
+  for (const k of ['titulo', 'proyecto', 'fecha']) if (d[k] != null && !esTexto(d[k])) e.push(`"${k}" debe ser texto.`);
+  if (!d.nota || typeof d.nota !== 'object') e.push('Falta "nota" con "antes" y "despues" (números de 0 a 100).');
+  else for (const k of ['antes', 'despues']) {
+    const n = d.nota[k];
+    if (typeof n !== 'number' || !isFinite(n) || n < 0 || n > 100) e.push(`"nota.${k}" debe ser un número entre 0 y 100.`);
+  }
+  if (d.fuentes != null && !(Array.isArray(d.fuentes) && d.fuentes.every(esTexto))) e.push('"fuentes" debe ser una lista de nombres de archivo.');
+  if (d.preguntas != null && !(Array.isArray(d.preguntas) && d.preguntas.every(esTexto))) e.push('"preguntas" debe ser una lista de textos.');
+  const ids = ZONAS.map(z => z.id);
+  if (!Array.isArray(d.zonas)) e.push('Falta "zonas": una lista con las zonas del pedido.');
+  else {
+    const vistas = new Set();
+    d.zonas.forEach((z, i) => {
+      const donde = `zonas[${i}]`;
+      if (!z || typeof z !== 'object') { e.push(`${donde} debe ser un objeto.`); return; }
+      if (!ids.includes(z.zona)) e.push(`${donde}: "${String(z.zona)}" no es una zona válida. Usa: ${ids.join(', ')}.`);
+      else if (vistas.has(z.zona)) e.push(`${donde}: la zona "${z.zona}" está repetida.`);
+      vistas.add(z.zona);
+      if (z.frases != null && !Array.isArray(z.frases)) e.push(`${donde}.frases debe ser una lista.`);
+      (Array.isArray(z.frases) ? z.frases : []).forEach((f, j) => {
+        const w = `${donde}.frases[${j}]`;
+        if (!f || typeof f !== 'object') { e.push(`${w} debe ser un objeto.`); return; }
+        if (!esTexto(f.texto) || !f.texto.trim()) e.push(`${w}: falta "texto".`);
+        if (!(f.tipo in TIPOS)) e.push(`${w}: "tipo" debe ser neutro, claro, vago, dato o aprobacion.`);
+        if (f.fuente != null && !(esTexto(f.fuente) && RE_FUENTE.test(f.fuente))) e.push(`${w}: "fuente" debe ser archivo:línea, por ejemplo CLAUDE.md:8.`);
+        if (f.dice != null && !esTexto(f.dice)) e.push(`${w}: "dice" debe ser texto.`);
+        if (f.pregunta != null && !esTexto(f.pregunta)) e.push(`${w}: "pregunta" debe ser texto.`);
+      });
+      if (z.agregado != null && !Array.isArray(z.agregado)) e.push(`${donde}.agregado debe ser una lista.`);
+      (Array.isArray(z.agregado) ? z.agregado : []).forEach((a, j) => {
+        const w = `${donde}.agregado[${j}]`;
+        if (!a || typeof a !== 'object') { e.push(`${w} debe ser un objeto.`); return; }
+        if (!(esTexto(a.fuente) && RE_FUENTE.test(a.fuente))) e.push(`${w}: "fuente" debe ser archivo:línea.`);
+        if (!esTexto(a.dice) || !a.dice.trim()) e.push(`${w}: falta "dice" (qué dice el archivo).`);
+      });
+    });
+  }
+  return e;
+}
+
+function normalizar(d) {
+  const porZona = {};
+  for (const z of d.zonas) porZona[z.zona] = { frases: z.frases || [], agregado: z.agregado || [] };
+  const fuentes = (d.fuentes || []).slice();
+  const usar = f => { const a = RE_FUENTE.exec(f)[1]; if (!fuentes.includes(a)) fuentes.push(a); };
+  for (const z of d.zonas) {
+    (z.frases || []).forEach(f => f.fuente && usar(f.fuente));
+    (z.agregado || []).forEach(a => usar(a.fuente));
+  }
+  let preguntas = d.preguntas;
+  if (!preguntas || !preguntas.length) {
+    preguntas = [];
+    for (const z of ZONAS) (porZona[z.id] ? porZona[z.id].frases : []).forEach(f => f.pregunta && preguntas.push(f.pregunta));
+  }
+  return {
+    titulo: d.titulo || 'Pedido sin título', proyecto: d.proyecto || '—', fecha: d.fecha || '—',
+    pedido: d.pedido, nota: { antes: Math.round(d.nota.antes), despues: Math.round(d.nota.despues) },
+    fuentes, porZona, preguntas
+  };
+}
+
+// ---------- reloj propio (pausable) ----------
+const clk = { t: 0, total: 1, playing: false, events: [], tweens: [], done: false };
+function at(time, fn) { clk.events.push({ time, fn }); }
+function tween(dur, update, end) { clk.tweens.push({ start: clk.t, dur: Math.max(dur, .001), update, end }); }
+let last = null;
+function frame(now) {
+  const dt = last == null ? 0 : Math.min(.1, (now - last) / 1000);
+  last = now;
+  if (clk.playing) {
+    clk.t += dt;
+    while (clk.events.length && clk.events[0].time <= clk.t) clk.events.shift().fn(true);
+    const activos = clk.tweens.slice();
+    for (const tw of activos) {
+      const p = Math.min(1, (clk.t - tw.start) / tw.dur);
+      tw.update && tw.update(p);
+      if (p >= 1) { clk.tweens.splice(clk.tweens.indexOf(tw), 1); tw.end && tw.end(); }
+    }
+    $('prog').style.width = Math.min(100, clk.t / clk.total * 100) + '%';
+    if (!clk.events.length && !clk.tweens.length && !clk.done) terminar();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---------- estado de la escena ----------
+let D = null;                 // datos normalizados
+let S = null;                 // estado de la escena
+const stage = $('stage'), svg = $('threads');
+
+function montar(d) {
+  D = d;
+  clk.t = 0; clk.events = []; clk.tweens = []; clk.done = false;
+  document.getAnimations().forEach(a => a.cancel());
+  svg.replaceChildren();
+  $('cierre').hidden = true;
+  $('prog').style.width = '0%';
+
+  $('titulo').textContent = d.titulo;
+  $('proyecto').textContent = d.proyecto;
+  $('fecha').textContent = d.fecha;
+
+  S = { nota: d.nota.antes, datos: 0, preg: 0, lanes: {}, files: {}, items: [], vagos: 0 };
+
+  // carriles
+  const lanes = $('lanes');
+  lanes.replaceChildren();
+  ZONAS.forEach((z, i) => {
+    const lane = el('div', 'lane');
+    lane.style.setProperty('--c', z.color);
+    const h = el('div', 'lane-h');
+    h.append(el('span', 'lane-n', String(i + 1).padStart(2, '0')), el('b', null, z.nombre), el('small', null, z.desc));
+    const b = el('div', 'lane-b');
+    const items = el('div', 'items');
+    const empty = el('div', 'empty', '· · ·');
+    b.append(items, empty);
+    lane.append(h, b);
+    lanes.append(lane);
+    S.lanes[z.id] = { lane, items, empty, z, n: 0 };
+  });
+
+  // archivos
+  const ul = $('files');
+  ul.replaceChildren();
+  d.fuentes.forEach(f => {
+    const li = el('li', 'file');
+    const hits = el('span', 'hits');
+    li.append(el('span', 'fname', f), hits);
+    ul.append(li);
+    S.files[f] = { li, hits, lineas: new Set() };
+  });
+
+  // pedido con fragmentos marcados
+  const frases = [];
+  ZONAS.forEach(z => { const pz = d.porZona[z.id]; if (pz) pz.frases.forEach(f => frases.push({ f, z })); });
+  const pedido = d.pedido, bajo = pedido.toLowerCase(), tomados = [];
+  const libre = (a, b) => tomados.every(r => b <= r[0] || a >= r[1]);
+  frases.forEach(x => {
+    const t = x.f.texto;
+    let pos = -1, from = 0;
+    for (const hay of [pedido, bajo]) {
+      const aguja = hay === bajo ? t.toLowerCase() : t;
+      from = 0;
+      while ((pos = hay.indexOf(aguja, from)) !== -1 && !libre(pos, pos + t.length)) from = pos + 1;
+      if (pos !== -1) break;
+    }
+    x.pos = pos;
+    if (pos !== -1) tomados.push([pos, pos + t.length, x]);
+  });
+  tomados.sort((a, b) => a[0] - b[0]);
+  const p = $('pedido');
+  p.replaceChildren();
+  let cur = 0;
+  tomados.forEach(([a, b, x]) => {
+    if (a > cur) p.append(document.createTextNode(pedido.slice(cur, a)));
+    const s = el('span', 'frag', pedido.slice(a, b));
+    s.style.setProperty('--c', x.z.color);
+    x.span = s;
+    p.append(s);
+    cur = b;
+  });
+  if (cur < pedido.length) p.append(document.createTextNode(pedido.slice(cur)));
+
+  pintarNota(d.nota.antes);
+  $('meterAntes').style.left = d.nota.antes + '%';
+  pintarConteos();
+
+  // orden: frases en el orden en que aparecen en el pedido; luego lo agregado zona por zona
+  const orden = frases.filter(x => x.pos !== -1).sort((a, b) => a.pos - b.pos).concat(frases.filter(x => x.pos === -1));
+  programar(orden);
+}
+
+function pintarNota(v) {
+  S.nota = v;
+  $('nota').textContent = Math.round(v);
+  $('meterFill').style.width = Math.max(0, Math.min(100, v)) + '%';
+}
+function pintarConteos() { $('cDatos').textContent = S.datos; $('cPreg').textContent = S.preg; }
+
+// ---------- línea de tiempo ----------
+function programar(orden) {
+  const conFuente = orden.filter(x => x.f.fuente).length;
+  const agregados = ZONAS.reduce((n, z) => n + (D.porZona[z.id] ? D.porZona[z.id].agregado.length : 0), 0);
+  const pasosNota = conFuente + agregados;
+  const delta = pasosNota ? (D.nota.despues - D.nota.antes) / pasosNota : 0;
+
+  // duración "natural" para escalar a ~25 s
+  let base = 1.4 + 2.2;
+  orden.forEach(x => {
+    base += .3 + .8;
+    if (x.f.tipo === 'vago') base += .9;
+    if (x.f.fuente) base += 2.0;
+    if (x.f.pregunta) base += 2.0;
+  });
+  base += agregados * 1.6 + ZONAS.length * .1;
+  const s = Math.max(.45, Math.min(1.6, DURACION_OBJETIVO / base));
+  let T = 0;
+
+  at(T, anim => {
+    if (!anim) return;
+    Object.values(S.lanes).forEach((L, i) => L.lane.animate(
+      [{ opacity: 0, transform: 'translateX(-14px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 380 * s, delay: i * 90 * s, easing: 'ease-out', fill: 'backwards' }));
+  });
+  T += 1.4 * s;
+
+  orden.forEach(x => {
+    const L = S.lanes[x.z.id];
+    const item = crearItem(x.f, false);
+    x.item = item;
+    at(T, anim => activar(L, anim)); T += .3 * s;
+    at(T, anim => soltar(L, item, x.span, anim, .75 * s)); T += .8 * s;
+    if (x.f.tipo === 'vago') { at(T, anim => { if (anim) item.el.classList.add('blink'); }); T += .9 * s; }
+    if (x.f.fuente) { at(T, anim => resolverFuente(x.f, item, x.z, delta, anim, s)); T += 2.0 * s; }
+    if (x.f.pregunta) { at(T, anim => resolverPregunta(x.f, item, anim, s)); T += 2.0 * s; }
+    if (!x.f.fuente && !x.f.pregunta) at(T, () => {
+      item.el.classList.remove('blink');
+      if (x.f.tipo === 'vago') { item.el.classList.add('st-vago'); S.vagos++; }
+    });
+  });
+
+  ZONAS.forEach(z => {
+    const pz = D.porZona[z.id];
+    T += .1 * s;
+    if (!pz || !pz.agregado.length) return;
+    const L = S.lanes[z.id];
+    pz.agregado.forEach(a => {
+      const item = crearItem(a, true);
+      at(T, anim => { activar(L, anim); L.items.append(item.el); L.empty.hidden = true; item.el.classList.add('oculto'); });
+      at(T + .1 * s, anim => resolverAgregado(a, item, z, delta, anim, s));
+      T += 1.6 * s;
+    });
+  });
+
+  at(T, anim => {
+    Object.values(S.lanes).forEach(L => {
+      L.lane.classList.remove('activa');
+      if (!L.n) { L.lane.classList.add('vacia'); L.empty.textContent = 'vacía: el pedido no dice nada de esto'; }
+    });
+    const desde = S.nota;
+    if (anim) tween(1.2 * s, p => pintarNota(desde + (D.nota.despues - desde) * ease(p)));
+    else pintarNota(D.nota.despues);
+  });
+  T += 1.4 * s;
+  at(T, anim => mostrarCierre(anim));
+  T += .8 * s;
+  clk.total = T;
+}
+
+function crearItem(f, esAgregado) {
+  const e = el('div', 'item ' + (esAgregado ? 'add' : 't-' + f.tipo));
+  const top = el('div', 'top');
+  top.append(el('span', 'tag', esAgregado ? '+ sumado' : TIPOS[f.tipo]), el('span', 'txt', esAgregado ? f.dice : f.texto));
+  const res = el('div', 'res');
+  res.hidden = true;
+  e.append(top, res);
+  return { el: e, res };
+}
+
+function activar(L, anim) {
+  Object.values(S.lanes).forEach(o => o.lane.classList.toggle('activa', o === L));
+  if (!anim) return;
+  const r = L.lane.getBoundingClientRect();
+  const arriba = window.innerWidth < 860 ? $('side').getBoundingClientRect().bottom : 0;
+  if (r.top < arriba + 8 || r.bottom > window.innerHeight - 90) {
+    const y = window.scrollY + r.top - Math.max(arriba + 16, (window.innerHeight - 90 + arriba) / 2 - r.height / 2);
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+}
+
+function soltar(L, item, span, anim, dur) {
+  L.items.append(item.el);
+  L.empty.hidden = true;
+  L.n++;
+  if (span) span.classList.add('taken');
+  if (!anim) return;
+  const desde = (span || $('pedido')).getBoundingClientRect();
+  const hasta = item.el.getBoundingClientRect();
+  if (span) { span.classList.add('pick'); setTimeout(() => span.classList.remove('pick'), dur * 1000); }
+  item.el.animate([
+    { transform: `translate(${desde.left - hasta.left}px,${desde.top - hasta.top}px) scale(.92)`, opacity: .35 },
+    { transform: 'none', opacity: 1 }
+  ], { duration: dur * 1000, easing: 'cubic-bezier(.25,.8,.25,1)' });
+}
+
+function marcarArchivo(fuente, anim) {
+  const [, archivo, linea] = RE_FUENTE.exec(fuente);
+  const F = S.files[archivo];
+  if (!F) return;
+  F.li.classList.add('hit');
+  if (!F.lineas.has(linea)) { F.lineas.add(linea); F.hits.append(el('span', null, ':' + linea)); }
+  if (anim) { F.li.classList.remove('flash'); void F.li.offsetWidth; F.li.classList.add('flash'); }
+}
+
+function sumar(delta, anim, s) {
+  S.datos++; pintarConteos();
+  const desde = S.nota, hasta = Math.min(D.nota.despues, desde + delta);
+  if (anim) tween(.5 * s, p => pintarNota(desde + (hasta - desde) * ease(p)));
+  else pintarNota(hasta);
+}
+
+function mostrarFuente(item, f) {
+  item.res.hidden = false;
+  item.res.prepend(el('span', 'src', f.fuente), ...(f.dice ? [el('span', 'dice', '“' + f.dice + '”')] : []));
+}
+
+function resolverFuente(f, item, z, delta, anim, s) {
+  const archivo = RE_FUENTE.exec(f.fuente)[1];
+  const fin = () => {
+    item.el.classList.remove('blink');
+    item.el.classList.add('st-ok');
+    mostrarFuente(item, f);
+    if (anim) item.res.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350 });
+    sumar(delta, anim, s);
+  };
+  if (!anim) { marcarArchivo(f.fuente); fin(); return; }
+  hilo(item.el, S.files[archivo].li, OK, s, { onHit: () => marcarArchivo(f.fuente, true), onBack: fin });
+}
+
+function resolverPregunta(f, item, anim, s) {
+  const fin = () => {
+    item.el.classList.remove('blink', 'st-ok');
+    item.el.classList.add('st-q');
+    item.res.hidden = false;
+    item.res.classList.add('q');
+    item.res.append(el('span', 'preg', f.pregunta));
+    if (anim) item.res.lastChild.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'none' }], { duration: 400 });
+    S.preg++; pintarConteos();
+  };
+  if (!anim) { fin(); return; }
+  const box = $('filesBox');
+  hilo(item.el, box.querySelector('ul'), Q, s, {
+    dashed: true,
+    onHit: () => {
+      box.classList.add('miss');
+      Object.values(S.files).forEach(F => F.li.classList.add('miss'));
+      setTimeout(() => { box.classList.remove('miss'); Object.values(S.files).forEach(F => F.li.classList.remove('miss')); }, 600);
+    },
+    onBack: fin
+  });
+}
+
+function resolverAgregado(a, item, z, delta, anim, s) {
+  const archivo = RE_FUENTE.exec(a.fuente)[1];
+  const fin = () => {
+    item.el.classList.remove('oculto');
+    if (anim) item.el.classList.add('reveal');
+    item.res.hidden = false;
+    item.res.append(el('span', 'src', a.fuente));
+    sumar(delta, anim, s);
+  };
+  if (!anim) { marcarArchivo(a.fuente); fin(); return; }
+  hilo(item.el, S.files[archivo].li, OK, s * .85, { onHit: () => marcarArchivo(a.fuente, true), onBack: fin });
+}
+
+// Hilo animado: sale del elemento hacia el archivo y vuelve con el dato.
+function hilo(desdeEl, haciaEl, color, s, o) {
+  const path = svgEl('path'), dot = svgEl('circle');
+  path.setAttribute('stroke', color);
+  dot.setAttribute('r', '5'); dot.setAttribute('fill', color); dot.setAttribute('color', color);
+  svg.append(path, dot);
+  const curva = () => {
+    const a = desdeEl.getBoundingClientRect(), b = haciaEl.getBoundingClientRect(), r = stage.getBoundingClientRect();
+    let x1, y1, x2, y2, d;
+    if (b.left >= a.right - 4) {
+      x1 = a.right - r.left; y1 = a.top + a.height / 2 - r.top;
+      x2 = b.left - r.left; y2 = b.top + b.height / 2 - r.top;
+      const k = Math.max(40, (x2 - x1) * .5);
+      d = `M${x1},${y1} C${x1 + k},${y1} ${x2 - k},${y2} ${x2},${y2}`;
+    } else {
+      const sube = b.bottom <= a.top;
+      x1 = a.left + Math.min(a.width / 2, 60) - r.left; y1 = (sube ? a.top : a.bottom) - r.top;
+      x2 = b.left + b.width / 2 - r.left; y2 = (sube ? b.bottom : b.top) - r.top;
+      const k = Math.max(30, Math.abs(y2 - y1) * .45) * (sube ? -1 : 1);
+      d = `M${x1},${y1} C${x1},${y1 + k} ${x2},${y2 - k} ${x2},${y2}`;
+    }
+    path.setAttribute('d', d);
+    return path.getTotalLength();
+  };
+  const ponDot = len => { const pt = path.getPointAtLength(len); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); };
+  tween(.75 * s, p => {
+    const L = curva(), e = ease(p);
+    path.style.strokeDasharray = L; path.style.strokeDashoffset = L * (1 - e);
+    ponDot(L * e);
+  }, () => {
+    o.onHit && o.onHit();
+    path.style.strokeDasharray = o.dashed ? '5 7' : 'none';
+    path.style.strokeDashoffset = 0;
+    tween(.25 * s, () => { const L = curva(); ponDot(L); }, () => {
+      tween(.65 * s, p => { const L = curva(); ponDot(L * (1 - ease(p))); }, () => {
+        o.onBack && o.onBack();
+        tween(.35 * s, p => { curva(); path.style.opacity = 1 - p; dot.style.opacity = 1 - p; }, () => { path.remove(); dot.remove(); });
+      });
+    });
+  });
+}
+
+function mostrarCierre(anim) {
+  const c = $('cierre');
+  const archivosLeidos = Object.values(S.files).filter(F => F.lineas.size).length;
+  const vacias = Object.values(S.lanes).filter(L => !L.n).map(L => L.z.nombre.toLowerCase());
+  let txt = `El agente leyó ${plural(archivosLeidos, 'archivo', 'archivos')}, respaldó ${plural(S.datos, 'dato', 'datos')} con archivo y línea, y dejó ${plural(D.preguntas.length, 'pregunta', 'preguntas')} en vez de inventar.`;
+  if (S.vagos) txt += ` Quedan ${plural(S.vagos, 'frase vaga', 'frases vagas')} sin fuente ni pregunta.`;
+  $('resumen').textContent = txt;
+  const st = $('stats');
+  st.replaceChildren();
+  [['ok', S.datos, 'datos respaldados'], ['q', D.preguntas.length, 'preguntas pendientes'],
+   ['', `${archivosLeidos}/${D.fuentes.length}`, 'archivos con datos usados'], ['', `${D.nota.antes} → ${D.nota.despues}`, 'nota del pedido']]
+    .forEach(([cls, n, t]) => { const b = el('div', 'stat ' + cls); b.append(el('b', null, n), el('span', null, t)); st.append(b); });
+  const ol = $('preguntas');
+  ol.replaceChildren();
+  if (D.preguntas.length) D.preguntas.forEach(q => ol.append(el('li', null, q)));
+  else ol.append(el('li', null, 'Sin preguntas pendientes: todo salió de los archivos.'));
+  $('notaFin').textContent = vacias.length
+    ? `Zonas vacías: ${vacias.join(', ')}. Si importan para la tarea, conviene decirlas en el pedido.`
+    : 'Nada se inventó: lo que no estaba en los archivos quedó como pregunta.';
+  c.hidden = false;
+  if (anim) {
+    c.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'ease-out' });
+    setTimeout(() => c.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+  }
+}
+
+function terminar() {
+  clk.done = true; clk.playing = false;
+  $('prog').style.width = '100%';
+  $('playTxt').textContent = 'Repetir';
+}
+
+// ---------- controles ----------
+function reproducir() {
+  if (clk.done) { reiniciar(); return; }
+  clk.playing = true;
+  document.getAnimations().forEach(a => a.playState === 'paused' && a.play());
+  $('playTxt').textContent = 'Pausa';
+}
+function pausar() {
+  clk.playing = false;
+  document.getAnimations().forEach(a => a.playState === 'running' && a.pause());
+  $('playTxt').textContent = 'Sigue';
+}
+function reiniciar() {
+  if (!D) return;
+  window.scrollTo({ top: 0 });
+  montar(D);
+  clk.playing = true;
+  $('playTxt').textContent = 'Pausa';
+}
+function irAlFinal() {
+  if (!D) return;
+  montar(D);
+  // Aplica cada paso sin animación: el estado final es el mismo que el animado.
+  while (clk.events.length) clk.events.shift().fn(false);
+  clk.tweens.forEach(tw => { tw.update && tw.update(1); tw.end && tw.end(); });
+  clk.tweens = [];
+  svg.replaceChildren();
+  clk.t = clk.total;
+  terminar();
+}
+$('bPlay').onclick = () => clk.playing ? pausar() : reproducir();
+$('bReset').onclick = reiniciar;
+$('bEnd').onclick = irAlFinal;
+$('bOpen').onclick = () => $('fileIn').click();
+$('bPaste').onclick = () => { const c = $('carga'); c.hidden = !c.hidden; if (!c.hidden) $('pegado').focus(); };
+$('bCerrar').onclick = () => { $('carga').hidden = true; };
+$('bEjemplo').onclick = () => { ocultarError(); $('carga').hidden = true; iniciar(normalizar(EJEMPLO), false, 'ejemplo incrustado'); };
+$('bVer').onclick = () => cargarTexto($('pegado').value, 'JSON pegado', () => { $('carga').hidden = true; });
+$('fileIn').onchange = e => { const f = e.target.files[0]; if (f) leerArchivo(f); e.target.value = ''; };
+
+document.addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('textarea,input')) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); clk.playing ? pausar() : reproducir(); }
+  else if (e.key === 'r' || e.key === 'R') reiniciar();
+  else if (e.key === 'f' || e.key === 'F') irAlFinal();
+});
+
+// arrastrar y soltar
+let arrastres = 0;
+window.addEventListener('dragenter', e => { e.preventDefault(); arrastres++; $('drop').classList.add('on'); });
+window.addEventListener('dragleave', () => { if (--arrastres <= 0) { arrastres = 0; $('drop').classList.remove('on'); } });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => {
+  e.preventDefault(); arrastres = 0; $('drop').classList.remove('on');
+  const f = e.dataTransfer && e.dataTransfer.files[0];
+  if (f) leerArchivo(f);
+});
+
+// ---------- carga de datos ----------
+function mostrarError(titulo, lista) {
+  const box = $('error');
+  box.replaceChildren(el('b', null, titulo));
+  if (lista && lista.length) {
+    const ul = el('ul');
+    lista.slice(0, 10).forEach(t => ul.append(el('li', null, t)));
+    if (lista.length > 10) ul.append(el('li', null, `… y ${lista.length - 10} problemas más.`));
+    box.append(ul);
+  }
+  box.hidden = false;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function ocultarError() { $('error').hidden = true; }
+
+function cargarTexto(texto, origen, alCargar, fin) {
+  let d;
+  try { d = JSON.parse(texto); }
+  catch (err) { mostrarError(`No se pudo leer ${origen}: no es JSON válido.`, [err.message, 'Revisa comillas, comas y llaves. Debe empezar con { y terminar con }.']); return false; }
+  const errores = validar(d);
+  if (errores.length) { mostrarError(`${origen} no tiene el formato de lee-antes. Corrige esto:`, errores); return false; }
+  ocultarError();
+  alCargar && alCargar();
+  iniciar(normalizar(d), !!fin, origen);
+  return true;
+}
+function leerArchivo(f) {
+  if (!/\.json$/i.test(f.name) && f.type !== 'application/json') {
+    mostrarError(`"${f.name}" no es un archivo .json.`, ['Arrastra el archivo que guardó la skill en .lee-antes/ (termina en .json).']);
+    return;
+  }
+  f.text().then(t => cargarTexto(t, `"${f.name}"`)).catch(() => mostrarError(`No se pudo abrir "${f.name}".`));
+}
+
+function iniciar(d, alFinal, origen) {
+  D = d;
+  $('origen').textContent = origen ? 'datos: ' + origen : '';
+  window.scrollTo({ top: 0 });
+  if (alFinal) irAlFinal();
+  else { montar(d); clk.playing = true; $('playTxt').textContent = 'Pausa'; }
+}
+
+const params = new URLSearchParams(location.search);
+const alFinal = params.has('fin') && params.get('fin') !== '0';
+const url = params.get('datos');
+if (url) {
+  fetch(url).then(r => { if (!r.ok) throw new Error('El servidor respondió ' + r.status + '.'); return r.text(); })
+    .then(t => {
+      if (!cargarTexto(t, 'el archivo de ?datos=', null, alFinal)) iniciar(normalizar(EJEMPLO), alFinal, 'ejemplo incrustado');
+    })
+    .catch(err => {
+      mostrarError('No se pudo cargar ?datos=' + url, [err.message,
+        'Si abriste el visor como archivo local (file://), el navegador bloquea esa descarga: usa “Abrir JSON” o arrastra el archivo.',
+        'Mientras tanto se muestra el ejemplo de Casas para Gatos.']);
+      iniciar(normalizar(EJEMPLO), alFinal, 'ejemplo incrustado');
+    });
+} else {
+  iniciar(normalizar(EJEMPLO), alFinal, 'ejemplo incrustado');
+}
+})();
+</script>
+</body>
+</html>

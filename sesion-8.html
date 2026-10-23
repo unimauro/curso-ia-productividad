@@ -36,14 +36,16 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Dale solo las llaves que necesita:</b> permisos mínimos, claves como secretos y nada sensible en lo que el agente lee de internet.</li>
     <li><b>Ponle tope al gasto:</b> costo por conversación y por tarea, y un límite mensual.</li>
   </ol>
-  <h3>La Araña: que tu agente lea antes de responder</h3>
-  <p>Recurso gratis de EXPOSURE (@alexmcarrera): una skill que hace que tu IA lea tus archivos antes de responder y que te pregunte lo que no sabe, en vez de inventarlo. Funciona en Claude Code, Codex, Cursor, Antigravity y Gemini CLI, y tiene un mensaje listo para el chat. <a href="https://exposure.com.ar/recursos/la-arana/" target="_blank" rel="noopener">Ábrela (https://exposure.com.ar/recursos/la-arana/)</a>.</p>
+  <h3>/lee-antes: que tu agente lea antes de responder</h3>
+  <p>Nuestra skill del curso: antes de hacer una tarea, tu agente lee tus archivos, cita de dónde sacó cada dato (<code>archivo:línea</code>) y te pregunta lo que no encuentra, en vez de inventarlo. Funciona en Claude Code, Codex y Cursor. <a href="material/skills/lee-antes/visor.html?datos=ejemplo-casas-para-gatos.json" target="_blank" rel="noopener">Mira la demo animada</a>: una corrida real con Casas para Gatos donde no inventó el descuento y preguntó qué caso iba.</p>
   <ol>
     <li><b>Escribe lo que ya decidiste</b> en <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (Codex): quién eres, cómo hablas, tus reglas.</li>
-    <li><b>Copia el «Mensaje para el chat»</b> de la página (botón Copiar). Hoy la descarga del <code>.zip</code> no funciona en su sitio: el mensaje hace lo mismo.</li>
-    <li><b>Pégalo con tu pedido al final</b> en Claude, ChatGPT o Claude Code. En el chat, adjunta tu archivo en el mismo mensaje.</li>
-    <li><b>Recibes</b> una nota de 0 a 100, lo que encontró en tus archivos y lo que te pregunta. Contesta y pídele que guarde tus respuestas en tu archivo, en una parte llamada «Decisiones».</li>
+    <li><b>Instálala:</b> baja <a href="material/skills/lee-antes.zip">lee-antes.zip</a> y copia la carpeta <code>lee-antes</code> dentro de <code>.claude/skills/</code> de tu proyecto (o pídeselo a tu agente).</li>
+    <li><b><code>/lee-antes</code> + tu pedido:</b> te da una nota de 0 a 100, lo que encontró y hasta 5 preguntas. No hace la tarea todavía.</li>
+    <li><b><code>/lee-antes hacer</code> + tu pedido</b> la hace si la nota llega a 75; <b><code>/lee-antes aprender</code></b> guarda tus respuestas en <code>## Decisiones</code>.</li>
+    <li><b>Míralo animado:</b> arrastra el JSON que guarda en <code>.lee-antes/</code> al <a href="material/skills/lee-antes/visor.html" target="_blank" rel="noopener">visor</a>.</li>
   </ol>
+  <p class="nota">Idea inspirada en <a href="https://exposure.com.ar/recursos/la-arana/" target="_blank" rel="noopener">La Araña de EXPOSURE (https://exposure.com.ar/recursos/la-arana/)</a>. Si usas el chat de Claude o ChatGPT, su «Mensaje para el chat» hace algo parecido.</p>
   <h3>Un agente de verdad: tu agente de Upwork que busca trabajo remoto por ti</h3>
   <p>Caso real de la guía de Anastasia Javurek (@anastasiajavurek). Necesitas cuenta de freelancer en Upwork, Claude Code y plan Pro o superior (el plan gratis solo permite 1 conector), y la computadora encendida para que corra la rutina.</p>
   <ol>
