@@ -43,8 +43,12 @@ code{background:var(--tint);padding:1px 6px;border-radius:6px;overflow-wrap:anyw
     <li><b>Instálala:</b> baja <a href="material/skills/lee-antes.zip">lee-antes.zip</a> y copia la carpeta <code>lee-antes</code> dentro de <code>.claude/skills/</code> de tu proyecto (o pídeselo a tu agente).</li>
     <li><b><code>/lee-antes</code> + tu pedido:</b> te da una nota de 0 a 100, lo que encontró y hasta 5 preguntas. No hace la tarea todavía.</li>
     <li><b><code>/lee-antes hacer</code> + tu pedido</b> la hace si la nota llega a 75; <b><code>/lee-antes aprender</code></b> guarda tus respuestas en <code>## Decisiones</code>.</li>
-    <li><b>Míralo animado:</b> arrastra el JSON que guarda en <code>.lee-antes/</code> al <a href="material/skills/lee-antes/visor.html" target="_blank" rel="noopener">visor</a>.</li>
+    <li><b><code>/lee-antes preguntar</code> + tu pregunta:</b> le haces preguntas a tu proyecto (tus informes, notas o datos). Responde solo con lo escrito, con <code>archivo:línea</code>; si no está, dice «No está en el proyecto»; y si tu pregunta trae una premisa falsa, la corrige.</li>
+    <li><b>Míralo animado:</b> arrastra el JSON que guarda en <code>.lee-antes/</code> al <a href="material/skills/lee-antes/visor.html" target="_blank" rel="noopener">visor</a>. El archivo no se sube a ningún lado: se lee en tu navegador.</li>
   </ol>
+  <p><b>En claude.ai (sin instalar nada en tu computadora):</b> en Configuración, busca Skills y sube <code>lee-antes.zip</code>. Después, en un chat nuevo, adjunta tus archivos y escribe <code>/lee-antes preguntar</code> y tu pregunta. En el chat no puede guardar el JSON en tu disco: pídele que te lo muestre y cópialo al visor con «Pegar JSON».</p>
+  <div class="prompt" id="la1">/lee-antes preguntar ¿Qué cifras de mis archivos se contradicen entre sí y cuál es la más reciente?</div>
+  <button class="copiar" data-copy="la1" type="button">Copiar prompt</button>
   <p class="nota">Idea inspirada en <a href="https://exposure.com.ar/recursos/la-arana/" target="_blank" rel="noopener">La Araña de EXPOSURE (https://exposure.com.ar/recursos/la-arana/)</a>. Si usas el chat de Claude o ChatGPT, su «Mensaje para el chat» hace algo parecido.</p>
   <h3>Un agente de verdad: tu agente de Upwork que busca trabajo remoto por ti</h3>
   <p>Caso real de la guía de Anastasia Javurek (@anastasiajavurek). Necesitas cuenta de freelancer en Upwork, Claude Code y plan Pro o superior (el plan gratis solo permite 1 conector), y la computadora encendida para que corra la rutina.</p>

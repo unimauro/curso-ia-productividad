@@ -320,7 +320,7 @@ function el(tag, cls, text) {
 function svgEl(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
 const ease = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 const plural = (n, uno, varios) => n + ' ' + (n === 1 ? uno : varios);
-const RE_FUENTE = /^(.+):(\d+)$/;
+const RE_FUENTE = /^(.+?):(\d+(?:-\d+)?)$/; // archivo:línea o archivo:inicio-fin
 
 // ---------- validación ----------
 function validar(d) {
@@ -352,7 +352,7 @@ function validar(d) {
         if (!f || typeof f !== 'object') { e.push(`${w} debe ser un objeto.`); return; }
         if (!esTexto(f.texto) || !f.texto.trim()) e.push(`${w}: falta "texto".`);
         if (!(f.tipo in TIPOS)) e.push(`${w}: "tipo" debe ser neutro, claro, vago, dato o aprobacion.`);
-        if (f.fuente != null && !(esTexto(f.fuente) && RE_FUENTE.test(f.fuente))) e.push(`${w}: "fuente" debe ser archivo:línea, por ejemplo CLAUDE.md:8.`);
+        if (f.fuente != null && !(esTexto(f.fuente) && RE_FUENTE.test(f.fuente))) e.push(`${w}: "fuente" debe ser archivo:línea, por ejemplo CLAUDE.md:8 o CLAUDE.md:8-12.`);
         if (f.dice != null && !esTexto(f.dice)) e.push(`${w}: "dice" debe ser texto.`);
         if (f.pregunta != null && !esTexto(f.pregunta)) e.push(`${w}: "pregunta" debe ser texto.`);
       });
